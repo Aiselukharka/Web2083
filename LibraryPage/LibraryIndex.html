@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Library | Class-wise Books</title>
     <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
     <link rel="stylesheet" href="LibraryStyle.css">
 </head>
 <body>
     <div id="MainBody">
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
-            <select id="PageNavigationSelect">   
+            <div id="LogoBox">
+                <img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Library Logo">
+            </div>
+            <select id="PageNavigationSelect" aria-label="Page navigation">
                 <option value="LibraryPage">Library</option>
                 <option value="NoticePage">Notice</option>
                 <option value="QuestionBankPage">Question Bank</option>
@@ -23,16 +25,36 @@
                 <option value="GalleryPage">Gallery</option>
                 <option value="SMC_TGC_Page">SMC & TGC</option>
                 <option value="HelpingHandPage">Helping Hand</option>
-                <option value="AdminPage">Admin</option>                
+                <option value="AdminPage">Admin</option>
             </select>
             <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
             <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
         </div>
-        <div id="ClassSelectionDropdown"></div>
-        <h2 id="MainHead">Available Books</h2>
-        <div id="DefaultBookList"></div>
-        <div id="LibraryBookList"></div>
+        
+        <!-- Class Selection Dropdown -->
+        <div id="ClassSelectionDropdownBox">
+            <select id="ClassSelectionDropdownSelect">
+                <option value="" disabled selected>Select Class</option>
+                <option value="Class_1">Class 1</option>
+                <option value="Class_2">Class 2</option>
+                <option value="Class_3">Class 3</option>
+                <option value="Class_4">Class 4</option>
+                <option value="Class_5">Class 5</option>
+                <option value="Class_6">Class 6</option>
+                <option value="Class_7">Class 7</option>
+                <option value="Class_8">Class 8</option>
+                <option value="Class_9">Class 9</option>
+                <option value="Class_10">Class 10</option>
+                <option value="Class_11">Class 11</option>
+                <option value="Class_12">Class 12</option>
+                <option value="MoreBooks">More Books</option>                
+            </select>
+        </div>
+        
+        <h2 id="MainHead">📚 Available Books</h2>
+        <div id="BookListContainer"></div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../SupabaseConfig.js"></script>
     <script src="../CustomDialog.js"></script>

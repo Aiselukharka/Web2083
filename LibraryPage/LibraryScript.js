@@ -1,129 +1,343 @@
+// Initialize Supabase client
 const supabaseClient = supabase.createClient(_supabaseUrl, _supabaseKey);
 
-// -------------------- NAVIGATE PAGES --------------------
-const PageNavigationDripDown = document.getElementById("PageNavigationSelect");
-PageNavigationDripDown.addEventListener("change", function () {
-    const pageMap = {
-        "LibraryPage": "LibraryIndex.html",
-        "NoticePage": "../NoticePage/NoticeIndex.html",
-        "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
-        "StudentPage": "../StudentPage/StudentIndex.html",
-        "TeacherPage": "../TeacherPage/TeacherIndex.html",
-        "HomePage": "../index.html",
-        "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
-        "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
-        "GalleryPage": "../GalleryPage/GalleryIndex.html",
-        "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
-        "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
-        "AdminPage": "../AdminPage/LogInIndex.html"        
-    };
+// -------------------- GLOBAL HELPER FUNCTIONS --------------------
 
-    const selectedPage = pageMap[this.value];
-    if (selectedPage) {
-        window.location.href = selectedPage;
+window.changeLanguage = function(lang) {
+    if (lang === 'en') {
+        console.log('Language switched to English');
+    } else {
+        console.log('Language switched to Nepali');
     }
-});
+};
 
-// -------------------- LOAD DEFAULT BOOKS --------------------
-async function loadDefaultBooks() {
-    const box = document.getElementById("DefaultBookList");
-    if (!box) return;
-    box.innerHTML = "<p>Loading books...</p>";
+// UPDATED: This function now forces URLs into an iframe-friendly viewer wrapper
+window.openPdfReader = function(pdfUrl, title = "") {
+  const oldModal = document.getElementById("pdfModal");
+  if (oldModal) oldModal.remove();
+  let zoom = 1;
+  
+  const modal = document.createElement("div");
+  modal.id = "pdfModal";
+  modal.style.cssText = `
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.85);
+    z-index:99999;
+    display:flex;
+    flex-direction:column;
+  `;
+  
+  const toolbar = document.createElement("div");
+  toolbar.style.cssText = `
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 15px;
+    background:#222;
+  `;
+  
+  const titleDiv = document.createElement("div");
+  titleDiv.textContent = title;
+  titleDiv.style.color = "white";
+  titleDiv.style.fontSize = "18px";
+  
+  const controls = document.createElement("div");
+  controls.style.display = "flex";
+  controls.style.gap = "10px";
+  
+  const btnZoomOut = document.createElement("button");
+  btnZoomOut.textContent = "−";
+  const btnZoomIn = document.createElement("button");
+  btnZoomIn.textContent = "+";
+  const btnClose = document.createElement("button");
+  btnClose.textContent = "✕";
+  
+  [btnZoomOut, btnZoomIn, btnClose].forEach(btn => {
+    btn.style.padding = "8px 14px";
+    btn.style.fontSize = "18px";
+    btn.style.fontWeight = "bold";
+    btn.style.cursor = "pointer";
+    btn.style.border = "none";
+    btn.style.borderRadius = "5px";
+    btn.style.background = "#555";
+    btn.style.color = "white";
+  });
+  
+  btnZoomOut.onmouseenter = () => { btnZoomOut.style.background = "blue"; btnZoomOut.style.color = "yellow"; };
+  btnZoomOut.onmouseleave = () => { btnZoomOut.style.background = "#555"; btnZoomOut.style.color = "white"; };
+  btnZoomIn.onmouseenter = () => { btnZoomIn.style.background = "green"; btnZoomIn.style.color = "yellow"; };
+  btnZoomIn.onmouseleave = () => { btnZoomIn.style.background = "#555"; btnZoomIn.style.color = "white"; };
+  btnClose.onmouseenter = () => { btnClose.style.background = "red"; btnClose.style.color = "yellow"; };
+  btnClose.onmouseleave = () => { btnClose.style.background = "#555"; btnClose.style.color = "white"; };
+  
+  btnClose.onclick = () => modal.remove();
+  
+  const container = document.createElement("div");
+  container.style.flex = "1";
+  container.style.overflow = "auto";
+  
+  const iframe = document.createElement("iframe");
+  
+  // FIX: Force Cloudinary and GitHub paths into Google Docs Viewer so the <iframe> doesn't fail or trigger external downloads
+  iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+  
+  iframe.style.cssText = `
+    width:100%;
+    height:100%;
+    border:none;
+    transform-origin:top center;
+  `;
+  
+  function updateZoom() {
+    iframe.style.transform = `scale(${zoom})`;
+  }
+  
+  btnZoomIn.onclick = () => {
+    zoom += 0.1;
+    updateZoom();
+  };
+  btnZoomOut.onclick = () => {
+    if (zoom > 0.5) {
+      zoom -= 0.1;
+      updateZoom();
+    }
+  };
+  
+  controls.append(btnZoomOut, btnZoomIn, btnClose);
+  toolbar.append(titleDiv, controls);
+  container.appendChild(iframe);
+  modal.append(toolbar, container);
+  document.body.appendChild(modal);
+};
+
+window.showPictureViewer = function(url, title) {
+    // Reuses your modal logic structure for consistency
+    window.openPdfReader(url, title); 
+};
+
+window.openOfficeFile = function(url, title) {
+    // Office files embedded via Microsoft Web Viewer
+    const officeUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+    window.openPdfReader(officeUrl, title);
+};
+
+window.downloadBook = async function(btn, url, fileName) {
+    if (!btn) return;
     try {
-        const response = await fetch("https://api.github.com/repos/ojhagsoftware/SchoolLibrary/contents");
+        btn.innerText = "Downloading...";
+        btn.disabled = true;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network error");
+        const blob = await response.blob();
+        const a = document.createElement("a");
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+        console.error("Download failed", err);
+        alert("Download failed. You can try right-click and 'Save link as'.");
+    } finally {
+        setTimeout(() => {
+            if (btn) {
+                btn.innerText = "Download";
+                btn.disabled = false;
+            }
+        }, 1200);
+    }
+};
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+function escapeHtmlAttr(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+}
+
+function escapeUrl(url) {
+    return url.replace(/'/g, '%27');
+}
+
+// -------------------- PAGE NAVIGATION --------------------
+const PageNavigationDripDown = document.getElementById("PageNavigationSelect");
+if (PageNavigationDripDown) {
+    PageNavigationDripDown.addEventListener("change", function() {
+        const pageMap = {
+            "LibraryPage": "LibraryIndex.html",
+            "NoticePage": "../NoticePage/NoticeIndex.html",
+            "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
+            "StudentPage": "../StudentPage/StudentIndex.html",
+            "TeacherPage": "../TeacherPage/TeacherIndex.html",
+            "HomePage": "../index.html",
+            "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
+            "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
+            "GalleryPage": "../GalleryPage/GalleryIndex.html",
+            "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
+            "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
+            "AdminPage": "../AdminPage/LogInIndex.html"
+        };
+        const selectedPage = pageMap[this.value];
+        if (selectedPage) {
+            window.location.href = selectedPage;
+        }
+    });
+}
+
+// -------------------- LOAD BOOKS FROM DEFAULT FOLDER STRUCTURE --------------------
+async function loadBooksFromClass(className) {
+    const container = document.getElementById("BookListContainer");
+    if (!container) return;
+    
+    container.innerHTML = '<div class="loading-text">📖 Loading books for ' + className + '...</div>';
+    
+    try {
+        const githubPath = `https://api.github.com/repos/Aiselukharka/Web2083/contents/DefaultBooks/${className}`;
+        const response = await fetch(githubPath);
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                container.innerHTML = '<div class="info-text">📚 No books found for ' + className + '. Check back later!</div>';
+                return;
+            }
+            throw new Error("GitHub API error");
+        }
+        
         const files = await response.json();
-        box.innerHTML = "";
         const pdfFiles = files.filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".pdf"));
+        
         if (pdfFiles.length === 0) {
-            box.innerHTML = "<p>No books found.</p>";
+            container.innerHTML = '<div class="info-text">📚 No PDF books available for ' + className + '.</div>';
             return;
         }
+        
+        container.innerHTML = "";
+        
         pdfFiles.forEach(book => {
-            console.log("Name:", book.name);
-            console.log("Download URL:", book.download_url);
-
             const div = document.createElement("div");
-            div.className = "DefaultBookCards";
+            div.className = "BookCard";
+            const safeName = book.name.replace(/'/g, "\\'");
+            
+            // Use the raw download URL which Google Docs Viewer can consume cleanly
+            const fileUrl = book.download_url;
+
             div.innerHTML = `
-                <div class="DefaultBookNames">${book.name}</div>
-                <button class="btnOpenDefaultBook" onclick="openPdfReader('${book.download_url}', '${book.name.replace(/'/g, "\\'")}')">Open</button>
-                <button class="btnDownloadDefaultBook" onclick="downloadDefaultBook('${book.download_url}', '${book.name.replace(/'/g, "\\'")}')">Download</button>
-                <hr>
+                <div class="BookName">📘 ${escapeHtml(book.name)}</div>
+                <button class="btnOpenBook" onclick="openPdfReader('${escapeUrl(fileUrl)}', '${escapeHtmlAttr(safeName)}')">📖 Open</button>
+                <button class="btnDownloadBook" onclick="downloadBook(this, '${escapeUrl(fileUrl)}', '${escapeHtmlAttr(book.name)}')">💾 Download</button>
             `;
-            box.appendChild(div);
+            container.appendChild(div);
         });
+        
     } catch (err) {
-        console.error(err);
-        box.innerHTML = "<p>Unable to load books from GitHub.</p>";
+        console.error("Error loading class books:", err);
+        container.innerHTML = '<div class="error-text">⚠️ Unable to load books. Please check your network connection.</div>';
     }
 }
-// -------------------- DOWNLOAD DEFAULT BOOKS --------------------
-function downloadDefaultBook(url, fileName) {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-loadDefaultBooks();
 
-// -------------------- LOAD BOOKS FROM CLAUDINARY --------------------
-async function loadBooks() {
-  const { data, error } = await supabaseClient
-    .from("librarybooks")
-    .select("*")
-    .order("id", { ascending: false });
-  if (error) {
-    console.error(error);
-    return;
-  }
-  const adminList = document.getElementById("LibraryBookList");
-  adminList.innerHTML = "";
-  data.forEach(book => {
-    const div = document.createElement("div");
-    div.className = "BookItems";
-    const safeUrl = encodeURIComponent(book.bookurl);
-    const safeTitle = book.title.replace(/'/g, "\\'");
-    const extension = book.title.split('.').pop().toLowerCase();
-    let openCode = "";
-    if (["pdf"].includes(extension)) {
-      openCode = `openPdfReader('${book.bookurl}','${safeTitle}')`;
-    }else if (["jpg","jpeg","png","gif","webp"].includes(extension)){
-      openCode = `showPictureViewer('${book.bookurl}','${safeTitle}')`;
-    }else if (["doc","docx","docm","ppt","pptx","pptm","xls","xlsx","xlsm"].includes(extension)){
-      openCode = `openOfficeFile('${book.bookurl}','${safeTitle}')`;
+// -------------------- LOAD MORE BOOKS FROM SUPABASE --------------------
+async function loadMoreBooksFromSupabase() {
+    const container = document.getElementById("BookListContainer");
+    if (!container) return;
+    
+    container.innerHTML = '<div class="loading-text">🌟 Loading more books from library...</div>';
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from("librarybooks")
+            .select("*")
+            .order("id", { ascending: false });
+        
+        if (error) {
+            console.error("Supabase error:", error);
+            container.innerHTML = '<div class="error-text">⚠️ Could not fetch books from database.</div>';
+            return;
+        }
+        
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div class="info-text">📭 No additional books available. Check back soon!</div>';
+            return;
+        }
+        
+        container.innerHTML = "";
+        
+        data.forEach(book => {
+            const div = document.createElement("div");
+            div.className = "BookCard";
+            const bookUrl = book.bookurl || "";
+            const titleRaw = book.title || "Untitled";
+            const safeTitle = titleRaw.replace(/'/g, "\\'");
+            
+            // Checking extensions from the URL path instead of written title
+            let cleanUrlPath = bookUrl.split('?')[0].toLowerCase();
+            let extension = cleanUrlPath.split('.').pop();
+            
+            let openCode = "";
+            // Route everything matching documents securely into your custom openPdfReader modal
+            if (["pdf"].includes(extension) || bookUrl.includes("/raw/upload/")) {
+                openCode = `openPdfReader('${escapeUrl(bookUrl)}','${escapeHtmlAttr(safeTitle)}')`;
+            } else if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension)) {
+                openCode = `openPdfReader('${escapeUrl(bookUrl)}','${escapeHtmlAttr(safeTitle)}')`;
+            } else if (["doc", "docx", "docm", "ppt", "pptx", "pptm", "xls", "xlsx", "xlsm"].includes(extension)) {
+                openCode = `openOfficeFile('${escapeUrl(bookUrl)}','${escapeHtmlAttr(safeTitle)}')`;
+            } else {
+                openCode = `openPdfReader('${escapeUrl(bookUrl)}','${escapeHtmlAttr(safeTitle)}')`;
+            }
+            
+            div.innerHTML = `
+                <div class="BookName">📚 ${escapeHtml(titleRaw)}</div>
+                <button class="btnOpenBook" onclick="${openCode}">🔍 Open</button>
+                <button class="btnDownloadBook" onclick="downloadBook(this, '${escapeUrl(bookUrl)}', '${escapeHtmlAttr(titleRaw)}')">💾 Download</button>
+            `;
+            container.appendChild(div);
+        });
+        
+    } catch (err) {
+        console.error("Error loading more books:", err);
+        container.innerHTML = '<div class="error-text">❌ Failed to load additional books. Please refresh the page.</div>';
     }
-    div.innerHTML = `
-      <div class="BookNames">${book.title}</div>
-      <button class="btnOpenBook" onclick="${openCode}">Open</button>
-      <button class="btnDownloadBook" onclick="downloadBook(this, '${book.bookurl}', '${book.title}')">Download</button>
-      <hr>
-    `;
-    adminList.appendChild(div);
-  });
-}
-loadBooks();
-
-// -------------------- DOWNLOAD BOOK --------------------
-async function downloadBook(btn, url, fileName) {
-  try {
-    btn.innerText = "Downloading...";
-    btn.disabled = true;
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(a.href);
-  } finally {
-    setTimeout(() => {
-      btn.innerText = "Download";
-      btn.disabled = false;
-    }, 1500);
-  }
 }
 
+// -------------------- CLASS SELECTION HANDLER --------------------
+const classDropdown = document.getElementById("ClassSelectionDropdownSelect");
+if (classDropdown) {
+    classDropdown.addEventListener("change", function() {
+        const selectedValue = this.value;
+        
+        if (!selectedValue || selectedValue === "") {
+            const container = document.getElementById("BookListContainer");
+            if (container) {
+                container.innerHTML = '<div class="info-text">📖 Please select a class to view books.</div>';
+            }
+            return;
+        }
+        
+        if (selectedValue === "MoreBooks") {
+            loadMoreBooksFromSupabase();
+        } else {
+            loadBooksFromClass(selectedValue);
+        }
+    });
+}
+
+// -------------------- INITIAL DISPLAY MESSAGE --------------------
+window.addEventListener("DOMContentLoaded", function() {
+    const container = document.getElementById("BookListContainer");
+    if (container) {
+        container.innerHTML = '<div class="info-text">📖 Please select a class from the dropdown above to view books.</div>';
+    }
+});

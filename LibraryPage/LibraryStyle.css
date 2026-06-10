@@ -3,182 +3,336 @@
     src: url('../Sanskrit-2003.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
+/* -------------------- GLOBAL RESET -------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html{
+html {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;  
 }
 
-body { 
+body {
     width: 100%;
-    max-width: 1200px;   
-    font-family: Arial, sans-serif; 
     min-height: 100%;
+    background: #f5f0e8;
     font-family: 'Arial', 'MySanskritFont', sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center;  
-}
-
-#MainBody{
-    width: 96%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    background-color: #ffaaaa;
-    margin: 0 auto;       
+    justify-content: flex-start;
+    line-height: 1.4;
 }
 
+/* Main container */
+#MainBody {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    background: #fffaf5;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 24px 24px;
+    overflow-x: hidden;
+}
+
+/* ========== NAVIGATION BAR ========== */
 #PageNaviggationBox {
     width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    background: #000000;
-    padding: 1rem;
-    text-align: center;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: #0a2f2a;
+    padding: 0.9rem 1.5rem;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-#LogoBox{
-    width: 6%;
-    height: auto;     
+
+#LogoBox {
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-#LogoBox img{
+
+#LogoBox img {
     width: 100%;
-    height: 100%;
+    height: auto;
+    max-height: 50px;
     object-fit: contain;
 }
-#PageNavigationSelect{
-    width: 40%;
-    font-size: 2vw;
-    font-weight: bold;
-    padding: 2vh;
-    border: 4px solid #000000;
+
+#PageNavigationSelect {
+    flex: 2 1 180px;
+    min-width: 150px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.7rem 0.8rem;
+    border: none;
+    border-radius: 60px;
+    background: #fef9e6;
+    color: #0a2f2a;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-#PageNaviggationBox button{
-    width: 20%;
-    padding: 2vh 0 2vh 0;
-    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
-    color: #ffffff;
-    border-radius: 4vw;  
-    font-size: 2vw;  
+
+#PageNavigationSelect:focus {
+    outline: 2px solid #ffb347;
+}
+
+#PageNaviggationBox button {
+    flex: 0 1 auto;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #1e7b5e, #116b4f);
+    color: white;
+    border: none;
+    border-radius: 60px;
+    font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-#pageNaviggationBox button:hover{
-    background: linear-gradient(180deg, #009900, #00aa00, #009900);
-    color: #ffff00;
+
+#PageNaviggationBox button:hover {
+    background: linear-gradient(135deg, #0f5e46, #0a4c38);
+    transform: scale(0.97);
+    color: #ffea80;
 }
-#MainHead{
+
+/* ========== CLASS SELECTION DROPDOWN ========== */
+#ClassSelectionDropdownBox {
     width: 100%;
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
     text-align: center;
-    color: #0000aa;
-    font-size: 4vw;
-    font-weight: bold;
 }
-#DefaultBookList{
+
+#ClassSelectionDropdownSelect {
+    width: 90%;
+    max-width: 400px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 1rem;
+    border: 2px solid #1e7b5e;
+    border-radius: 60px;
+    background: #ffffff;
+    color: #0a2f2a;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+#ClassSelectionDropdownSelect:hover {
+    border-color: #ffb347;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#ClassSelectionDropdownSelect:focus {
+    outline: none;
+    border-color: #ffb347;
+    box-shadow: 0 0 0 3px rgba(255, 180, 71, 0.2);
+}
+
+/* Main heading */
+#MainHead {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1f4e3c;
+    margin: 1.2rem 0 0.8rem 0;
+    padding: 0 0.5rem;
+}
+
+/* ========== BOOK LIST CONTAINER ========== */
+#BookListContainer {
     width: 100%;
-    padding: 2vh;
+    padding: 0.8rem 1.2rem 1.8rem 1.2rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
+    gap: 1rem;
+    min-height: 400px;
 }
-.DefaultBookCards{
-    width: 100%;
+
+/* DESKTOP LAYOUT - ROW structure */
+.BookCard {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
-    padding: 2vh;
-    margin: 0 0 2vh 0;
-    box-shadow: 2px 2px 5px #111111;
+    justify-content: space-between;
+    gap: 0.8rem;
+    background: white;
+    border-radius: 28px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0e4d0;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-.DefaultBookNames{
-    width: 40%;
-    font-size: 2vw;
-    text-align: left;
-    padding: 0 2vh 0 2vh;
+
+.BookCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* MOBILE LAYOUT - COLUMN structure */
+@media (max-width: 768px) {
+    .BookCard {
+        flex-direction: column;
+        text-align: center;
+        align-items: stretch;
+        padding: 1.2rem;
+        gap: 1rem;
+    }
+    
+    .BookName {
+        order: 1;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btnOpenBook {
+        order: 2;
+    }
+    
+    .btnDownloadBook {
+        order: 3;
+    }
+}
+
+/* Book title styling */
+.BookName {
+    flex: 2 1 200px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e2f;
+    word-break: break-word;
+    line-height: 1.3;
+    padding: 0.2rem 0;
+}
+
+/* Button styles */
+.btnOpenBook, .btnDownloadBook {
+    flex: 1 0 auto;
+    min-width: 120px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
     font-weight: bold;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-.btnOpenDefaultBook{
-    width: 25%;
-    padding: 1vw 0 1vw 0;
-    background: linear-gradient(180deg, #009900, #00bb00, #009900);
-    color: #ffffff;
-    border-radius: 4vw;
-    font-size: 2vw;
-    font-weight: bold;
+
+.btnOpenBook {
+    background: linear-gradient(115deg, #2b8c5e, #1f6e48);
+    color: white;
 }
-.btnOpenDefaultBook:hover{
-    background: linear-gradient(180deg, #006600, #009900, #006600);
-    color: #ffff00;    
+
+.btnOpenBook:hover {
+    background: linear-gradient(115deg, #1f6e48, #155a3a);
+    transform: translateY(-2px);
+    color: #fff2b5;
 }
-.btnDownloadDefaultBook{
-    width: 25%;
-    padding: 1vw 0 1vw 0;
-    background: linear-gradient(180deg, #000099, #0000bb, #000099);
-    color: #ffffff;
-    border-radius: 4vw;
-    font-size: 2vw;
-    font-weight: bold;
+
+.btnDownloadBook {
+    background: linear-gradient(115deg, #2a4b7c, #1e3a60);
+    color: white;
 }
-.btnDownloadDefaultBook:hover{
-    background: linear-gradient(180deg, #000066, #000099, #000066);
-    color: #ffff00;
+
+.btnDownloadBook:hover {
+    background: linear-gradient(115deg, #1e3a60, #142c48);
+    transform: translateY(-2px);
+    color: #ffefb9;
 }
-#LibraryBookList{
-    width: 100%;
-    padding: 2vh;
+
+button:active {
+    transform: scale(0.97);
 }
-.BookItems{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 1vw 0 1vw 0;  
-    margin: 0 0 2vw 0; 
-    box-shadow: 2px 2px 5px #111111;
+
+button:disabled {
+    opacity: 0.6;
+    transform: none;
+    cursor: not-allowed;
 }
-.BookNames{
-    width: 40%;
-    font-size: 2vw;
-    font-weight: bold;
+
+/* Loading and error messages */
+.loading-text, .error-text, .info-text {
+    text-align: center;
+    font-size: 1rem;
+    padding: 2rem;
+    color: #5f4c3b;
+    background: #fef5e7;
+    border-radius: 40px;
+    margin: 1rem;
 }
-.btnOpenBook{
-    width: 25%;
-    padding: 1vw 0 1vw 0;
-    background: linear-gradient(180deg, #009900, #00bb00, #009900);
-    color: #ffffff;
-    border-radius: 4vw;
-    font-size: 2vw;
-    font-weight: bold;
+
+.error-text {
+    background: #ffe8e8;
+    color: #c0392b;
 }
-.btnOpenBook:hover{
-    background: linear-gradient(180deg, #006600, #009900, #006600);
-    color: #ffff00;    
+
+.info-text {
+    background: #e8f4f8;
+    color: #2980b9;
 }
-.btnDownloadBook{
-    width: 25%;
-    padding: 1vw 0 1vw 0;
-    background: linear-gradient(180deg, #000099, #0000bb, #000099);
-    color: #ffffff;
-    border-radius: 4vw;
-    font-size: 2vw;
-    font-weight: bold;
+
+/* Small devices */
+@media (max-width: 480px) {
+    #PageNaviggationBox {
+        padding: 0.8rem 1rem;
+        gap: 0.6rem;
+    }
+    
+    #PageNavigationSelect {
+        min-width: 130px;
+        font-size: 0.9rem;
+        padding: 0.6rem 0.7rem;
+    }
+    
+    #PageNaviggationBox button {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    #MainHead {
+        font-size: 1.6rem;
+    }
+    
+    #ClassSelectionDropdownSelect {
+        width: 95%;
+        font-size: 0.95rem;
+        padding: 0.7rem 0.9rem;
+    }
+    
+    .btnOpenBook, .btnDownloadBook {
+        min-width: 100%;
+        font-size: 0.9rem;
+        padding: 0.7rem 0.5rem;
+    }
+    
+    .BookName {
+        font-size: 1rem;
+    }
 }
-.btnDownloadBook:hover{
-    background: linear-gradient(180deg, #000066, #000099, #000066);
-    color: #ffff00;
+
+/* Touch-friendly */
+button, select {
+    touch-action: manipulation;
+}
+
+/* Accessibility */
+button:focus-visible, select:focus-visible {
+    outline: 3px solid #ffb347;
+    outline-offset: 2px;
 }
