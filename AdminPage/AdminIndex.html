@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+    <link rel="stylesheet" href="AdminStyle.css">
+</head>
+<body>
+    <div id="MainBody">
+        <div id="PageNaviggationBox">
+            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+            <select id="PageNavigationSelect">   
+                <option value="AdminPage">Admin</option>
+                <option value="LibraryPage">Library</option>
+                <option value="NoticePage">Notice</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="StudentPage">Students</option>
+                <option value="TeacherPage">Teachers</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="HomePage">Home</option>
+            </select>
+            <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
+            <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
+        </div>
+        <div id="DateBox"></div>
+        <div id="UtilityBox">
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
+            <select id="NavigationSelect">
+                <option>Select Edit Field</option>
+                <option value="LibraryEditBox">Edit Library</option>
+                <option value="NoticeEditBox">Edit Notice</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
+                <option value="StudentEditBox">Edit Student Data</option>
+                <option value="TeacherEditBox">Edit Teacher Data</option>
+                <option value="CalendarEditBox">Edit Calendar</option>
+                <option value="AboutUsEditBox">Edit About Us</option>
+                <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
+                <option value="GalleryEditBox">Edit Gallery</option>
+                <option value="HelpingHandEditBox">Edit Helping Hand</option>
+                <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
+            </select>
+            <select id="AdminToolsSelect">
+                <option>Admin Tools</option>
+                <option value="ChangeEmailTool">Change Email</option>
+                <option value="ChangePasswordTool">Change Password</option>
+                <option value="LogoutThisDeviceTool">Logout This Device</option>
+                <option value="LogoutAllDevicesTool">Logout All Devices</option>
+                <option value="AddAdminTool">Add/Delete Admin</option>
+            </select>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>
+        <!-- Library Edit Box -->
+        <div id="LibraryEditBox" class="EditBoxes">
+            <div id="AdminBookList"></div>
+            <div id="AddBookHead">Add Book</div>
+            <div id="AddBookBox">
+                <input type="file" id="LibraryFile" />
+                <button id="btnChooseLibraryFile" type="button">Choose File</button>
+                <input id="BookTitle" placeholder="Book Title" />
+                <button id="btnUploadBook" onclick="uploadBook()">Upload</button>
+            </div>
+        </div>
+        <!-- Notice Edit Box -->
+        <div id="NoticeEditBox" class="EditBoxes">
+            <div id="AdminNoticeList"></div>
+            <div id="AddNoticeHead">Add Notice</div>
+            <div id="AddNoticeBox">
+                <input type="file" id="NoticeFile" />
+                <button id="btnChooseNoticeFile" type="button">Choose File</button>
+                <input id="NoticeTitle" placeholder="Notice Title" />
+                <button id="btnUploadNotice" onclick="uploadNotice()">Upload</button>
+            </div>
+        </div>
+            <!-- Question Bank Edit Box -->
+        <div id="QuestionBankEditBox" class="EditBoxes">
+            <div id="AdminQuestionList"></div>
+            <div id="AddQuestionHead">Add Question</div>
+            <div id="AddQuestionBox">
+                <input type="file" id="QuestionFile" />
+                <button id="btnChooseQuestionFile" type="button">Choose File</button>
+                <input id="QuestionTitle" placeholder="Question Title" />
+                <button id="btnUploadQuestion" onclick="uploadQuestion()">Upload</button>
+            </div>
+        </div>
+        <!-- Student Edit Box -->
+        <div id="StudentEditBox" class="EditBoxes">
+
+        </div>
+        <!-- Teacher Edit Box -->
+        <div id="TeacherEditBox" class="EditBoxes">
+
+        </div>
+        <!-- Calendar Edit Box -->
+        <div id="CalendarEditBox" class="EditBoxes">
+
+        </div>
+        <!-- About Us Edit Box -->
+        <div id="AboutUsEditBox" class="EditBoxes">
+
+        </div>
+        <!-- Bal Pratibha Edit Box -->
+        <div id="BalPratibhaEditBox" class="EditBoxes">
+
+        </div>
+        <!-- Gallery Edit Box -->
+        <div id="GalleryEditBox" class="EditBoxes">
+
+        </div>
+        <!-- Helping Hand Edit Box -->
+        <div id="HelpingHandEditBox" class="EditBoxes">
+
+        </div>
+        <!-- SMC & TGC Edit Box -->
+        <div id="SMC_TGC_EditBox" class="EditBoxes">
+
+        </div>
+        
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../SupabaseConfig.js"></script>
+    <script src="../CustomDialog.js"></script>
+    <script src="../DocumentReader.js"></script>
+    <script src="../SmartCalculator.js"></script>
+    <script src="../NepaliCalendar.js"></script>
+    <script src="../DateConverter.js"></script>
+    <script src="AdminScript.js"></script>
+</body>
+</html>

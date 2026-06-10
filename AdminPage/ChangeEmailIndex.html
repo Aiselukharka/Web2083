@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Change Email</title>
+<link rel="icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="../SupabaseConfig.js"></script>
+<style>
+body{font-family:Arial;margin:0;padding:20px;background:#f5f5f5;display:none}
+.container{max-width:450px;margin:auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,.15)}
+h2{text-align:center}
+.input{margin-bottom:12px}
+label{font-weight:bold;display:block;margin-bottom:4px}
+input{width:100%;padding:10px;border:1px solid #ccc;border-radius:5px}
+.passwordBox{position:relative}
+.toggle{position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; user-select:none;}
+button{width:100%;padding:10px;border:0;border-radius:5px;background:#007bff;color:#fff;font-size:16px;cursor:pointer}
+#msg{text-align:center;margin-top:10px;font-weight:bold;display:none}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Change Email</h2>
+
+<div class="input">
+<label>Current Email</label>
+<div id="currentEmail" style="padding:10px;background:#eee;border-radius:5px"></div>
+</div>
+
+<form id="form">
+<input class="hidden" type="text"><input class="hidden" type="password">
+
+<div class="input">
+<label>New Email</label>
+<input type="email" id="newEmail" required>
+</div>
+
+<div class="input">
+<label>Confirm Email</label>
+<input type="email" id="confirmEmail" required>
+</div>
+
+<div class="input passwordBox">
+<label>Current Password</label>
+<input type="password" id="password" autocomplete="new-password" name="x_pwd_9281">
+<span class="toggle" id="toggle">👁</span>
+</div>
+
+<button type="submit">Change Email</button>
+</form>
+
+<div id="msg"></div>
+</div>
+
+<script>
+const supabaseClient=supabase.createClient(_supabaseUrl,_supabaseKey);
+const currentEmailDiv=document.getElementById("currentEmail");
+const form=document.getElementById("form");
+const msg=document.getElementById("msg");
+const pwd=document.getElementById("password");
+const toggle=document.getElementById("toggle");
+const btn = form.querySelector("button");
+let currentEmail="";
+
+(async()=>{
+const {data:{session}}=await supabaseClient.auth.getSession();
+if(!session){location.href="LoginIndex.html";return;}
+const {data:{user}}=await supabaseClient.auth.getUser();
+currentEmail=user.email;
+currentEmailDiv.textContent=currentEmail;
+document.body.style.display="block";
+})();
+
+toggle.onclick=()=>{
+pwd.type=pwd.type==="password"?"text":"password";
+toggle.textContent=pwd.type==="password"?"👁":"🙈";
+};
+
+function show(t,c){msg.style.display="block";msg.style.color=c;msg.textContent=t;}
+
+form.onsubmit = async (e) => {
+e.preventDefault();
+const newEmail = document.getElementById("newEmail").value.trim().toLowerCase();
+const confirmEmail = document.getElementById("confirmEmail").value.trim().toLowerCase();
+const password = pwd.value;
+// UI: start loading
+btn.disabled = true;
+const oldText = btn.textContent;
+btn.textContent = "Changing....";
+try {
+if (newEmail !== confirmEmail) {
+show("Emails do not match", "red");
+return;
+}
+if (newEmail === currentEmail) {
+show("Same email not allowed", "red");
+return;
+}
+const { error: loginError } = await supabaseClient.auth.signInWithPassword({
+email: currentEmail,
+password
+});
+if (loginError) {
+show("Wrong password", "red");
+return;
+}
+const { error: updateError } = await supabaseClient.auth.updateUser(
+{ email: newEmail },
+{ emailRedirectTo: window.location.origin + "/AdminPage/LoginIndex.html" }
+);
+if (updateError) {
+show(updateError.message, "red");
+return;
+}
+show("Email change sent. Logging out...", "green");
+setTimeout(async () => {
+await supabaseClient.auth.signOut();
+location.href = "LoginIndex.html";
+}, 3000);
+} finally {
+// UI: restore button state always
+btn.disabled = false;
+btn.textContent = oldText;
+}
+};
+</script>
+</body>
+</html>

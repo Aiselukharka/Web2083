@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Page</title>
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+    <link rel="stylesheet" href="LibraryStyle.css">
+</head>
+<body>
+    <div id="MainBody">
+        <div id="PageNaviggationBox">
+            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+            <select id="PageNavigationSelect">   
+                <option value="LibraryPage">Library</option>
+                <option value="NoticePage">Notice</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="StudentPage">Students</option>
+                <option value="TeacherPage">Teachers</option>
+                <option value="HomePage">Home</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="AdminPage">Admin</option>                
+            </select>
+            <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
+            <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
+        </div>
+        <div id="ClassSelectionDropdown"></div>
+        <h2 id="MainHead">Available Books</h2>
+        <div id="DefaultBookList"></div>
+        <div id="LibraryBookList"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../SupabaseConfig.js"></script>
+    <script src="../CustomDialog.js"></script>
+    <script src="../SmartCalculator.js"></script>
+    <script src="../NepaliCalendar.js"></script>
+    <script src="../DateConverter.js"></script>
+    <script src="../DocumentReader.js"></script>
+    <script src="LibraryScript.js"></script>
+</body>
+</html>

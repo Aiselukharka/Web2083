@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>School Library PDF Files</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .file-list { margin-top: 20px; }
+        .file-item { margin: 10px 0; padding: 10px; background: #f5f5f5; border-radius: 5px; }
+        a { color: #0366d6; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>School Library PDF Files</h1>
+    <div id="file-list" class="file-list">Loading files...</div>
+
+    <script>
+        async function getPDFUrls() {
+            const repoOwner = 'ojhagsoftware';
+            const repoName = 'SchoolLibrary';
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
+            
+            try {
+                const response = await fetch(apiUrl);
+                const files = await response.json();
+                
+                const pdfFiles = files.filter(file => 
+                    file.name.toLowerCase().endsWith('.pdf')
+                );
+                
+                const fileListDiv = document.getElementById('file-list');
+                
+                if (pdfFiles.length === 0) {
+                    fileListDiv.innerHTML = '<p>No PDF files found.</p>';
+                    return;
+                }
+                
+                let html = '<h2>PDF Files:</h2>';
+                pdfFiles.forEach(file => {
+                    const rawUrl = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/main/${file.name}`;
+                    html += `
+                        <div class="file-item">
+                            <a href="${rawUrl}" target="_blank">${file.name}</a>
+                            <br>
+                            <small>Raw URL: ${rawUrl}</small>
+                        </div>
+                    `;
+                });
+                
+                fileListDiv.innerHTML = html;
+                
+            } catch (error) {
+                document.getElementById('file-list').innerHTML = 
+                    '<p>Error loading files: ' + error.message + '</p>';
+            }
+        }
+        
+        getPDFUrls();
+    </script>
+</body>
+</html>

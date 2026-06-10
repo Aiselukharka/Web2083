@@ -1,0 +1,2 @@
+const _supabaseUrl = "https://jrkockwjffpgdpqoymtk.supabase.co";
+const _supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impya29ja3dqZmZwZ2RwcW95bXRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NTQ0OTEsImV4cCI6MjA5NTAzMDQ5MX0.u6ihr9jVnkKwf7C5iEgomKTeQv7xjGZqPew_C3tR0Ak";

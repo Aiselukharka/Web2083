@@ -1,0 +1,510 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+body { 
+    width: 100%;
+    height: auto;
+    max-width: 1200px;   
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+
+#MainBody{
+    width: 96%;
+    max-width: 1100px;   
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 2vh 2vh 2vh;   
+}
+
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: 1rem;
+    text-align: center;
+}
+#LogoBox{
+    width: 6%;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 40%;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 2vh;
+    border: 4px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: 2vh 0 2vh 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: 2vw;  
+    font-weight: bold;
+    cursor: pointer;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: 3vw;
+    font-weight: 800;
+    color: #ffff00;
+    padding: 2vh;   
+    background: linear-gradient(180deg, #111111, #333333); 
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+}
+#btnCalculator, #btnCalendar{
+    width: 15%;
+    padding: 1vw 0 1vw 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: 2vw;  
+    font-weight: bold;
+    cursor: pointer;
+}
+#btnCalculator:hover, #btnCalendar:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+#NavigationSelect{
+    width: 30%;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 1vw 0 1vw 0;
+    border: 4px solid #000000;
+}
+#AdminToolsSelect{
+    width: 30%;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 1vw 0 1vw 0;
+    border: 4px solid #000000;
+}
+/* Style for Library Edit Box */
+#LibraryEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #cceecc, #bbeebb);
+}
+.BookItems{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    margin: 0 0 2vh 0;
+    box-shadow: 2px 2px 5px #111111;
+}
+.BookItems h3{
+    width: 40%;
+    text-align: left;
+    font-size: 2vw;
+}
+.btnOpenBook{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #009900, #00cc00, #009900);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+    cursor: pointer;
+}
+.btnOpenBook:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+.btnDownloadBook{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #000099, #0000cc, #000099);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDownloadBook:hover{
+    background: linear-gradient(180deg, #000066, #000099, #000066);
+    color: #ffff00;
+}
+.btnDeleteBook{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #990000, #cc0000, #990000);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDeleteBook:hover{
+    background: linear-gradient(180deg, #660000, #990000, #660000);
+    color: #ffff00;
+}
+#AddBookHead{
+    width: 100%;
+    text-align: center;
+    font-size: 3vw;
+    font-weight: bold;
+    color: #0000aa;
+    margin: 8vh 0 0 0;
+}
+#AddBookBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    border: 2px solid #aaaaaa;
+    background: linear-gradient(135deg, #aaaaaa, #bbbbbb);
+    border-radius: 4vw;
+}
+#LibraryFile{display: none;}
+#btnChooseLibraryFile{
+    width: 20%;
+    padding: 1vw 0 1vw 0;
+    background: linear-gradient(180deg, #009900, #00cc00, #009900);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw 0 0 4vw;
+    cursor: pointer;
+}
+#btnChooseLibraryFile:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+#BookTitle{
+    width: 50%;
+    text-align: left;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 2vh;    
+}
+#btnUploadBook{
+    width: 20%;
+    font-size: 2vw;
+    font-weight: bold;
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffffff;
+    padding: 1vw 0 1vw 0;
+    border-radius: 0 4vw 4vw 0;
+    cursor: pointer;
+}
+#btnUploadBook:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;    
+}
+
+/* Style for Notice Edit Box */
+#NoticeEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eeeecc, #eeeebb);
+}
+.NoticeItems{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    margin: 0 0 2vh 0;
+    box-shadow: 2px 2px 5px #111111;
+}
+.NoticeItems h3{
+    width: 40%;
+    text-align: left;
+    font-size: 2vw;
+}
+.btnOpenNotice{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #009900, #00cc00, #009900);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+    cursor: pointer;
+}
+.btnOpenNotice:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+.btnDownloadNotice{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #000099, #0000cc, #000099);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDownloadNotice:hover{
+    background: linear-gradient(180deg, #000066, #000099, #000066);
+    color: #ffff00;
+}
+.btnDeleteNotice{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #990000, #cc0000, #990000);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDeleteNotice:hover{
+    background: linear-gradient(180deg, #660000, #990000, #660000);
+    color: #ffff00;
+}
+#AddNoticeHead{
+    width: 100%;
+    text-align: center;
+    font-size: 3vw;
+    font-weight: bold;
+    color: #0000aa;
+    margin: 8vh 0 0 0;
+}
+#AddNoticeBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    border: 2px solid #aaaaaa;
+    background: linear-gradient(135deg, #aaaaaa, #bbbbbb);
+    border-radius: 4vw;
+}
+#NoticeFile{display: none;}
+#btnChooseNoticeFile{
+    width: 20%;
+    padding: 1vw 0 1vw 0;
+    background: linear-gradient(180deg, #009900, #00cc00, #009900);
+    color: #ffffff;
+    border-radius: 4vw 0 0 4vw;
+    font-size: 2vw;
+    font-weight: bold;
+    cursor: pointer;
+}
+#btnChooseNoticeFile:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+#NoticeTitle{
+    width: 50%;
+    text-align: left;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 2vh;    
+}
+#btnUploadNotice{
+    width: 20%;
+    font-size: 2vw;
+    font-weight: bold;
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffffff;
+    padding: 1vw 0 1vw 0;
+    border-radius: 4vw;
+    cursor: pointer;
+    border-radius: 0 4vw 4vw 0;
+}
+#btnUploadNotice:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;    
+}
+/* Style for Question Bank Edit Box */
+#QuestionBankEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eeccee, #eebbee);
+}
+.QuestionItems{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    margin: 0 0 2vh 0;
+    box-shadow: 2px 2px 5px #111111;
+}
+.QuestionItems h3{
+    width: 40%;
+    text-align: left;
+    font-size: 2vw;
+}
+.btnOpenQuestion{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #009900, #00cc00, #009900);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+    cursor: pointer;
+}
+.btnOpenQuestion:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+.btnDownloadQuestion{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #000099, #0000cc, #000099);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDownloadQuestion:hover{
+    background: linear-gradient(180deg, #000066, #000099, #000066);
+    color: #ffff00;
+}
+.btnDeleteQuestion{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #990000, #cc0000, #990000);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDeleteQuestion:hover{
+    background: linear-gradient(180deg, #660000, #990000, #660000);
+    color: #ffff00;
+}
+#AddQuestionHead{
+    width: 100%;
+    text-align: center;
+    font-size: 3vw;
+    font-weight: bold;
+    color: #0000aa;
+    margin: 8vh 0 0 0;
+}
+#AddQuestionBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    border: 2px solid #aaaaaa;
+    background: linear-gradient(135deg, #aaaaaa, #bbbbbb);
+    border-radius: 4vw;
+    margin: 0 0 4vh 0;
+}
+#QuestionFile{display: none;}
+#btnChooseQuestionFile{
+    width: 20%;
+    font-size: 2vw;
+    font-weight: bold;
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffffff;
+    padding: 1vw 0 1vw 0;
+    border-radius: 4vw 0 0 4vw;
+    cursor: pointer;
+}
+#btnChooseQuestionFile:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+#QuestionTitle{
+    width: 50%;
+    text-align: left;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 2vh;
+}
+#btnUploadQuestion{
+    width: 20%;
+    font-size: 2vw;
+    font-weight: bold;
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffffff;
+    padding: 1vw 0 1vw 0;
+    border-radius: 0 4vw 4vw 0;
+    cursor: pointer;
+}
+#btnUploadQuestion:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+
+/* Style for Student Edit Box */
+#StudentEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #cceeee, #bbeeee);
+}
+/* Style for Teacher Edit Box */
+#TeacherEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eeeeee, #dddddd);
+}
+/* Style for Calendar Edit Box */
+#CalendarEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ccccee, #bbbbee);
+}
+.EditBoxes{display: none;}
+
+
+
