@@ -20,9 +20,9 @@ serve(async (req: Request) => {
 
   const { publicId } = await req.json()
 
-  const cloudName = "dfsaihbk7"
-  const apiKey = "246358477926496"
-  const apiSecret = "4lkmAE_2kEOrxFls5yK73WfmKWo"
+  const cloudName = "dcdwpdnyp"
+  const apiKey = "928191332566744"
+  const apiSecret = "GfOBNusubr8R_dgJOXwVRrIP2cU"
 
   const url =
       `https://api.cloudinary.com/v1_1/${cloudName}/raw/destroy`

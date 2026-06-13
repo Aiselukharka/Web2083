@@ -43,10 +43,23 @@ Deno.serve(async (req) => {
     }
 
     // 2. Delete from AdminUsers table
-    await supabase
+    const { error: tableError } = await supabase
       .from("AdminUsers")
       .delete()
       .eq("auth_user_id", authUserId);
+
+    if (tableError) {
+      return new Response(
+        JSON.stringify({ error: tableError.message }),
+        {
+          status: 400,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+    }
 
     return new Response(
       JSON.stringify({ success: true }),

@@ -1,6 +1,6 @@
 const supabaseClient = supabase.createClient(_supabaseUrl, _supabaseKey);
 // -------------------- CLOUDINARY --------------------
-const CLOUD_NAME = "dfsaihbk7";
+const CLOUD_NAME = "dcdwpdnyp";
 
 // -------------------- PROTECTION FORM UNAUTHORIZED ACCESS --------------------
 protectAdminPage();
@@ -221,8 +221,9 @@ async function deleteBook(id, publicId) {
   try {
     btn.innerText = "Deleting...";
     btn.disabled = true;
+    console.log("Deleting publicId:", publicId);
     const response = await fetch(
-      "https://jrkockwjffpgdpqoymtk.functions.supabase.co/delete-book",
+      "https://wrjivuysumgpoqmabwpw.supabase.co/functions/v1/delete-book",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

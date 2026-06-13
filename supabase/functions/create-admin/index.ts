@@ -45,10 +45,26 @@ Deno.serve(async (req) => {
       );
     }
 
+    const { error: insertError } =
     await supabase.from("AdminUsers").insert({
       email,
       auth_user_id: data.user.id
     });
+
+  if (insertError) {
+    return new Response(
+      JSON.stringify({
+        error: insertError.message
+      }),
+      {
+        status: 400,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+  }
 
     return new Response(
       JSON.stringify({ success: true }),

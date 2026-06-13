@@ -237,26 +237,77 @@ setLoading(false);
 
 openAdminBtn.onclick=()=>location.href="AdminIndex.html";
 
-forgotPasswordBtn.onclick=async(e)=>{
-e.preventDefault();
-const email=prompt("Enter email");
-if(!email) return;
+forgotPasswordBtn.onclick = async (e) => {
 
-setLoading(true);
+    e.preventDefault();
 
-try{
-const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{
-redirectTo:location.origin+"/AdminPage/ResetPasswordIndex.html"
-});
+    const email = prompt("Enter email");
 
-if(error) throw error;
+    if (!email) return;
 
-alert("Reset email sent");
-}catch(err){
-alert(err.message);
-}finally{
-setLoading(false);
-}
+    setLoading(true);
+
+    try {
+
+        // Generate Supabase recovery link
+
+        const linkResponse = await fetch(
+            "https://wrjivuysumgpoqmabwpw.supabase.co/functions/v1/generate-reset-link",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email })
+            }
+        );
+
+        const linkResult = await linkResponse.json();
+
+        if (!linkResponse.ok) {
+            throw new Error(linkResult.error);
+        }
+
+        // Send email via Resend
+
+        const emailResponse = await fetch(
+            "https://wrjivuysumgpoqmabwpw.supabase.co/functions/v1/send-reset-email",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    to: email,
+                    resetLink: linkResult.resetLink
+                })
+            }
+        );
+
+        
+        const emailResult = await emailResponse.json();
+
+        console.log("Email Result:", JSON.stringify(emailResult, null, 2));
+        alert(JSON.stringify(emailResult, null, 2));
+
+        if (!emailResponse.ok) {
+            alert(JSON.stringify(emailResult, null, 2));
+            throw new Error(emailResult.error);
+        }
+
+        alert("Password reset email sent.");
+
+    } catch (err) {
+
+        console.error(err);
+        alert(err.message);
+
+    } finally {
+
+        setLoading(false);
+
+    }
+
 };
 
 window.addEventListener("load",refreshUI);

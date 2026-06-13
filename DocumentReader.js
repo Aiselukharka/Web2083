@@ -1,7 +1,11 @@
 function openPdfReader(pdfUrl, title = "") {
   const oldModal = document.getElementById("pdfModal");
   if (oldModal) oldModal.remove();
-  let zoom = 1;
+  
+  let currentWidth = 900; 
+  const minWidth = 500;
+  const maxWidth = 2500;
+  
   const modal = document.createElement("div");
   modal.id = "pdfModal";
   modal.style.cssText = `
@@ -15,6 +19,7 @@ function openPdfReader(pdfUrl, title = "") {
     display:flex;
     flex-direction:column;
   `;
+  
   const toolbar = document.createElement("div");
   toolbar.style.cssText = `
     display:flex;
@@ -23,19 +28,23 @@ function openPdfReader(pdfUrl, title = "") {
     padding:10px 15px;
     background:#222;
   `;
+  
   const titleDiv = document.createElement("div");
   titleDiv.textContent = title;
   titleDiv.style.color = "white";
   titleDiv.style.fontSize = "18px";
+  
   const controls = document.createElement("div");
   controls.style.display = "flex";
   controls.style.gap = "10px";
+  
   const btnZoomOut = document.createElement("button");
   btnZoomOut.textContent = "−";
   const btnZoomIn = document.createElement("button");
   btnZoomIn.textContent = "+";
   const btnClose = document.createElement("button");
   btnClose.textContent = "✕";
+  
   [btnZoomOut, btnZoomIn, btnClose].forEach(btn => {
     btn.style.padding = "8px 14px";
     btn.style.fontSize = "18px";
@@ -46,60 +55,106 @@ function openPdfReader(pdfUrl, title = "") {
     btn.style.background = "#555";
     btn.style.color = "white";
   });
-  btnZoomOut.onmouseenter = () => {
-    btnZoomOut.style.background = "blue";
-    btnZoomOut.style.color = "yellow";
-  };
-  btnZoomOut.onmouseleave = () => {
-    btnZoomOut.style.background = "#555";
-    btnZoomOut.style.color = "white";
-  };
-  btnZoomIn.onmouseenter = () => {
-    btnZoomIn.style.background = "green";
-    btnZoomIn.style.color = "yellow";
-  };
-  btnZoomIn.onmouseleave = () => {
-    btnZoomIn.style.background = "#555";
-    btnZoomIn.style.color = "white";
-  };
-  btnClose.onmouseenter = () => {
-    btnClose.style.background = "red";
-    btnClose.style.color = "yellow";
-  };
-  btnClose.onmouseleave = () => {
-    btnClose.style.background = "#555";
-    btnClose.style.color = "white";
-  };
+  
+  btnZoomOut.onmouseenter = () => { btnZoomOut.style.background = "blue"; btnZoomOut.style.color = "yellow"; };
+  btnZoomOut.onmouseleave = () => { btnZoomOut.style.background = "#555"; btnZoomOut.style.color = "white"; };
+  btnZoomIn.onmouseenter = () => { btnZoomIn.style.background = "green"; btnZoomIn.style.color = "yellow"; };
+  btnZoomIn.onmouseleave = () => { btnZoomIn.style.background = "#555"; btnZoomIn.style.color = "white"; };
+  btnClose.onmouseenter = () => { btnClose.style.background = "red"; btnClose.style.color = "yellow"; };
+  btnClose.onmouseleave = () => { btnClose.style.background = "#555"; btnClose.style.color = "white"; };
+  
   btnClose.onclick = () => modal.remove();
+  
   const container = document.createElement("div");
-  container.style.flex = "1";
-  container.style.overflow = "auto";
+  container.style.cssText = `
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+  `;
+  
+  const bookWrapper = document.createElement("div");
+  bookWrapper.style.cssText = `
+    width: ${currentWidth}px;
+    margin: 0 auto;
+    height: 100%;
+    min-height: 85vh;
+    transition: width 0.1s ease-out;
+    background: #fff; /* Gives a clean loading background */
+  `;
+  
+  // --- SMART URL ROUTING TO FIX GOOGLE ERRORS ---
+  let finalIframeSrc = "";
+  
+  if (pdfUrl.includes("raw.githubusercontent.com")) {
+    // FIX: Instead of sending heavy raw GitHub links to Google Docs Viewer,
+    // convert them to jsDelivr CDN links. Browsers can render CDN PDFs natively inside iframes!
+    const cleanPath = pdfUrl.replace("https://raw.githubusercontent.com/", "");
+    const parts = cleanPath.split("/");
+    const user = parts[0];
+    const repo = parts[1];
+    const branch = parts[2];
+    const filePath = parts.slice(3).join("/");
+    
+    // Direct CDN address that forces browser native viewing
+    finalIframeSrc = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+  } else {
+    // Cloudinary or regular links still go through Google Viewer wrapper safely
+    finalIframeSrc = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+  }
+  
   const iframe = document.createElement("iframe");
-  iframe.src = pdfUrl;
+  iframe.src = finalIframeSrc;
   iframe.style.cssText = `
     width:100%;
     height:100%;
     border:none;
-    transform-origin:top center;
   `;
+  
+  // Fallback Link UI: Just in case Google completely breaks down for a specific user, 
+  // they can click an elegant anchor banner to open it natively.
+  const fallbackAlert = document.createElement("div");
+  fallbackAlert.style.cssText = `
+    padding: 5px; background: #fff3cd; color: #856404; text-align: center; font-size: 13px; font-family: sans-serif;
+  `;
+  fallbackAlert.innerHTML = `⚠️ Having trouble viewing? <a href="${pdfUrl}" target="_blank" style="color: #533f03; font-weight: bold; text-decoration: underline;">Click here to open directly</a>`;
+  
   function updateZoom() {
-    iframe.style.transform = `scale(${zoom})`;
+    bookWrapper.style.width = `${currentWidth}px`;
+    if (currentWidth > container.clientWidth) {
+        bookWrapper.style.margin = "0";
+    } else {
+        bookWrapper.style.margin = "0 auto";
+    }
   }
+  
   btnZoomIn.onclick = () => {
-    zoom += 0.1;
-    updateZoom();
-  };
-  btnZoomOut.onclick = () => {
-    if (zoom > 0.5) {
-      zoom -= 0.1;
+    if (currentWidth < maxWidth) {
+      currentWidth += 150;
       updateZoom();
     }
   };
+  
+  btnZoomOut.onclick = () => {
+    if (currentWidth > minWidth) {
+      currentWidth -= 150;
+      updateZoom();
+    }
+  };
+  
   controls.append(btnZoomOut, btnZoomIn, btnClose);
   toolbar.append(titleDiv, controls);
-  container.appendChild(iframe);
-  modal.append(toolbar, container);
+  
+  bookWrapper.appendChild(iframe);
+  
+  // Prepend fallback helper link inside the modal view
+  container.appendChild(bookWrapper);
+  modal.append(toolbar, fallbackAlert, container);
   document.body.appendChild(modal);
+  
+  setTimeout(updateZoom, 50);
 }
 
 //Open image viewer

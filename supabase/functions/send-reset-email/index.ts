@@ -28,8 +28,9 @@ serve(async (req) => {
     }
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    console.log("RESEND_API_KEY exists:", !!RESEND_API_KEY);
 
-    if (!RESEND_API_KEY) {
+    if (!RESEND_API_KEY || RESEND_API_KEY.trim() === "") {
       return new Response(
         JSON.stringify({ error: "Missing RESEND_API_KEY" }),
         {
@@ -47,7 +48,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "School_Website_Project <noreply@ganeshojha.com.np>",
+        from: "onboarding@resend.dev",
         to: [to],
         subject: "Reset Your Password",
         html: `

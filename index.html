@@ -2,15 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Home Page</title>
     <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+    
+    <!-- Required fonts and icons for slider -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <link rel="stylesheet" href="HomeStyle.css">
 </head>
 <body>
     <div id="MainBody">
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+            <div id="LogoBox">
+                <img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100">
+            </div>
             <select id="PageNavigationSelect">   
                 <option value="HomePage">Home</option>
                 <option value="LibraryPage">Library</option>
@@ -28,7 +35,24 @@
             <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
             <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
         </div>
+        
+        <!-- Slider Section -->
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <div class="slides-area" id="slidesArea">
+                    <div class="loader-overlay" id="loaderOverlay">
+                        <div class="spinner"></div>
+                        <p>Loading from Supabase...</p>
+                    </div>
+                </div>
+                <button class="nav-btn prev-btn" id="prevBtn" style="display: none;">&#10094;</button>
+                <button class="nav-btn next-btn" id="nextBtn" style="display: none;">&#10095;</button>
+                <div class="slide-counter" id="slideCounter" style="display: none;">1 / 10</div>
+            </div>
+            <div class="dots-pagination" id="dotsContainer"></div>
+        </div>
     </div>
+    
     <script src="HomeScript.js"></script>
 </body>
 </html>
