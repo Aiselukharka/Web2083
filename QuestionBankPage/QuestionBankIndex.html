@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question Bank Page</title>
-    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="QuestionBankStyle.css">
 </head>
 <body>
     <div id="MainBody">
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
             <select id="PageNavigationSelect">   
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="NoticePage">Notice</option>
@@ -25,8 +26,7 @@
                 <option value="HelpingHandPage">Helping Hand</option>
                 <option value="AdminPage">Admin</option>                
             </select>
-            <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
-            <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
         </div>
         <div id="MainHead">Available Questions</div>
         <div id="AdminQuestionList"></div>
@@ -35,7 +35,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../SupabaseConfig.js"></script>
     <script src="../CustomDialog.js"></script>
-    <script src="../pdfReader.js"></script>
+    <script src="../DocumentReader.js"></script>
+    <script src="../NepaliCalendar.js"></script>
     <script src="../SmartCalculator.js"></script>    
     <script src="QuestionBankScript.js"></script>
 </body>

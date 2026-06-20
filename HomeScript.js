@@ -26,9 +26,9 @@ PageNavigationDripDown.addEventListener("change", function () {
 // SUPABASE CONFIGURATION
 // ========================
 // 🔧 REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
-const SUPABASE_URL = 'https://wrjivuysumgpoqmabwpw.supabase.co';      // <-- REPLACE with your supabase url
+const SUPABASE_URL = 'https://wrjivuysumgpoqmabwpw.supabase.co';      
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indyaml2dXlzdW1ncG9xbWFid3B3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzczMTEsImV4cCI6MjA5NjY1MzMxMX0.Cfi1IwCFDEHGq1f4g_1amRduxeEiWvoZy4BwxNAtv8A';                  // <-- REPLACE with your anon key
-const TABLE_NAME = 'AdminImageTable';                         // your table name
+const TABLE_NAME = 'AboutSchoolTable';                         
 
 // ============================================================
 // FETCH IMAGES FROM SUPABASE (including Credentials column)
@@ -42,8 +42,7 @@ async function fetchSliderImagesFromSupabase() {
     }
     
     try {
-        const allRecordsUrl = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*&limit=50`;
-        
+        const allRecordsUrl = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*&limit=50`;        
         const allResponse = await fetch(allRecordsUrl, {
             headers: {
                 'apikey': SUPABASE_ANON_KEY,
@@ -63,34 +62,45 @@ async function fetchSliderImagesFromSupabase() {
             throw new Error("No records found in the table");
         }
         
+        // FIXED: Filter using your real column name 'Name'
         const sliderRecords = allRecords.filter(record => {            
-            const imageName = record.ImageName || '';
-            return imageName.toLowerCase().includes('sliderpicture');            
+            const dbName = record.Name || '';
+            return dbName.toLowerCase().includes('sliderpicture');            
         });
         
         console.log(`Found ${sliderRecords.length} slider pictures`);
         
         if (sliderRecords.length === 0) {
-            const allNames = allRecords.map(r => r.ImageName).filter(n => n);
+            const allNames = allRecords.map(r => r.Name).filter(n => n);
             throw new Error(`No SliderPicture records. Found: ${allNames.join(', ')}`);
         }
         
+        // FIXED: Sort using your real column name 'Name'
         const sortedRecords = sliderRecords.sort((a, b) => {
             const getNumber = (name) => {
                 const match = String(name || '').match(/SliderPicture(\d+)/i);
                 return match ? parseInt(match[1], 10) : 999;
             };
-            return getNumber(a.ImageName) - getNumber(b.ImageName);
+            return getNumber(a.Name) - getNumber(b.Name);
         });
         
-        const validRecords = sortedRecords.filter(r => r.ImageUrl && r.ImageUrl.trim() !== '');
+        // FIXED: Filter out rows that don't have a valid Cloudinary URL in 'Value'
+        const validRecords = sortedRecords.filter(r => r.Value && r.Value.trim() !== '');
         
-        return validRecords.map(record => ({
-            name: record.ImageName,
-            url: record.ImageUrl,
-            id: record.id,
-            credentials: record.Credentials || record.credentials || record.Credential || record.credential || "No credentials provided"
-        }));
+        // FIXED: Map DB records to what your front-end slider properties expect
+        return validRecords.map(record => {
+            // Find the matching credential value for this specific slider number
+            const sliderNumber = record.Name.replace('SliderPicture', '');
+            const matchingCredentialRow = allRecords.find(r => r.Name === `SliderCredential${sliderNumber}`);
+
+            return {
+                name: record.FileName || record.Name, // Shows actual file name or key string
+                url: record.Value,                   // Points to Cloudinary URL in 'Value' column
+                id: record.id,
+                // Automatically grabs credential string from its paired row, or defaults cleanly
+                credentials: matchingCredentialRow ? matchingCredentialRow.value || matchingCredentialRow.Value : "No credentials provided"
+            };
+        });
         
     } catch (err) {
         console.error("Supabase error:", err);
@@ -449,3 +459,43 @@ async function initSlider() {
 }
 
 initSlider();
+
+
+async function loadDynamicLogoAndFavicon() {
+    try {
+        // Query the table natively using your pre-configured supabaseClient
+        const { data, error } = await supabaseClient
+            .from('AboutSchoolTable')
+            .select('Value')
+            .eq('Name', 'SchoolLogo')
+            .single(); // Accesses the single matching record directly
+
+        if (error) {
+            console.error("Supabase query error loading branding:", error.message);
+            return;
+        }
+
+        if (data && data.Value) {
+            const freshLogoUrl = data.Value;
+
+            // 1. Update the Favicon inside the Document Head
+            const faviconElement = document.getElementById('dynamicFavicon');
+            if (faviconElement) {
+                faviconElement.href = freshLogoUrl;
+            }
+
+            // 2. Update the Logo Image Source inside #LogoBox
+            const logoImgElement = document.querySelector('#LogoBox img');
+            if (logoImgElement) {
+                logoImgElement.src = freshLogoUrl;
+            }
+            
+            console.log("Logo and Favicon synced dynamically via supabaseClient!");
+        }
+    } catch (error) {
+        console.error("Unexpected error setting up branding layout:", error);
+    }
+}
+
+// Run as soon as the page DOM is ready
+document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);

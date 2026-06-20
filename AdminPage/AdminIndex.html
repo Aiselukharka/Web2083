@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
-    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="AdminStyle.css">
 </head>
 <body>
     <div id="MainBody">
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
             <select id="PageNavigationSelect">   
                 <option value="AdminPage">Admin</option>
                 <option value="LibraryPage">Library</option>
@@ -25,14 +26,12 @@
                 <option value="HelpingHandPage">Helping Hand</option>
                 <option value="HomePage">Home</option>
             </select>
-            <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
-            <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
         </div>
         <div id="DateBox"></div>
         <div id="UtilityBox">
-            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
             <select id="NavigationSelect">
-                <option>Select Edit Field</option>
+                <option selected disabled>Select Edit Field</option>
                 <option value="LibraryEditBox">Edit Library</option>
                 <option value="NoticeEditBox">Edit Notice</option>
                 <option value="QuestionBankEditBox">Edit Question Bank</option>
@@ -46,14 +45,12 @@
                 <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
             </select>
             <select id="AdminToolsSelect">
-                <option>Admin Tools</option>
-                <option value="ChangeEmailTool">Change Email</option>
+                <option disabled selected>Admin Tools</option>
                 <option value="ChangePasswordTool">Change Password</option>
                 <option value="LogoutThisDeviceTool">Logout This Device</option>
                 <option value="LogoutAllDevicesTool">Logout All Devices</option>
                 <option value="AddAdminTool">Add/Delete Admin</option>
-            </select>
-            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+            </select>            
         </div>
         <!-- Library Edit Box -->
         <div id="LibraryEditBox" class="EditBoxes">
@@ -90,6 +87,7 @@
         </div>
         <!-- Student Edit Box -->
         <div id="StudentEditBox" class="EditBoxes">
+            <div>Edit Student Data Below</div>
 
         </div>
         <!-- Teacher Edit Box -->
@@ -98,11 +96,36 @@
         </div>
         <!-- Calendar Edit Box -->
         <div id="CalendarEditBox" class="EditBoxes">
-
+            <div id="CalendarDataBox"><!--Here calendar data will be displayed dynamically--></div>
         </div>
         <!-- About Us Edit Box -->
         <div id="AboutUsEditBox" class="EditBoxes">
-
+            <div id="EditAboutUsHead">Edit School Details</div>
+            <div class="EditAboutUsBoxes"><div>School Name:</div><input type="text" id="SchoolName" /></div>
+            <div class="EditAboutUsBoxes"><div>School Address:</div><input type="text" id="SchoolAddress" /></div>
+            <div class="EditAboutUsBoxes"><div>School Mobile:</div><input type="text" id="SchoolContact" /></div>
+            <div class="EditAboutUsBoxes"><div>School Email:</div><input type="text" id="SchoolEmail" /></div>
+            <div class="EditAboutUsBoxes"><div>Website:</div><input type="text" id="SchoolWebsite" /></div>
+            
+            <div id="ImportantContactBox">
+                <div id="ImportantContactHead">Add Some Important Contacts</div>
+                <div id="AboutUsImportantContactBox"></div>
+            </div>
+            <div id="SocialMediaEditBox">
+                <div id="SocialMediaHead">Write Following Social Media Links</div>
+                <div id="AboutUsSocialMediaBox"></div>                
+            </div>
+            <div id="AboutUsLogoSelectBox">
+                <label>Select Logo:</label>
+                <input type="file" id="SelectLogoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/>
+                <button id="btnChooseLogoFile" type="button">Choose File</button>
+                <div id="AboutUsLogoName"></div>
+            </div>
+            <div id="SliderEditBox">
+                <div id="SliderPictureSelectHead">Select Slider Pictures Below</div>
+                <div id="AboutUsSliderBox"></div>                
+            </div>
+            <button id="btnSaveAboutUs" type="button" onclick="saveAboutUs()">Save Changes</button>
         </div>
         <!-- Bal Pratibha Edit Box -->
         <div id="BalPratibhaEditBox" class="EditBoxes">
@@ -129,6 +152,11 @@
     <script src="../SmartCalculator.js"></script>
     <script src="../NepaliCalendar.js"></script>
     <script src="../DateConverter.js"></script>
+    <script src="EditAboutUs.js"></script>
+    <script src="EditQuestionBank.js"></script>
+    <script src="EditNotice.js"></script>
+    <script src="EditLibrary.js"></script>
+    <script src="EditCalendar.js"></script>
     <script src="AdminScript.js"></script>
 </body>
 </html>

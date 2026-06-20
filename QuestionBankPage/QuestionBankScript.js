@@ -1,5 +1,3 @@
-const supabaseClient = supabase.createClient(_supabaseUrl, _supabaseKey);
-
 // -------------------- NAVIGATE PAGES --------------------
 const PageNavigationDripDown = document.getElementById("PageNavigationSelect");
 PageNavigationDripDown.addEventListener("change", function () {
@@ -17,7 +15,6 @@ PageNavigationDripDown.addEventListener("change", function () {
         "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
         "AdminPage": "../AdminPage/LogInIndex.html"        
     };
-
     const selectedPage = pageMap[this.value];
     if (selectedPage) {
         window.location.href = selectedPage;
@@ -44,20 +41,13 @@ async function loadQuestions() {
     const extension = question.QuestionUrl.split('.').pop().toLowerCase();
     let openCode = "";
     if (["pdf"].includes(extension)) {
-      openCode =
-        `openPdfReader('${question.QuestionUrl}','${safeTitle}')`;
+      openCode = `openPdfReader('${question.QuestionUrl}','${safeTitle}')`;
     }
-    else if (
-      ["jpg","jpeg","png","gif","webp"].includes(extension)
-    ) {
-      openCode =
-        `showPictureViewer('${question.QuestionUrl}','${safeTitle}')`;
+    else if (["jpg","jpeg","png","gif","webp"].includes(extension)) {
+      openCode = `showPictureViewer('${question.QuestionUrl}','${safeTitle}')`;
     }
-    else if (
-      ["doc","docx","ppt","pptx","xls","xlsx"].includes(extension)
-    ) {
-      openCode =
-        `openOfficeFile('${question.QuestionUrl}','${safeTitle}')`;
+    else if (["doc","docx","ppt","pptx","xls","xlsx"].includes(extension)) {
+      openCode = `openOfficeFile('${question.QuestionUrl}','${safeTitle}')`;
     }
   div.innerHTML = `
       <h3>${question.title}</h3>
@@ -92,4 +82,40 @@ async function downloadQuestion(btn, url, fileName) {
   }
 }
 
+//Dynamically show logo and favicon
+async function loadDynamicLogoAndFavicon() {
+    try {
+        // Query the table natively using your pre-configured supabaseClient
+        const { data, error } = await supabaseClient
+            .from('AboutSchoolTable')
+            .select('Value')
+            .eq('Name', 'SchoolLogo')
+            .single(); // Accesses the single matching record directly
 
+        if (error) {
+            console.error("Supabase query error loading branding:", error.message);
+            return;
+        }
+
+        if (data && data.Value) {
+            const freshLogoUrl = data.Value;
+
+            // 1. Update the Favicon inside the Document Head
+            const faviconElement = document.getElementById('dynamicFavicon');
+            if (faviconElement) {
+                faviconElement.href = freshLogoUrl;
+            }
+
+            // 2. Update the Logo Image Source inside #LogoBox
+            const logoImgElement = document.querySelector('#LogoBox img');
+            if (logoImgElement) {
+                logoImgElement.src = freshLogoUrl;
+            }
+            
+            console.log("Logo and Favicon synced dynamically via supabaseClient!");
+        }
+    } catch (error) {
+        console.error("Unexpected error setting up branding layout:", error);
+    }
+}
+document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);

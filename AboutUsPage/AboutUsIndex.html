@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
-    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
-    <link rel="stylesheet" href="AboutUsStyle.css">
+    <!-- Fallback favicon updated dynamically via JS -->
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+    <link rel="stylesheet" href="AboutUsStyle.css"><link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+    <!-- Load Supabase Client SDK first -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div id="MainBody">
+        <!-- Navigation Section -->
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+            <div id="LogoBox"><img id="HeaderLogo" src="" alt="Logo" width="100" height="100"></div>
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
             <select id="PageNavigationSelect">   
                 <option value="AboutUsPage">About Us</option>
                 <option value="StudentPage">Students</option>
@@ -25,11 +30,38 @@
                 <option value="HelpingHandPage">Helping Hand</option>
                 <option value="AdminPage">Admin</option>                
             </select>
-            <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
-            <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>
+
+        <!-- Dynamic Content Section -->
+        <div id="PageContentContainer">
+            <!-- School core overview block -->
+            <div id="SchoolOverviewSection">
+                <h1 id="DisplaySchoolName">Loading Details...</h1>
+                <p id="DisplaySchoolAddress"></p>
+                
+                <div class="meta-row">
+                    <span><strong>Contact:</strong> <span id="DisplaySchoolContact"></span></span>
+                    <span><strong>Email:</strong> <span id="DisplaySchoolEmail"></span></span>
+                    <span><strong>Website:</strong> <a id="DisplaySchoolWebsite" href="#" target="_blank"></a></span>
+                </div>
+
+                <div id="SocialLinksContainer">
+                    <!-- Appended dynamically if present -->
+                </div>
+            </div>
+
+            <!-- Administration team panel -->
+            <h2 class="section-title">Key Administration & Contact Members</h2>
+            <div id="SpecialContactsGrid">
+                <!-- Appended dynamically via JS -->
+            </div>
         </div>
 
     </div>
+    <script src="../SupabaseConfig.js"></script>
+    <script src="../NepaliCalendar.js"></script>
+    <script src="../SmartCalculator.js"></script>
     <script src="AboutUsScript.js"></script>
 </body>
 </html>

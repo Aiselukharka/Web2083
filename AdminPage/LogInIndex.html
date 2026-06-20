@@ -4,38 +4,173 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Login</title>
-<link rel="icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+<link id="dynamicFavicon" rel="icon" type="image/png" href="" />
 
 <style>
-@font-face{font-family:'MySanskritFont';src:url('../Sanskrit-2003.ttf') format('truetype');}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{width:100%;min-height:100%;display:flex;justify-content:center;}
-body{width:100%;max-width:1200px;min-height:100vh;font-family:Arial,'MySanskritFont',sans-serif;display:flex;justify-content:center;}
-#MainBody{width:96%;max-width:1100px;min-height:100vh;background:#ffaaaa;display:flex;flex-direction:column;align-items:center;}
-#PageNaviggationBox {width: 100%; display: flex; flex-direction: row; justify-content: space-evenly; background: #000000; padding: 1rem; text-align: center;}
-#LogoBox{width: 6%; height: auto;}
-#LogoBox img{width: 100%; height: 100%; object-fit: contain;}
-#PageNavigationSelect{width: 40%; font-size: 2vw; font-weight: bold; padding: 2vh; border: 4px solid #000000;}
-#PageNaviggationBox button{width: 20%; padding: 2vh 0 2vh 0; background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00); color: #ffffff; border-radius: 4vw; font-size: 2vw; font-weight: bold; cursor: pointer;}
-#pageNaviggationBox button:hover{background: linear-gradient(180deg, #009900, #00aa00, #009900); color: #ffff00;}
-#btnAdmin{background:#00aa00!important;}
-.LogInContainer{width:60%;padding:2rem;background:linear-gradient(135deg,#aaccaa,#aaeeaa);display:flex;justify-content:center;}
-.LogInBox{width:100%;display:flex;flex-direction:column;align-items:center;}
-.LogInBox h2{font-size:2.5rem;color:#003300;margin-bottom:10px;}
-.LogInBox p{font-size:1.2rem;color:#555;margin-bottom:20px;}
-#loginStatus{font-size:1.1rem;font-weight:bold;margin-bottom:20px;text-align:center;}
-#loginForm{width:100%;display:flex;flex-direction:column;align-items:center;background:linear-gradient(135deg,#ddd,#eee);padding:2rem;border-radius:10px;}
-.InputGroup{width:100%;display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;font-size:1.3rem;font-weight:bold;}
+@font-face{
+    font-family:'MySanskritFont';
+    src:url('../Sanskrit-2003.ttf') format('truetype');
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+html{
+    width:100%;
+    min-height:100%;
+    display:flex;
+    justify-content:center;
+}
+body{
+    width:100%;
+    max-width:1200px;
+    min-height:100vh;
+    font-family:Arial,'MySanskritFont',sans-serif;
+    display:flex;
+    justify-content:center;
+}
+#MainBody{
+    width:96%;
+    max-width:1100px;
+    min-height:100vh;
+    background:#ffaaaa;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+#PageNaviggationBox {
+    width: 100%; 
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-evenly; 
+    background: #000000; 
+    padding: 1rem; 
+    text-align: center;
+}
+#LogoBox{
+    width: 6%; 
+    height: auto;
+}
+#LogoBox img{
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 80%; 
+    font-size: 2vw; 
+    font-weight: bold; 
+    padding: 2vh; 
+    border: 4px solid #000000;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900); 
+    color: #ffff00;
+}
+#btnAdmin{
+    background:#00aa00!important;
+}
+.LogInContainer{
+    width:60%;
+    padding:2rem;
+    background:linear-gradient(135deg,#aaccaa,#aaeeaa);
+    display:flex;
+    justify-content:center;
+}
+.LogInBox{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.LogInBox h2{
+    font-size:2.5rem;
+    color:#003300;
+    margin-bottom:10px;
+}
+.LogInBox p{
+    font-size:1.2rem;
+    color:#555;
+    margin-bottom:20px;
+}
+#loginStatus{
+    font-size:1.1rem;
+    font-weight:bold;
+    margin-bottom:20px;
+    text-align:center;
+}
+#loginForm{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    background:linear-gradient(135deg,#ddd,#eee);
+    padding:2rem;
+    border-radius:10px;
+}
+.InputGroup{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    margin-bottom:1.5rem;
+    font-size:1.3rem;
+    font-weight:bold;
+}
 .InputGroup label{width:25%;}
-#email,#password{width:100%;padding:.7rem;font-size:1.1rem;border:1px solid #ccc;border-radius:5px;}
-#PasswordBox{width:75%;position:relative;}
-#togglePassword{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.2rem;}
-#btnLogIn,#btnOpenAdmin{width:50%;padding:.8rem;margin-top:15px;font-size:1.2rem;color:white;border:none;border-radius:20px;cursor:pointer;}
-#btnLogIn{background:linear-gradient(180deg,#007700,#00aa00,#007700);}
-#btnOpenAdmin{background:linear-gradient(180deg,#0000aa,#3333ff,#0000aa);display:none;}
-#forgotPassword{margin-top:1rem;font-size:1.2rem;color:#0000dd;text-decoration:none;}
-#forgotPassword:hover{text-decoration:underline;}
-#errorMessage{color:red;margin-top:15px;font-size:14px;display:none;}
+#email,#password{
+    width:100%;
+    padding:.7rem;
+    font-size:1.1rem;
+    border:1px solid #ccc;border-radius:5px;
+}
+#PasswordBox{
+    width:75%;
+    position:relative;
+}
+#togglePassword{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-size:1.2rem;
+}
+#btnLogIn,#btnOpenAdmin{
+    width:50%;
+    padding:.8rem;
+    margin-top:15px;
+    font-size:1.2rem;
+    color:white;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+}
+#btnLogIn{
+    background:linear-gradient(180deg,#007700,#00aa00,#007700);
+}
+#btnOpenAdmin{
+    background:linear-gradient(180deg,#0000aa,#3333ff,#0000aa);
+    display:none;
+}
+#forgotPassword{
+    margin-top:1rem;
+    font-size:1.2rem;
+    color:#0000dd;
+    text-decoration:none;
+}
+#forgotPassword:hover{
+    text-decoration:underline;
+}
+#errorMessage{
+    color:red;
+    margin-top:15px;
+    font-size:14px;
+    display:none;
+}
 
 @media(max-width:800px){
 .LogInContainer{width:90%;}
@@ -53,7 +188,7 @@ body{width:100%;max-width:1200px;min-height:100vh;font-family:Arial,'MySanskritF
 <body>
 <div id="MainBody">
 <div id="PageNaviggationBox">
-    <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+    <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
     <select id="PageNavigationSelect">   
         <option value="AdminPage">Admin</option>
         <option value="HelpingHandPage">Helping Hands</option>
@@ -67,9 +202,7 @@ body{width:100%;max-width:1200px;min-height:100vh;font-family:Arial,'MySanskritF
         <option value="AboutUsPage">About Us</option>
         <option value="GalleryPage">Gallery</option>
         <option value="SMC_TGC_Page">SMC & TGC</option>                        
-    </select>
-    <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
-    <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
+    </select>    
 </div>
 
 <div class="LogInContainer">
@@ -78,7 +211,7 @@ body{width:100%;max-width:1200px;min-height:100vh;font-family:Arial,'MySanskritF
 <h2>Admin Login</h2>
 <p>Enter credentials to access dashboard</p>
 
-<div id="loginStatus"></div>
+<div id="loginStatus"></div><img src="" width="100" height="100">
 
 <form id="loginForm" autocomplete="off">
 <div class="InputGroup">
@@ -109,8 +242,6 @@ body{width:100%;max-width:1200px;min-height:100vh;font-family:Arial,'MySanskritF
 <script src="../SupabaseConfig.js"></script>
 
 <script>
-const supabaseClient = supabase.createClient(_supabaseUrl,_supabaseKey);
-
 const loginForm=document.getElementById("loginForm");
 const loginBtn=document.getElementById("btnLogIn");
 const openAdminBtn=document.getElementById("btnOpenAdmin");
@@ -321,6 +452,43 @@ refreshUI();
 }
 });
 
+//Dynamically show logo and favicon
+async function loadDynamicLogoAndFavicon() {
+    try {
+        // Query the table natively using your pre-configured supabaseClient
+        const { data, error } = await supabaseClient
+            .from('AboutSchoolTable')
+            .select('Value')
+            .eq('Name', 'SchoolLogo')
+            .single(); // Accesses the single matching record directly
+
+        if (error) {
+            console.error("Supabase query error loading branding:", error.message);
+            return;
+        }
+
+        if (data && data.Value) {
+            const freshLogoUrl = data.Value;
+
+            // 1. Update the Favicon inside the Document Head
+            const faviconElement = document.getElementById('dynamicFavicon');
+            if (faviconElement) {
+                faviconElement.href = freshLogoUrl;
+            }
+
+            // 2. Update the Logo Image Source inside #LogoBox
+            const logoImgElement = document.querySelector('#LogoBox img');
+            if (logoImgElement) {
+                logoImgElement.src = freshLogoUrl;
+            }
+            
+            console.log("Logo and Favicon synced dynamically via supabaseClient!");
+        }
+    } catch (error) {
+        console.error("Unexpected error setting up branding layout:", error);
+    }
+}
+document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
 </script>
 
 </body>

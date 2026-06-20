@@ -1,23 +1,23 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts"
 
 serve(async (req: Request) => {
-  // CORS headers
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS"
   }
 
-  // Handle browser preflight request
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders })
   }
 
   try {
-    // Frontend can pass publicId, and optionally resourceType ('raw' for books, 'image' for images)
-    const { publicId, resourceType = "raw" } = await req.json()
+    const { publicId } = await req.json()
 
-    // Securely pull configuration credentials from the environment
+    if (!publicId) {
+      throw new Error("Missing parameter: publicId is required.")
+    }
+
     const cloudName = Deno.env.get("CLOUDINARY_CLOUD_NAME")
     const apiKey = Deno.env.get("CLOUDINARY_API_KEY")
     const apiSecret = Deno.env.get("CLOUDINARY_API_SECRET")
@@ -26,24 +26,20 @@ serve(async (req: Request) => {
       throw new Error("Missing Cloudinary configurations in server environmental variables.")
     }
 
-    // Dynamic endpoint depending on resourceType ('raw' or 'image')
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/destroy`
-
-    const formData = new FormData()
-    formData.append("public_id", publicId)
-
+    // Explicitly uses 'image' resource type and Admin API endpoints
+    const url = `https://api.cloudinary.com/v1_1/${cloudName}/resources/image/upload?public_ids[]=${encodeURIComponent(publicId)}`
     const basicAuth = btoa(`${apiKey}:${apiSecret}`)
 
     const res = await fetch(url, {
-      method: "POST",
+      method: "DELETE",
       headers: {
-        Authorization: `Basic ${basicAuth}`
-      },
-      body: formData
+        "Authorization": `Basic ${basicAuth}`,
+        "Content-Type": "application/json"
+      }
     })
 
     const result = await res.json()
-    console.log("Cloudinary destroy result:", result)
+    console.log("Cloudinary Material Delete Result:", result)
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" }

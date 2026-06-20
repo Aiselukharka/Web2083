@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Add Admin</title>
-<link rel="icon" href="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png">
+<link id="dynamicFavicon" rel="icon" type="image/png" href="" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script src="../SupabaseConfig.js"></script>
     <style>
@@ -158,7 +158,7 @@
 <body>
     <div id="MainBody">
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="https://res.cloudinary.com/dfsaihbk7/image/upload/v1779451142/satakon_h6cojj.png" alt="Logo" width="100" height="100"></div>
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
             <select id="PageNavigationSelect">   
                 <option value="AddAdminPage">Add Admin</option>
                 <option value="AdminPage">Admin</option>
@@ -173,9 +173,7 @@
                 <option value="SMC_TGC_Page">SMC & TGC</option>
                 <option value="HelpingHandPage">Helping Hand</option>
                 <option value="HomePage">Home</option>
-            </select>
-            <button id="btnEnglish" type="button" onclick="changeLanguage('en')">English</button>
-            <button id="btnNepali" type="button" onclick="changeLanguage('ne')">नेपाली</button>
+            </select>            
         </div>
         <div id="AdminList"></div>
         <div id="AddAdminBox">
@@ -189,7 +187,6 @@
     </div>
 
     <script>
-    const supabaseClient = supabase.createClient(_supabaseUrl, _supabaseKey);
     /* ================= AUTH ================= */
     protectAdminPage();
     async function protectAdminPage() {
@@ -221,7 +218,6 @@ PageNavigationDripDown.addEventListener("change", function () {
         "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
         "HomePage": "../HomeIndex.html"
     };
-
     const selectedPage = pageMap[this.value];
     if (selectedPage) {
         window.location.href = selectedPage;
@@ -324,6 +320,43 @@ PageNavigationDripDown.addEventListener("change", function () {
         const input = document.getElementById(id);
         input.type = input.type === "password" ? "text" : "password";
     }
+
+    async function loadDynamicLogoAndFavicon() {
+        try {
+            // Query the table natively using your pre-configured supabaseClient
+            const { data, error } = await supabaseClient
+                .from('AboutSchoolTable')
+                .select('Value')
+                .eq('Name', 'SchoolLogo')
+                .single(); // Accesses the single matching record directly
+
+            if (error) {
+                console.error("Supabase query error loading branding:", error.message);
+                return;
+            }
+
+            if (data && data.Value) {
+                const freshLogoUrl = data.Value;
+
+                // 1. Update the Favicon inside the Document Head
+                const faviconElement = document.getElementById('dynamicFavicon');
+                if (faviconElement) {
+                    faviconElement.href = freshLogoUrl;
+                }
+
+                // 2. Update the Logo Image Source inside #LogoBox
+                const logoImgElement = document.querySelector('#LogoBox img');
+                if (logoImgElement) {
+                    logoImgElement.src = freshLogoUrl;
+                }
+                
+                console.log("Logo and Favicon synced dynamically via supabaseClient!");
+            }
+        } catch (error) {
+            console.error("Unexpected error setting up branding layout:", error);
+        }
+    }
+    document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
     </script>
 </body>
 </html>
