@@ -13,7 +13,7 @@
 
 html{
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;  
@@ -21,18 +21,18 @@ html{
 
 body { 
     width: 100%;
-    max-width: 1200px;   
+    height: auto;
     font-family: Arial, sans-serif; 
     min-height: 100%;
     font-family: 'Arial', 'MySanskritFont', sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center;  
+    align-items: center; 
+    background: linear-gradient(135deg, #333333, #555555); 
 }
 
 #MainBody{
-    width: 96%;
-    max-width: 1100px;   
+    width: 90%;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -62,18 +62,18 @@ body {
 }
 #PageNavigationSelect{
     width: 40%;
-    font-size: 2vw;
+    font-size: clamp(1rem, 2vw, 3rem);
     font-weight: bold;
-    padding: 2vh;
+    padding: clamp(0.3rem, 1vw, 2rem);
     border: 4px solid #000000;
 }
 #PageNaviggationBox button{
     width: 20%;
-    padding: 2vh 0 2vh 0;
+    padding: clamp(0.3rem, 1vw, 2rem) 0;
     background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
     color: #ffffff;
     border-radius: 4vw;  
-    font-size: 2vw;  
+    font-size: clamp(1rem, 2vw, 3rem);  
     font-weight: bold;
     cursor: pointer;
 }
@@ -82,108 +82,99 @@ body {
     color: #ffff00;
 }
 
-/* --- APPEND THESE TO YOUR EXISTING ABOUTUSSTYLE.CSS FILE --- */
-
 #PageContentContainer {
     width: 100%;
-    padding: 2rem 1.5rem;
+    padding: clamp(1rem, 2vw, 3rem);
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: clamp(1rem, 2vw, 3rem);
 }
-
-/* School Core Overview Section Styling */
 #SchoolOverviewSection {
     width: 100%;
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    background: #dddddd;
+    border-radius: 2vw;
+    padding: clamp(1rem, 2vw, 3rem);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.08);
     text-align: center;
 }
 
 #DisplaySchoolName {
-    font-size: 2.5rem;
-    color: #1a1a1a;
-    margin-bottom: 0.5rem;
+    font-size: clamp(2rem, 3vw, 4rem);
+    color: #0000aa;
+    margin-bottom: clamp(0.5rem, 1.5vw, 3rem); 
+    text-shadow: 2px 2px 5px #aa0000;       
 }
 
 #DisplaySchoolAddress {
-    font-size: 1.2rem;
-    color: #666666;
-    margin-bottom: 1.5rem;
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-style: italic;
+    color: #aa0000;
+    margin-bottom: clamp(0.5rem, 1.5vw, 3rem);   
+    text-shadow: 1px 1px 2px #aaaa00; 
 }
 
 .meta-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 2rem;
-    font-size: 1.1rem;
+    gap: clamp(1rem, 2vw, 3rem);
+    font-size: clamp(0.6rem, 1.4vw, 2rem);
     color: #333333;
-    border-top: 1px solid #eeeeee;
-    border-bottom: 1px solid #eeeeee;
-    padding: 1rem 0;
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    padding: clamp(0.3rem, 1vw, 2rem) 0;
 }
-
 .meta-row a {
-    color: #00aa00;
+    color: #0000aa;
     text-decoration: none;
     font-weight: bold;
 }
-
 .meta-row a:hover {
     text-decoration: underline;
+    color: #0000ff
 }
-
-/* Social Media Button Layouts */
 #SocialLinksContainer {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    gap: clamp(1rem, 2vw, 3rem);
+    margin: clamp(1rem, 2vw, 3rem) 0;
 }
 
 .social-btn {
-    padding: 0.6rem 1.2rem;
-    background: #333333;
+    padding: clamp(0.4rem, 1.2vw, 2rem);
+    background: linear-gradient(180deg, #007700, #00aa00, #007700);
     color: #ffffff;
     text-decoration: none;
     font-weight: bold;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    border-radius: 2vw;
+    font-size: clamp(0.6rem, 1.5vw, 2.3rem);
     transition: all 0.2s ease;
 }
-
 .social-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    background: linear-gradient(180deg, #004400, #007700, #004400);
+    color: #ffff00;
 }
-
-/* Administration Profiles Grid Framework */
 .section-title {
     text-align: center;
-    font-size: 1.8rem;
-    color: #1a1a1a;
-    margin-bottom: -0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: clamp(2rem, 3vw, 4rem);
+    color: #aa00aa;
+    margin-bottom: clamp(0.5rem, 1.5vw, 3rem); 
+    text-shadow: 2px 2px 5px #ffffff; 
 }
-
 #SpecialContactsGrid {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    gap: clamp(1rem, 2vw, 4rem);
     justify-content: center;
 }
-
-/* Individual Card Items Layout */
 .contact-card {
     background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #e0e0e0;
+    border-radius: 2vw;
+    border: 2px solid #00ffff;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.06);
     display: flex;
@@ -196,11 +187,11 @@ body {
 }
 
 .image-container {
-    width: 100%;
-    height: 380px; /* Provides ample vertical height for 300x450 aspect ratios */
-    background-color: #fcfcfc; /* Neutral background color fill for empty layout spaces */
-    border-bottom: 1px solid #eeeeee;
-    padding: 10px; /* Prevents edge stretching */
+    width: auto;
+    height: 300px;
+    background-color: #fcfcfc;
+    border-bottom: 1px solid #aaaaaa;
+    padding: clamp(0.4rem, 1.2vw, 2rem);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -209,38 +200,40 @@ body {
 .image-container img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Ensures images scale perfectly without any cropping */
+    object-fit: contain; 
 }
 
 .contact-details-box {
-    padding: 1.25rem;
+    padding: clamp(0.3rem, 1vw, 2rem);
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    background: #fafafa;
+    background: #ccffff;
+    text-align: center;
 }
 
 .contact-role-tag {
-    font-size: 0.85rem;
+    font-size: clamp(0.8rem, 1.4vw, 2.5rem);
     text-transform: uppercase;
     color: #00aa00;
     font-weight: bold;
     letter-spacing: 0.5px;
+    text-decoration: underline;
 }
 
 .contact-name {
-    font-size: 1.3rem;
-    color: #1a1a1a;
+    font-size: clamp(0.8rem, 1.4vw, 2.5rem);
+    color: #0000aa;
     font-weight: bold;
     margin-bottom: 0.25rem;
 }
 
 .contact-info-line {
-    font-size: 0.95rem;
-    color: #555555;
+    font-size: clamp(0.6rem, 1.2vw, 2rem);
+    color: #aa00aa;
     word-break: break-all;
 }
 
 .contact-info-line strong {
-    color: #333333;
+    color: #000000;
 }

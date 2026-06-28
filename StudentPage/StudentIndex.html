@@ -5,14 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Page</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jspreadsheet-ce@4/dist/jspreadsheet.min.css" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/jspreadsheet-ce@4/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsuites@4/dist/jsuites.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsuites@4/dist/jsuites.min.css" type="text/css" />
+    
     <link rel="stylesheet" href="StudentStyle.css">
 </head>
 <body>
     <div id="MainBody">
+        
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <div id="IdentityHeaderRow">
+                <div id="LogoBox"><img src="" alt="Logo"></div>
+                <div id="SchoolMetaBlock">
+                    <h1 id="SchoolNameLabel">Loading School...</h1>
+                    <p id="SchoolAddressLabel">Loading Address...</p>
+                </div>
+            </div>
             <select id="PageNavigationSelect">   
-                <option value="StudentPage">Students</option>
+                <option value="StudentPage" selected>Students</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="NoticePage">Notice</option>
                 <option value="LibraryPage">Library</option>
@@ -26,28 +39,70 @@
                 <option value="AdminPage">Admin</option>                
             </select>  
         </div>
-        <div id="ClassSelectionBox">
-            <div>Select Class:</div>
-            <select id="ClassSelectionDropdown">
-                <option value="Class_1">Class ECD</option>
-                <option value="Class_2">Class KG</option>
-                <option value="Class_3">Class 1</option>
-                <option value="Class_4">Class 2</option>
-                <option value="Class_5">Class 3</option>
-                <option value="Class_6">Class 4</option>
-                <option value="Class_7">Class 5</option>
-                <option value="Class_8">Class 6</option>
-                <option value="Class_9">Class 7</option>
-                <option value="Class_10">Class 8</option>
-                <option value="Class_11">Class 9</option>
-                <option value="Class_12">Class 10</option>
-                <option value="Class_13">Class 11</option>
-                <option value="Class_14">Class 12</option>                
-            </select>
+
+        <div id="FilterControlPanel">
+            <div class="filters-inner-row">
+                <div class="filter-group">
+                    <label class="filter-header-label">Classes</label>
+                    <div id="FilterClassDropdown" class="custom-multiselect-panel bg-class"></div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-header-label">Streams</label>
+                    <div id="FilterStreamDropdown" class="custom-multiselect-panel bg-stream"></div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-header-label">Houses</label>
+                    <div id="FilterHouseDropdown" class="custom-multiselect-panel bg-house"></div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-header-label">Races</label>
+                    <div id="FilterRaceDropdown" class="custom-multiselect-panel bg-race"></div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-header-label">Genders</label>
+                    <div id="FilterGenderDropdown" class="custom-multiselect-panel bg-gender"></div>
+                </div>
+            </div>
+            <div id="FilterActionContainer" style="display: none;">
+                <button id="btnApplyGridFilters" onclick="applyActiveFilters()">Apply Filters</button>
+            </div>
         </div>
 
+        <div id="StudentDataBox"></div>
+
+        <div id="ActionBarBox" style="display: none;">
+            <span class="export-label">Export Data As:</span>
+            <button class="btn-export" onclick="exportData('excel')">Excel Spreadsheet</button>
+            <button class="btn-export" onclick="exportData('pdf')">PDF Document</button>
+            <button class="btn-export" onclick="exportData('jpg')">JPG Image</button>
+        </div>
     </div>
+
+    <div id="StudentDetailModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close-btn" onclick="closeStudentModal()">&times;</span>
+            <div class="modal-scroll-container">
+                <div class="modal-body-layout">
+                    <div class="modal-photo-pane">
+                        <img id="ModalStudentPhoto" src="" alt="Student Profile Picture">
+                    </div>
+                    <div class="modal-info-pane">
+                        <h2 id="ModalStudentName">Student Profile</h2>
+                        <hr>
+                        <div id="ModalDetailsSingleColumn"></div>
+                    </div>
+                </div>
+                <div class="modal-save-jpg-container">
+                    <button class="btn-modal-save" onclick="saveModalAsJPG()">Save Profile as Image (JPG)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <script src="../SupabaseConfig.js"></script>
     <script src="../NepaliCalendar.js"></script>
     <script src="../SmartCalculator.js"></script>

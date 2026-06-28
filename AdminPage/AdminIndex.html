@@ -3,9 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
     <title>Admin Page</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
-    <link rel="stylesheet" href="AdminStyle.css">
+    <style>
+        @font-face {
+            font-family: 'MySanskritFont';
+            src: url('../Sanskrit-2003.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        html{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+            font-size: 62.5%;
+        }
+        body { 
+            width: 100%;
+            height: auto;
+            font-family: Arial, sans-serif; 
+            min-height: 100%;
+            font-family: 'Arial', 'MySanskritFont', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+        }
+
+        #MainBody{
+            width: 96%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffaaaa;
+            min-height: 100%;
+            margin: 0 auto;    
+            padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+        }
+
+        #PageNaviggationBox {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            background: #000000;
+            padding: clamp(0.3rem, 1rem, 1.6rem);
+            text-align: center;
+        }
+        #LogoBox{
+            width: 6%;
+            height: auto;     
+        }
+        #LogoBox img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        #PageNavigationSelect{
+            width: 50%;
+            font-size: clamp(1.2rem, 2vw, 3rem);
+            font-weight: bold;
+            padding: clamp(0.3rem, 1rem, 1.6rem);;
+            border: 4px solid #000000;
+        }
+        #PageNaviggationBox button{
+            width: 20%;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+            background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+            color: #ffffff;
+            border-radius: 4vw;  
+            font-size: clamp(1rem, 2vw, 3rem);  
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #pageNaviggationBox button:hover{
+            background: linear-gradient(180deg, #009900, #00aa00, #009900);
+            color: #ffff00;
+        }
+
+        #DateBox{
+            width: 100%;
+            text-align: center;
+            font-size: clamp(1.2rem, 3vw, 2.5rem);
+            font-weight: 800;
+            color: #ffff00;
+            padding: clamp(0.3rem, 1rem, 1.6rem);   
+            background: linear-gradient(180deg, #111111, #333333); 
+        }
+        #UtilityBox{
+            width: 100%;
+            height: auto;
+            background: linear-gradient(180deg, #333333, #555555);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+        }
+        #EditNavigationSelect, #AdminToolsSelect{
+            width: 48%;
+            font-size: clamp(1.2rem, 2vw, 3rem);
+            font-weight: bold;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+            border: 4px solid #000000;
+        }
+    </style>
 </head>
 <body>
     <div id="MainBody">
@@ -30,19 +141,25 @@
         </div>
         <div id="DateBox"></div>
         <div id="UtilityBox">
-            <select id="NavigationSelect">
-                <option selected disabled>Select Edit Field</option>
+            <select id="EditNavigationSelect">
+                <option selected disabled>Admin</option>
+                <option value="AttendanceCardEditBox">Edit Attendance Cards</option>
+                <option value="IDCardEditBox">Edit ID Cards</option>
+                <option value="ResultEditBox">Edit Result</option>
+                <option value="RoutineEditBox">Edit Routine</option>
+                <option value="StudentAttendanceEditBox">Edit Student Attendance</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
                 <option value="LibraryEditBox">Edit Library</option>
                 <option value="NoticeEditBox">Edit Notice</option>
-                <option value="QuestionBankEditBox">Edit Question Bank</option>
+                <option value="AboutUsEditBox">Edit About Us</option>
                 <option value="StudentEditBox">Edit Student Data</option>
                 <option value="TeacherEditBox">Edit Teacher Data</option>
                 <option value="CalendarEditBox">Edit Calendar</option>
-                <option value="AboutUsEditBox">Edit About Us</option>
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
                 <option value="HelpingHandEditBox">Edit Helping Hand</option>
                 <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
             </select>
             <select id="AdminToolsSelect">
                 <option disabled selected>Admin Tools</option>
@@ -52,111 +169,189 @@
                 <option value="AddAdminTool">Add/Delete Admin</option>
             </select>            
         </div>
-        <!-- Library Edit Box -->
-        <div id="LibraryEditBox" class="EditBoxes">
-            <div id="AdminBookList"></div>
-            <div id="AddBookHead">Add Book</div>
-            <div id="AddBookBox">
-                <input type="file" id="LibraryFile" />
-                <button id="btnChooseLibraryFile" type="button">Choose File</button>
-                <input id="BookTitle" placeholder="Book Title" />
-                <button id="btnUploadBook" onclick="uploadBook()">Upload</button>
-            </div>
-        </div>
-        <!-- Notice Edit Box -->
-        <div id="NoticeEditBox" class="EditBoxes">
-            <div id="AdminNoticeList"></div>
-            <div id="AddNoticeHead">Add Notice</div>
-            <div id="AddNoticeBox">
-                <input type="file" id="NoticeFile" />
-                <button id="btnChooseNoticeFile" type="button">Choose File</button>
-                <input id="NoticeTitle" placeholder="Notice Title" />
-                <button id="btnUploadNotice" onclick="uploadNotice()">Upload</button>
-            </div>
-        </div>
-            <!-- Question Bank Edit Box -->
-        <div id="QuestionBankEditBox" class="EditBoxes">
-            <div id="AdminQuestionList"></div>
-            <div id="AddQuestionHead">Add Question</div>
-            <div id="AddQuestionBox">
-                <input type="file" id="QuestionFile" />
-                <button id="btnChooseQuestionFile" type="button">Choose File</button>
-                <input id="QuestionTitle" placeholder="Question Title" />
-                <button id="btnUploadQuestion" onclick="uploadQuestion()">Upload</button>
-            </div>
-        </div>
-        <!-- Student Edit Box -->
-        <div id="StudentEditBox" class="EditBoxes">
-            <div>Edit Student Data Below</div>
-
-        </div>
-        <!-- Teacher Edit Box -->
-        <div id="TeacherEditBox" class="EditBoxes">
-
-        </div>
-        <!-- Calendar Edit Box -->
-        <div id="CalendarEditBox" class="EditBoxes">
-            <div id="CalendarDataBox"><!--Here calendar data will be displayed dynamically--></div>
-        </div>
-        <!-- About Us Edit Box -->
-        <div id="AboutUsEditBox" class="EditBoxes">
-            <div id="EditAboutUsHead">Edit School Details</div>
-            <div class="EditAboutUsBoxes"><div>School Name:</div><input type="text" id="SchoolName" /></div>
-            <div class="EditAboutUsBoxes"><div>School Address:</div><input type="text" id="SchoolAddress" /></div>
-            <div class="EditAboutUsBoxes"><div>School Mobile:</div><input type="text" id="SchoolContact" /></div>
-            <div class="EditAboutUsBoxes"><div>School Email:</div><input type="text" id="SchoolEmail" /></div>
-            <div class="EditAboutUsBoxes"><div>Website:</div><input type="text" id="SchoolWebsite" /></div>
-            
-            <div id="ImportantContactBox">
-                <div id="ImportantContactHead">Add Some Important Contacts</div>
-                <div id="AboutUsImportantContactBox"></div>
-            </div>
-            <div id="SocialMediaEditBox">
-                <div id="SocialMediaHead">Write Following Social Media Links</div>
-                <div id="AboutUsSocialMediaBox"></div>                
-            </div>
-            <div id="AboutUsLogoSelectBox">
-                <label>Select Logo:</label>
-                <input type="file" id="SelectLogoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/>
-                <button id="btnChooseLogoFile" type="button">Choose File</button>
-                <div id="AboutUsLogoName"></div>
-            </div>
-            <div id="SliderEditBox">
-                <div id="SliderPictureSelectHead">Select Slider Pictures Below</div>
-                <div id="AboutUsSliderBox"></div>                
-            </div>
-            <button id="btnSaveAboutUs" type="button" onclick="saveAboutUs()">Save Changes</button>
-        </div>
-        <!-- Bal Pratibha Edit Box -->
-        <div id="BalPratibhaEditBox" class="EditBoxes">
-
-        </div>
-        <!-- Gallery Edit Box -->
-        <div id="GalleryEditBox" class="EditBoxes">
-
-        </div>
-        <!-- Helping Hand Edit Box -->
-        <div id="HelpingHandEditBox" class="EditBoxes">
-
-        </div>
-        <!-- SMC & TGC Edit Box -->
-        <div id="SMC_TGC_EditBox" class="EditBoxes">
-
-        </div>
-        
+                
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
     <script src="../SupabaseConfig.js"></script>
+    <script src="../DateConverter.js"></script>
     <script src="../CustomDialog.js"></script>
-    <script src="../DocumentReader.js"></script>
     <script src="../SmartCalculator.js"></script>
     <script src="../NepaliCalendar.js"></script>
-    <script src="../DateConverter.js"></script>
-    <script src="EditAboutUs.js"></script>
-    <script src="EditQuestionBank.js"></script>
-    <script src="EditNotice.js"></script>
-    <script src="EditLibrary.js"></script>
-    <script src="EditCalendar.js"></script>
-    <script src="AdminScript.js"></script>
+    <script>
+        if (typeof supabaseClient === 'undefined') {
+            console.error("Supabase client not found. Make sure SupabaseConfig.js is loaded first.");
+        }
+        // -------------------- CLOUDINARY --------------------
+        const CLOUD_NAME = "dcdwpdnyp";
+
+        // -------------------- PROTECTION FORM UNAUTHORIZED ACCESS --------------------
+        protectAdminPage();
+        async function protectAdminPage() {
+            const {
+                data: { session },
+                error
+            } = await supabaseClient.auth.getSession();
+            if (error || !session) {
+            showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
+                window.location.replace(
+                    "LoginIndex.html"
+                );
+                return;
+            }
+            document.body.style.display = "block";
+        }
+
+        // -------------------- NAVIGATE PAGES --------------------
+        const PageNavigationDripDown = document.getElementById("PageNavigationSelect");
+        PageNavigationDripDown.addEventListener("change", function () {
+            const pageMap = {
+                "AdminPage": "LogInIndex.html",
+                "LibraryPage": "../LibraryPage/LibraryIndex.html",
+                "NoticePage": "../NoticePage/NoticeIndex.html",
+                "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
+                "StudentPage": "../StudentPage/StudentIndex.html",
+                "TeacherPage": "../TeacherPage/TeacherIndex.html",
+                "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
+                "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
+                "GalleryPage": "../GalleryPage/GalleryIndex.html",
+                "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
+                "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
+                "HomePage": "../index.html"
+            };
+
+            const selectedPage = pageMap[this.value];
+            if (selectedPage) {
+                window.location.href = selectedPage;
+            }
+        });
+
+        // -------------------- NAVIGATE ADMIN EDITS --------------------
+        const EditNavigationDropDown = document.getElementById("EditNavigationSelect");
+        EditNavigationDropDown.addEventListener("change", function () {
+            const pageMap = {
+                "AttendanceCardEditBox": "EditAttendanceCard.html",
+                "IDCardEditBox": "EditIDCard.html",
+                "ResultEditBox": "EditResult.html",
+                "RoutineEditBox": "EditRoutine.html",
+                "StudentAttendanceEditBox": "EditStudentAttendance.html",
+                "LibraryEditBox": "EditLibrary.html",
+                "NoticeEditBox": "EditNotice.html",
+                "AboutUsEditBox": "EditAboutUs.html",
+                "StudentEditBox": "EditStudent.html",
+                "TeacherEditBox": "EditTeacher.html",
+                "CalendarEditBox": "EditCalendar.html",
+                "BalPratibhaEditBox": "EditBalPratibha.html",
+                "GalleryEditBox": "EditGallery.html",
+                "HelpingHandEditBox": "EditHelpingHand.html",
+                "SMC_TGCEditBox": "EditSMC_TGC.html",
+                "QuestionBankEditBox": "EditQuestionBank.html"
+            };   
+            const selectedEdit = pageMap[this.value];
+            if (selectedEdit) {
+                window.location.href = selectedEdit;
+            }
+        });
+
+        // -------------------- DATE --------------------
+        const dateBox = document.getElementById('DateBox');
+        dateBox.innerText =
+        AD2BS(new Date()) +
+        " (" +
+        new Date().toISOString().split('T')[0] +
+        ")";
+
+        //----------------------- Script for Admin Tools Dropdown -----------------------
+        document.getElementById("AdminToolsSelect").addEventListener("change", async function () {
+            switch (this.value) {
+                case "ChangePasswordTool":
+                    window.location.href = "ChangePasswordIndex.html";
+                    break;
+                case "LogoutAllDevicesTool":
+                showCustomDialog2(
+                    "Confirm Logout",
+                    "Logout from all devices?",
+                    "Yes",
+                    "Cancel",
+                    async function () {
+                        await supabaseClient.auth.signOut({
+                            scope: "global"
+                        });
+                        window.location.replace("LoginIndex.html");
+                    },
+                    function () {}
+                );
+                break;
+                case "LogoutAllDevicesTool":
+                const confirm = showCustomDialog2("Confirm Logout", "Logout from all devices?", "Yes", "Cancel", function() {}, function() {});
+                    if (confirm==="Yes") {
+                        await supabaseClient
+                        .auth
+                        .signOut({
+                            scope: "global"
+                        });
+                        window.location.replace("LoginIndex.html");
+                    }
+                    break;
+                case "AddAdminTool":
+                    window.location.href = "AddAdminIndex.html";
+                    break;
+            }
+            this.selectedIndex = 0;
+        });
+
+        // -------------------- NAVIGATION DROPDOWN of Edit Boxes --------------------
+        const NavigationDropDown = document.getElementById("EditNavigationSelect");
+        const editBoxes = document.querySelectorAll(".EditBoxes");
+
+        NavigationDropDown.addEventListener("change", function () {
+        editBoxes.forEach(box => box.style.display = "none");
+        const selectedValue = this.value;
+        if (selectedValue) {
+            document.getElementById(selectedValue).style.display = "block";
+        }
+        });
+
+
+        //Dynamically show logo and favicon
+        async function loadDynamicLogoAndFavicon() {
+            try {
+                // Query the table natively using your pre-configured supabaseClient
+                const { data, error } = await supabaseClient
+                    .from('AboutSchoolTable')
+                    .select('Value')
+                    .eq('Name', 'SchoolLogo')
+                    .single();
+
+                if (error) {
+                    console.error("Supabase query error loading branding:", error.message);
+                    return;
+                }
+
+                if (data && data.Value) {
+                    const freshLogoUrl = data.Value;
+
+                    // 1. Update the Favicon inside the Document Head
+                    const faviconElement = document.getElementById('dynamicFavicon');
+                    if (faviconElement) {
+                        faviconElement.href = freshLogoUrl;
+                    }
+
+                    // 2. Update the Logo Image Source inside #LogoBox
+                    const logoImgElement = document.querySelector('#LogoBox img');
+                    if (logoImgElement) {
+                        logoImgElement.src = freshLogoUrl;
+                    }
+                    
+                    console.log("Logo and Favicon synced dynamically via supabaseClient!");
+                }
+            } catch (error) {
+                console.error("Unexpected error setting up branding layout:", error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
+        
+    </script>    
 </body>
 </html>
