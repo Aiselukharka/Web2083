@@ -1,7 +1,66 @@
+const PageNavDropdown = document.getElementById("PageNavigationSelect");
+if (PageNavDropdown) {
+    PageNavDropdown.addEventListener("change", function () {
+        const pageMap = {
+            "LibraryPage": "../LibraryPage/LibraryIndex.html",
+            "NoticePage": "../NoticePage/NoticeIndex.html",
+            "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
+            "StudentPage": "StudentIndex.html",
+            "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
+            "HomePage": "../index.html",
+            "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
+            "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
+            "GalleryPage": "../GalleryPage/GalleryIndex.html",
+            "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
+            "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
+            "AdminPage": "../AdminPage/LogInIndex.html"        
+        };
+        if (pageMap[this.value]) window.location.href = pageMap[this.value];
+    });
+}
+
+// -------------------- DYNAMICALLY LOADING HEADER AND FAVICON --------------------
+async function loadDynamicLogoAndFavicon() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('AboutSchoolTable')
+            .select('Name, Value')
+            .in('Name', ['SchoolLogo', 'SchoolName', 'SchoolAddress']);
+        if (error) {
+            console.error("Supabase query error:", error.message);
+            return;
+        }
+        if (data && data.length > 0) {
+            const brandingData = {};
+            data.forEach(item => {
+                brandingData[item.Name] = item.Value;
+            });
+            const freshLogoUrl = brandingData.SchoolLogo;
+            const faviconElement = document.getElementById('dynamicFavicon');
+            const logoElement = document.getElementById('SchoolLogo');            
+            if (faviconElement && freshLogoUrl) {
+                faviconElement.href = freshLogoUrl;            
+            }
+            if (logoElement && freshLogoUrl) {
+                logoElement.src = freshLogoUrl;
+            }
+            const schoolNameElement = document.getElementById('SchoolName');
+            if (schoolNameElement && brandingData.SchoolName) {
+                schoolNameElement.textContent = brandingData.SchoolName;
+            }
+            const schoolAddressElement = document.getElementById('SchoolAddress');
+            if (schoolAddressElement && brandingData.SchoolAddress) {
+                schoolAddressElement.textContent = brandingData.SchoolAddress;
+            }
+        }
+    } catch (error) {
+        console.error("Unexpected error setting up branding layout:", error);
+    }
+}
+
 let allRawStudents = [];       
 let filteredStudentsList = []; 
 let classIdToNameMap = {};
-
 const GRID_SCHEMA = [
     { type: 'text', title: 'R.No.', name: 'RollNo', align: 'center', width: 70 },
     { type: 'text', title: 'Regd. No.', name: 'RegdNo', align: 'left', width: 150 },
@@ -25,28 +84,15 @@ const GRID_SCHEMA = [
 document.addEventListener('DOMContentLoaded', async () => {
     const dataBox = document.getElementById('StudentDataBox');
     dataBox.innerHTML = "<p style='padding:25px; font-style:italic;'>Loading student metrics environment...</p>";
-
     try {
         const { data: meta } = await supabaseClient
             .from('AboutSchoolTable')
             .select('Name, Value')
-            .in('Name', ['SchoolName', 'SchoolAddress', 'SchoolLogo']);
-        
-        if (meta) {
-            meta.forEach(item => {
-                if (item.Name === 'SchoolName') document.getElementById('SchoolNameLabel').textContent = item.Value;
-                if (item.Name === 'SchoolAddress') document.getElementById('SchoolAddressLabel').textContent = item.Value;
-                if (item.Name === 'SchoolLogo' && item.Value) {
-                    document.getElementById('dynamicFavicon').href = item.Value;
-                    document.querySelector('#LogoBox img').src = item.Value;
-                }
-            });
-        }
+            .in('Name', ['SchoolName', 'SchoolAddress', 'SchoolLogo']);        
         const { data: classes } = await supabaseClient
             .from('ClassTable')
             .select('id, ClassName')
             .order('SortOrder', { ascending: true });
-
         if (classes) {
             classes.forEach(c => {
                 classIdToNameMap[c.id] = c.ClassName;
@@ -56,20 +102,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             .from('StudentDataTable')
             .select('*')
             .order('RollNo', { ascending: true });
-
         if (error) throw error;
         allRawStudents = students || [];
-
         if (allRawStudents.length === 0) {
             dataBox.innerHTML = "<p style='padding:20px;'>No student records found in the database system.</p>";
             return;
-        }
-        
-        buildPanelMultiSelects(classes);
-        
+        }        
+        buildPanelMultiSelects(classes);        
         filteredStudentsList = [...allRawStudents];
-        renderDataGrid();
-        
+        renderDataGrid();        
         document.getElementById('ActionBarBox').style.display = 'block';
     } catch (err) {
         dataBox.innerHTML = `<p style='padding:20px; color:red;'>Initialization Error: ${err.message}</p>`;
@@ -85,16 +126,13 @@ function buildPanelMultiSelects(classesData) {
         'Race': 'FilterRaceDropdown',
         'StudentGender': 'FilterGenderDropdown'
     };
-
     const triggerFilterChangedState = () => {
         document.getElementById('FilterActionContainer').style.display = 'flex';
     };
-
     Object.keys(filterMappings).forEach(key => {
         const containerEl = document.getElementById(filterMappings[key]);
         if (!containerEl) return;
         containerEl.innerHTML = '';
-
         let items = [];
         if (key === 'ClassID' && classesData) {
             items = classesData.map(c => ({ label: c.ClassName, value: String(c.id) }));
@@ -102,32 +140,24 @@ function buildPanelMultiSelects(classesData) {
             const distinctValues = [...new Set(allRawStudents.map(s => (s[key] || '').trim()).filter(Boolean))];
             items = distinctValues.map(val => ({ label: val, value: val }));
         }
-
-        // IMPROVEMENT 6: Dynamic text implementation initialized as Deselect All
         const masterRow = document.createElement('label');
         masterRow.className = 'filter-item-row macro-toggle-row';
         masterRow.innerHTML = `<input type="checkbox" class="master-toggle-checkbox" checked> <span class="master-toggle-text">Deselect All</span>`;
         containerEl.appendChild(masterRow);
-
         const masterCheckbox = masterRow.querySelector('.master-toggle-checkbox');
         const masterText = masterRow.querySelector('.master-toggle-text');
-
         items.forEach(item => {
             const row = document.createElement('label');
             row.className = 'filter-item-row';
             row.innerHTML = `<input type="checkbox" name="${key}" value="${item.value}" checked> <span>${item.label}</span>`;
             containerEl.appendChild(row);
         });
-
-        const childCheckboxes = containerEl.querySelectorAll(`input[name="${key}"]`);
-        
-        // IMPROVEMENT 6: Dynamic text adjustment rules toggled natively
+        const childCheckboxes = containerEl.querySelectorAll(`input[name="${key}"]`);        
         masterCheckbox.addEventListener('change', function() {
             childCheckboxes.forEach(cb => { cb.checked = this.checked; });
             masterText.textContent = this.checked ? "Deselect All" : "Select All";
             triggerFilterChangedState();
         });
-
         childCheckboxes.forEach(cb => {
             cb.addEventListener('change', () => {
                 const totalChecked = containerEl.querySelectorAll(`input[name="${key}"]:checked`).length;
@@ -146,29 +176,22 @@ function applyActiveFilters() {
         btn.classList.add('processing');
         btn.textContent = "Filtering Data...";
     }
-
     setTimeout(() => {
-        const filterMappings = ['ClassID', 'Stream', 'House', 'Race', 'StudentGender'];
-        
+        const filterMappings = ['ClassID', 'Stream', 'House', 'Race', 'StudentGender'];        
         filteredStudentsList = allRawStudents.filter(student => {
             return filterMappings.every(key => {
                 const checkedBoxes = document.querySelectorAll(`input[name="${key}"]:checked`);
-                const selectedValues = Array.from(checkedBoxes).map(cb => cb.value);
-                
-                if (selectedValues.length === 0) return false; 
-                
+                const selectedValues = Array.from(checkedBoxes).map(cb => cb.value);                
+                if (selectedValues.length === 0) return false;                 
                 const studentValue = String(student[key] || '').trim();
                 return selectedValues.includes(studentValue);
             });
         });
-
         renderDataGrid();
-
         if (btn) {
             btn.classList.remove('processing');
             btn.textContent = "Apply Filters";
-        }
-        
+        }        
         document.getElementById('FilterActionContainer').style.display = 'none';
     }, 50);
 }
@@ -177,9 +200,10 @@ function applyActiveFilters() {
 function renderDataGrid() {
     const box = document.getElementById('StudentDataBox');
     if (!box) return;
-
     if (window.excelGridInstance) {
-        try { jspreadsheet.destroy(box); } catch (e) {}
+        try { 
+            window.excelGridInstance.destroy(); 
+        } catch (e) {}
         window.excelGridInstance = null;
     }
     box.innerHTML = '';
@@ -188,8 +212,17 @@ function renderDataGrid() {
         box.innerHTML = "<p style='padding:20px; font-weight:bold; color:#cc0000;'>No records match your selected filter criteria combinations.</p>";
         return;
     }
-
-    const cleanRowsPayload = filteredStudentsList.map(st => [
+    const gridSchemaWithAction = [
+        ...GRID_SCHEMA,
+        { 
+            type: 'html',  
+            title: 'Action', 
+            name: 'Action', 
+            align: 'center', 
+            width: 100 
+        }
+    ];
+    const cleanRowsPayload = filteredStudentsList.map((st) => [
         st.RollNo || '',
         st.RegdNo || '',
         st.SymbNo || '',
@@ -205,44 +238,106 @@ function renderDataGrid() {
         st.Stream || '',
         st.Race || '',
         st.House || '',
-        st.Subjects || ''
+        st.Subjects || '',
+        `<button class="view-student-btn" style="
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 4px 12px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        ">👁️ View</button>`
     ]);
-
+    window._currentFilteredList = filteredStudentsList;
     window.excelGridInstance = jspreadsheet(box, {
         data: cleanRowsPayload,
-        columns: GRID_SCHEMA,
+        columns: gridSchemaWithAction,
         allowInsertColumn: false,
         allowDeleteColumn: false,
         allowInsertRow: false,
         allowDeleteRow: false,
         columnSorting: true,
         editable: false,
-        tableOverflow: true,      
-        tableWidth: '100%',       
-        tableHeight: '450px',     
-
-        onselection: function(instance, x1, y1, x2, y2) {
-            if (y1 === y2 && filteredStudentsList[y1]) {
-                openStudentModalCard(filteredStudentsList[y1]);
-            }
-        }
+        tableOverflow: true,
+        tableWidth: '100%',
+        tableHeight: '450px'
     });
+    setTimeout(() => {
+        const gridTable = box.querySelector('table');
+        if (gridTable) {
+            const newTable = gridTable.cloneNode(true);
+            gridTable.parentNode.replaceChild(newTable, gridTable);            
+            newTable.addEventListener('click', function(e) {
+                const button = e.target.closest('.view-student-btn');
+                if (button) {
+                    const row = button.closest('tr');
+                    if (!row) return;                    
+                    const rows = this.querySelectorAll('tbody tr');
+                    const rowIndex = Array.from(rows).indexOf(row);                    
+                    const studentList = window._currentFilteredList || filteredStudentsList;
+                    if (rowIndex >= 0 && rowIndex < studentList.length) {
+                        openStudentModalCard(studentList[rowIndex]);
+                    }
+                    return;
+                }                
+            });
+            newTable.addEventListener('dblclick', function(e) {
+                const row = e.target.closest('tr');
+                if (!row) return;                
+                if (e.target.closest('.view-student-btn')) return;                
+                const rows = this.querySelectorAll('tbody tr');
+                const rowIndex = Array.from(rows).indexOf(row);                
+                const studentList = window._currentFilteredList || filteredStudentsList;
+                if (rowIndex >= 0 && rowIndex < studentList.length) {
+                    openStudentModalCard(studentList[rowIndex]);
+                }
+            });
+            const style = document.createElement('style');
+            style.textContent = `
+                .view-student-btn:hover {
+                    background: #0056b3 !important;
+                    transform: scale(1.05);
+                }
+                .view-student-btn:active {
+                    transform: scale(0.95);
+                }
+                #StudentDataBox table tbody tr {
+                    cursor: default;
+                }
+                #StudentDataBox table tbody tr:hover {
+                    background-color: #f8f9fa;
+                }
+                /* Mobile optimization */
+                @media (max-width: 768px) {
+                    .view-student-btn {
+                        padding: 8px 12px !important;
+                        font-size: 14px !important;
+                        min-height: 44px; /* Better touch target */
+                    }
+                    #StudentDataBox table tbody td {
+                        padding: 8px 4px !important;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }, 150);
 }
 
 // -------------------- RESTORED POPUP DATA WRAPPER --------------------
 function openStudentModalCard(student) {
     document.getElementById('ModalStudentName').textContent = student.StudentName || 'Unnamed Student';
     document.getElementById('ModalStudentPhoto').src = student.PhotoUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-
     const singleColumnContainer = document.getElementById('ModalDetailsSingleColumn');
     singleColumnContainer.innerHTML = '';
-
     const classRow = document.createElement('div');
     classRow.className = 'modal-row-item';
     classRow.innerHTML = `<span class="modal-row-label">Class Level</span>
                           <span class="modal-row-value">${classIdToNameMap[student.ClassID] || '---'}</span>`;
     singleColumnContainer.appendChild(classRow);
-
     GRID_SCHEMA.forEach(col => {
         const row = document.createElement('div');
         row.className = 'modal-row-item';
@@ -252,50 +347,35 @@ function openStudentModalCard(student) {
         `;
         singleColumnContainer.appendChild(row);
     });
-
     document.getElementById('StudentDetailModal').style.display = 'flex';
 }
 
-// NEW IMPROVEMENT: Capture and Save the profile modal content as a JPG image asset
 window.saveModalAsJPG = function() {
-    // Target the main scroll container and content structures
     const scrollContainer = document.querySelector('.modal-scroll-container');
     const modalContent = document.querySelector('.modal-content');
     const closeBtn = document.querySelector('.modal-close-btn');
-    const saveBtnContainer = document.querySelector('.modal-save-jpg-container');
-    
-    // 1. Save original styling states so we can restore them later
+    const saveBtnContainer = document.querySelector('.modal-save-jpg-container');    
     const originalScrollOverflow = scrollContainer.style.overflowY;
     const originalContentMaxHeight = modalContent.style.maxHeight;
     const originalContentHeight = modalContent.style.height;
-
-    // 2. Hide interactive UI controls from the final image print asset
     closeBtn.style.visibility = 'hidden';
     saveBtnContainer.style.display = 'none';
-
-    // 3. FORCE the layout out of scroll mode to calculate absolute full canvas height
     scrollContainer.style.overflowY = 'visible';
     modalContent.style.maxHeight = 'none';
     modalContent.style.height = 'auto';
-
-    // 4. Run the rendering capture execution pipeline
     html2canvas(modalContent, {
         useCORS: true,
-        scale: 2, // Cleans up text blurring on high-DPI viewports
+        scale: 2, 
         backgroundColor: '#ffffff',
         logging: false,
         windowWidth: modalContent.scrollWidth,
         windowHeight: modalContent.scrollHeight
     }).then(canvas => {
-        // Build the download link trigger
         const a = document.createElement('a');
-        const studentName = document.getElementById('ModalStudentName').textContent.replace(/\s+/g, '_');
-        
+        const studentName = document.getElementById('ModalStudentName').textContent.replace(/\s+/g, '_');        
         a.href = canvas.toDataURL('image/jpeg', 0.95);
         a.download = `StudentProfile_${studentName}.jpg`;
         a.click();
-
-        // 5. RESTORE original responsive workspace styles seamlessly
         closeBtn.style.visibility = 'visible';
         saveBtnContainer.style.display = 'flex';
         scrollContainer.style.overflowY = originalScrollOverflow;
@@ -303,17 +383,12 @@ window.saveModalAsJPG = function() {
         modalContent.style.height = originalContentHeight;
     }).catch(err => {
         console.error("Snapshot rendering failed: ", err);
-        // Fallback restoration in case of engine errors
         closeBtn.style.visibility = 'visible';
         saveBtnContainer.style.display = 'flex';
         scrollContainer.style.overflowY = originalScrollOverflow;
         modalContent.style.maxHeight = originalContentMaxHeight;
         modalContent.style.height = originalContentHeight;
     });
-};
-
-window.closeStudentModal = function() {
-    document.getElementById('StudentDetailModal').style.display = 'none';
 };
 
 window.closeStudentModal = function() {
@@ -325,11 +400,8 @@ window.exportData = function(format) {
     if (filteredStudentsList.length === 0) {
         alert("No student data matches current filter criteria to run export operations.");
         return;
-    }
-    
+    }    
     const targetFilename = `StudentReport_${Date.now()}`;
-
-    // 1. NATIVE EXCEL WORKBOOK EXPORT
     if (format === 'excel') {
         if (window.excelGridInstance) {
             window.excelGridInstance.download(`${targetFilename}.xls`);
@@ -338,15 +410,10 @@ window.exportData = function(format) {
         }
         return;
     } 
-
-    // 2. PERFECT MULTI-PAGE PRINT/PDF OPERATION VIA ISOLATED WINDOW
     if (format === 'pdf') {
-        const schoolName = document.getElementById('SchoolNameLabel').textContent;
-        const schoolAddress = document.getElementById('SchoolAddressLabel').textContent;
-
-        // Open an independent document window instance context
-        const printWindow = window.open('', '_blank', 'width=1100,height=800');
-        
+        const schoolName = document.getElementById('SchoolName').textContent;
+        const schoolAddress = document.getElementById('SchoolAddress').textContent;
+        const printWindow = window.open('', '_blank', 'width=1100,height=800');        
         const htmlPayload = `
             <html>
             <head>
@@ -381,7 +448,7 @@ window.exportData = function(format) {
                             <tr>
                                <td>${st.RollNo || '---'}</td>
                                <td>${st.RegdNo || '---'}</td>
-                               <td>${st.SymNo || '---'}</td>
+                               <td>${st.SymbNo || '---'}</td>
                                <td style="font-weight:bold;">${st.StudentName || '---'}</td>
                                <td>${st.StudentGender || '---'}</td>
                                <td>${st.StudentAddress || '---'}</td>
@@ -402,33 +469,29 @@ window.exportData = function(format) {
             </body>
             </html>
         `;
-
         printWindow.document.write(htmlPayload);
         printWindow.document.close();
-        printWindow.focus();
-        
-        // Let assets buffer for a split-second, open system dialog box, then clean up memory
+        printWindow.focus();        
         setTimeout(() => {
             printWindow.print();
             printWindow.close();
         }, 250);
         return;
     }
-
-    // 3. FULL HIGH-QUALITY IMAGE EXPORT
     if (format === 'jpg') {
+        const schoolName = document.getElementById('SchoolName').textContent;
+        const schoolAddress = document.getElementById('SchoolAddress').textContent;        
         const exportHiddenCanvas = document.createElement('div');
         exportHiddenCanvas.style.position = 'absolute';
         exportHiddenCanvas.style.left = '-9999px';
         exportHiddenCanvas.style.backgroundColor = '#ffffff';
         exportHiddenCanvas.style.padding = '30px';
         exportHiddenCanvas.style.width = '1400px'; 
-        exportHiddenCanvas.style.fontFamily = 'Arial, sans-serif';
-        
+        exportHiddenCanvas.style.fontFamily = 'Arial, sans-serif';        
         exportHiddenCanvas.innerHTML = `
             <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #000000; padding-bottom: 12px;">
-                <h1 style="margin: 0; font-size: 26px; text-transform: uppercase;">${document.getElementById('SchoolNameLabel').textContent}</h1>
-                <p style="margin: 5px 0 0 0; font-size: 14px; color: #333; font-weight: bold;">${document.getElementById('SchoolAddressLabel').textContent}</p>
+                <h1 style="margin: 0; font-size: 26px; text-transform: uppercase;">${schoolName}</h1>
+                <p style="margin: 5px 0 0 0; font-size: 14px; color: #333; font-weight: bold;">${schoolAddress}</p>
                 <h3 style="margin: 15px 0 0 0; font-size: 16px; text-decoration: underline;">STUDENT DATA SUMMARY REPORT</h3>
             </div>
             <table style="width:100%; border-collapse: collapse; font-size: 11px;" border="1" cellpadding="6">
@@ -442,7 +505,7 @@ window.exportData = function(format) {
                         <tr>
                             <td style="border: 1px solid #000000; padding: 5px;">${st.RollNo || '---'}</td>
                             <td style="border: 1px solid #000000; padding: 5px;">${st.RegdNo || '---'}</td>
-                            <td style="border: 1px solid #000000; padding: 5px;">${st.SymNo || '---'}</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">${st.SymbNo || '---'}</td>
                             <td style="border: 1px solid #000000; padding: 5px; font-weight: bold;">${st.StudentName || '---'}</td>
                             <td style="border: 1px solid #000000; padding: 5px;">${st.StudentGender || '---'}</td>
                             <td style="border: 1px solid #000000; padding: 5px;">${st.StudentAddress || '---'}</td>
@@ -461,9 +524,7 @@ window.exportData = function(format) {
                 </tbody>
             </table>
         `;
-
         document.body.appendChild(exportHiddenCanvas);
-
         html2canvas(exportHiddenCanvas, { useCORS: true, scale: 2, logging: false }).then(canvas => {
             const a = document.createElement('a');
             a.href = canvas.toDataURL('image/jpeg', 0.95);
@@ -477,23 +538,7 @@ window.exportData = function(format) {
     }
 };
 
-const PageNavDropdown = document.getElementById("PageNavigationSelect");
-if (PageNavDropdown) {
-    PageNavDropdown.addEventListener("change", function () {
-        const pageMap = {
-            "LibraryPage": "../LibraryPage/LibraryIndex.html",
-            "NoticePage": "../NoticePage/NoticeIndex.html",
-            "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
-            "StudentPage": "StudentIndex.html",
-            "TeacherPage": "../TeacherPage/TeacherIndex.html",
-            "HomePage": "../index.html",
-            "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
-            "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
-            "GalleryPage": "../GalleryPage/GalleryIndex.html",
-            "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
-            "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
-            "AdminPage": "../AdminPage/LogInIndex.html"        
-        };
-        if (pageMap[this.value]) window.location.href = pageMap[this.value];
-    });
-}
+// -------------------- INITIALIZATION --------------------
+document.addEventListener('DOMContentLoaded', function() {
+    loadDynamicLogoAndFavicon();        
+});

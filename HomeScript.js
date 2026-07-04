@@ -8,7 +8,7 @@ PageNavigationDripDown.addEventListener("change", function () {
         "NoticePage": "NoticePage/NoticeIndex.html",
         "QuestionBankPage": "QuestionBankPage/QuestionBankIndex.html",
         "StudentPage": "StudentPage/StudentIndex.html",
-        "TeacherPage": "TeacherPage/TeacherIndex.html",
+        "HumanResourcePage": "HumanResourcePage/HumanResourceIndex.html",
         "BalPratibhaPage": "BalPratibhaPage/BalPratibhaIndex.html",
         "AboutUsPage": "AboutUsPage/AboutUsIndex.html",
         "GalleryPage": "GalleryPage/GalleryIndex.html",
@@ -499,3 +499,22 @@ async function loadDynamicLogoAndFavicon() {
 
 // Run as soon as the page DOM is ready
 document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
+
+document.addEventListener('DOMContentLoaded', function() {
+    // The video gallery will be initialized by VideoScript.js
+    console.log("Home page fully loaded - Video gallery ready");
+});
+
+// Add a function to refresh videos if needed
+function refreshVideoGallery() {
+    const videoGrid = document.getElementById('videoGrid');
+    if (videoGrid) {
+        videoGrid.innerHTML = `
+            <div class="video-loader">
+                <div class="spinner"></div>
+                <p>Refreshing videos...</p>
+            </div>
+        `;
+        initVideoGallery();
+    }
+}

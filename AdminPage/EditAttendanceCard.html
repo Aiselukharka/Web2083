@@ -262,11 +262,50 @@
             gap: 1rem;
             padding: 0 2rem;
         }
-        #AttendancePreviewFooter button {
-            padding: .8rem 2rem;
-            font-size: 1.6rem;
+        #btnPrevAttendanceCard {
+            width: 20%;
+            padding: clamp(0.4rem, 1vw, 2rem) 0;
+            margin: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1rem, 2vw, 3rem);
             font-weight: bold;
             cursor: pointer;
+            background: linear-gradient(180deg, #000077, #000099, #000077);
+            color: #ffffff;
+            border-radius: 2vw;
+        }
+        #btnPrevAttendanceCard:hover {
+            background: linear-gradient(180deg, #000055, #000077, #000055);
+            color: #ffff00;
+        }
+        #btnNextAttendanceCard {
+            width: 20%;
+            padding: clamp(0.4rem, 1vw, 2rem) 0;
+            margin: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1rem, 2vw, 3rem);
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(180deg, #777700, #999900, #777700);
+            color: #ffffff;
+            border-radius: 2vw;
+        }
+        #btnNextAttendanceCard:hover {
+            background: linear-gradient(180deg, #555500, #777700, #555500);
+            color: #ffff00;
+        }
+        #btnExportAttendanceCards {
+            width: 20%;
+            padding: clamp(0.4rem, 1vw, 2rem) 0;
+            margin: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1rem, 2vw, 3rem);
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(180deg, #770077, #990099, #770077);
+            color: #ffffff;
+            border-radius: 2vw;
+        }
+        #btnExportAttendanceCards:hover {
+            background: linear-gradient(180deg, #550055, #770077, #550055);
+            color: #ffff00;
         }
         .AttendanceCard {
             width: 1000px;
@@ -346,7 +385,7 @@
             color: #aa0033;
             font-size: 4rem;
             font-weight: bold;
-            padding: 2rem;
+            padding: 0.6rem;
             border-radius: 0.8rem;
             margin-top: 0.6rem;
             text-shadow: 1px 1px 4px #000;
@@ -440,7 +479,7 @@
                 <option value="NoticePage">Notice</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="StudentPage">Students</option>
-                <option value="TeacherPage">Teachers</option>
+                <option value="HumanResourcePage">Human Resource</option>
                 <option value="BalPratibhaPage">Bal Pratibha</option>
                 <option value="AboutUsPage">About Us</option>
                 <option value="GalleryPage">Gallery</option>
@@ -463,7 +502,7 @@
                 <option value="NoticeEditBox">Edit Notice</option>
                 <option value="QuestionBankEditBox">Edit Question Bank</option>
                 <option value="StudentEditBox">Edit Student Data</option>
-                <option value="TeacherEditBox">Edit Teacher Data</option>
+                <option value="HumanResourceEditBox">Edit Human Resource Data</option>
                 <option value="CalendarEditBox">Edit Calendar</option>
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
@@ -517,7 +556,7 @@
                 <div id="AttendancePreviewFooter">
                     <button id="btnPrevAttendanceCard" type="button">Previous</button>
                     <button id="btnNextAttendanceCard" type="button">Next</button>
-                    <button id="btnExportAttendanceCards" type="button" style="background: #0066cc; color: white;">Download / Export</button>
+                    <button id="btnExportAttendanceCards" type="button" style="background: #0066cc; color: white;">Download</button>
                 </div>
             </div>
         </div>
@@ -527,6 +566,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
+    <script src="../CustomDialog.js"></script>
     <script src="../SupabaseConfig.js"></script> 
     <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
     <script src="https://jsuites.net/v4/jsuites.js"></script>
@@ -540,6 +580,7 @@ if (typeof supabaseClient === 'undefined') {
 }
 // -------------------- CLOUDINARY --------------------
 const CLOUD_NAME = "dcdwpdnyp";
+
 let SelectedAttendanceStudents=[];
 let AttendanceSchoolInfo={};
 let AttendanceYear="";
@@ -571,7 +612,7 @@ if (PageNavigationDropDown) {
             "NoticePage": "../NoticePage/NoticeIndex.html",
             "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
             "StudentPage": "../StudentPage/StudentIndex.html",
-            "TeacherPage": "../TeacherPage/TeacherIndex.html",
+            "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
             "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
             "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
             "GalleryPage": "../GalleryPage/GalleryIndex.html",
@@ -599,7 +640,7 @@ if (EditNavigationDropDown) {
             "NoticeEditBox": "EditNotice.html",
             "QuestionBankEditBox": "EditQuestionBank.html",
             "AboutUsEditBox": "EditAboutUs.html",
-            "TeacherEditBox": "EditTeacher.html",
+            "HumanResourceEditBox": "EditHumanResource.html",
             "CalendarEditBox": "EditCalendar.html",
             "BalPratibhaEditBox": "EditBalPratibha.html",
             "GalleryEditBox": "EditGallery.html",
@@ -909,7 +950,6 @@ function showAttendanceCard() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {    
-    // Line 921 was crashing here because it ran too early. Now it waits safely:
     document.getElementById("btnAttendanceCancel").onclick = function() {
         document.getElementById("AttendancePopupOverlay").style.display = "none";
     };
@@ -935,21 +975,50 @@ document.addEventListener("DOMContentLoaded", () => {
 async function exportAttendanceCards(){
     const exportBox = document.getElementById("AttendanceExportBox");
     const zip = new JSZip();    
+    const btnExport = document.getElementById('btnExportAttendanceCards');
+    
+    // Grab the current designation from the input box so it matches perfectly
+    const designation = document.getElementById("AttendanceDesignation") ? document.getElementById("AttendanceDesignation").value.trim() : "Head Teacher";
+    
+    btnExport.innerText = "Downloading ....";
+    btnExport.disabled = true;
     exportBox.style.visibility = "visible";     
+    
+    let livePrincipalName = "";
+    if (AttendanceSchoolInfo && (AttendanceSchoolInfo.PrincipalName || AttendanceSchoolInfo.principal_name)) {
+        livePrincipalName = AttendanceSchoolInfo.PrincipalName || AttendanceSchoolInfo.principal_name;
+    }
+
     for(let i=0; i<SelectedAttendanceStudents.length; i++){
         const student = JSON.parse(SelectedAttendanceStudents[i].dataset.student);
-        exportBox.innerHTML = buildAttendanceCard(student, AttendanceSchoolInfo, AttendanceYear, AttendanceMotto, AttendanceClassName);        
+        
+        // FIX: Added the missing livePrincipalName and designation variables so the card matches the preview exactly
+        exportBox.innerHTML = buildAttendanceCard(student, AttendanceSchoolInfo, AttendanceYear, AttendanceMotto, AttendanceClassName, designation, livePrincipalName);        
+        
         const card = exportBox.firstElementChild;
         await new Promise(r => setTimeout(r, 150));         
         const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
         const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.95));
         zip.file(`${student.RollNo}-${student.StudentName}.jpg`, blob);
     }    
+    
     exportBox.innerHTML = "";
     exportBox.style.visibility = "hidden";    
+    
     const content = await zip.generateAsync({ type: "blob" });
     saveAs(content, "AttendanceCards.zip");
-    alert("Attendance cards exported successfully.");
+    
+    // Clean up interface variables back to normal state
+    btnExport.innerText = "Download";
+    btnExport.disabled = false;    
+    
+    // Call custom dialog box and cleanly dismiss preview pane window frame
+    showCustomDialog1("Exported", "Attendance cards exported successfully.", "OK", function(){
+        const previewOverlay = document.getElementById("AttendancePreviewOverlay");
+        if (previewOverlay) {
+            previewOverlay.style.display = "none";
+        }
+    });
 }
 
     </script> 

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Embedding Demo - YouTube & Facebook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .video-header .platform-icon {
+            font-size: 1.5rem;
+        }
+
+        .video-header h3 {
+            font-size: 1rem;
+            color: #333;
+            flex: 1;
+        }
+
+        .video-header .platform-badge {
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .platform-badge.youtube {
+            background: #ff0000;
+            color: white;
+        }
+
+        .platform-badge.facebook {
+            background: #1877f2;
+            color: white;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Two-Click Solution Styles */
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .video-placeholder:hover {
+            background: linear-gradient(135deg, #1a1a2e, #1a1a3e, #1a3a6a);
+        }
+
+        .video-placeholder .play-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        .video-placeholder h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .video-placeholder p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            max-width: 300px;
+        }
+
+        .video-placeholder .privacy-notice {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            opacity: 0.6;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        .video-placeholder .accept-btn {
+            margin-top: 15px;
+            padding: 10px 30px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .video-placeholder .accept-btn:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .video-placeholder .accept-btn.youtube-btn {
+            background: #ff0000;
+        }
+
+        .video-placeholder .accept-btn.youtube-btn:hover {
+            background: #cc0000;
+        }
+
+        .video-placeholder .accept-btn.facebook-btn {
+            background: #1877f2;
+        }
+
+        .video-placeholder .accept-btn.facebook-btn:hover {
+            background: #0d65d9;
+        }
+
+        .video-description {
+            padding: 15px 20px;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .video-description .source-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .video-description .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .legal-notice {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+        }
+
+        .legal-notice h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .legal-notice ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .legal-notice li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .legal-notice li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .legal-notice .warning {
+            color: #856404;
+            background: #fff3cd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .legal-notice .warning::before {
+            content: "⚠️ ";
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .video-placeholder .play-icon {
+                font-size: 3rem;
+            }
+
+            .video-placeholder h4 {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-header {
+                flex-wrap: wrap;
+            }
+
+            .video-header h3 {
+                font-size: 0.85rem;
+            }
+
+            .video-placeholder .accept-btn {
+                padding: 8px 20px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Privacy Banner */
+        .privacy-banner {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .privacy-banner p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .privacy-banner .close-banner {
+            background: none;
+            border: none;
+            color: #721c24;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Video Embedding Demo</h1>
+        <p class="subtitle">YouTube & Facebook videos with privacy-friendly two-click solution</p>
+
+        <!-- Privacy Banner -->
+        <div class="privacy-banner" id="privacyBanner">
+            <p>🔒 This site uses embedded videos from YouTube and Facebook. Videos only load after you click "Accept".</p>
+            <button class="close-banner" onclick="document.getElementById('privacyBanner').style.display='none'">×</button>
+        </div>
+
+        <div class="video-grid">
+            <!-- YouTube Video Card -->
+            <div class="video-card">
+                <div class="video-header">
+                    <span class="platform-icon">▶️</span>
+                    <h3>YouTube: Beautiful Nature Documentary</h3>
+                    <span class="platform-badge youtube">YouTube</span>
+                </div>
+                <div class="video-wrapper" id="youtubeWrapper">
+                    <div class="video-placeholder" id="youtubePlaceholder">
+                        <div class="play-icon">▶️</div>
+                        <h4>Click to Play Video</h4>
+                        <p>This video is hosted on YouTube</p>
+                        <button class="accept-btn youtube-btn" onclick="loadYouTubeVideo()">
+                            Accept & Play
+                        </button>
+                        <div class="privacy-notice">
+                            🔒 Video only loads after your consent
+                        </div>
+                    </div>
+                </div>
+                <div class="video-description">
+                    <p>🌍 A stunning 4K nature documentary featuring landscapes from around the world.</p>
+                    <small>Source: <a href="#" class="source-link" onclick="return false;">YouTube</a></small>
+                </div>
+            </div>
+
+            <!-- Facebook Video Card -->
+            <div class="video-card">
+                <div class="video-header">
+                    <span class="platform-icon">📘</span>
+                    <h3>Facebook: Inspirational Speech</h3>
+                    <span class="platform-badge facebook">Facebook</span>
+                </div>
+                <div class="video-wrapper" id="facebookWrapper">
+                    <div class="video-placeholder" id="facebookPlaceholder">
+                        <div class="play-icon">▶️</div>
+                        <h4>Click to Play Video</h4>
+                        <p>This video is hosted on Facebook</p>
+                        <button class="accept-btn facebook-btn" onclick="loadFacebookVideo()">
+                            Accept & Play
+                        </button>
+                        <div class="privacy-notice">
+                            🔒 Video only loads after your consent
+                        </div>
+                    </div>
+                </div>
+                <div class="video-description">
+                    <p>💡 An inspiring talk about innovation and the future of technology.</p>
+                    <small>Source: <a href="#" class="source-link" onclick="return false;">Facebook</a></small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legal Notice -->
+        <div class="legal-notice">
+            <h3>📋 Legal & Privacy Information</h3>
+            <ul>
+                <li><strong>Embedding is generally allowed</strong> - YouTube and Facebook provide official embed codes</li>
+                <li><strong>Two-click solution</strong> - Videos only load after user consent (GDPR compliant)</li>
+                <li><strong>No "New Public"</strong> - Embedded content is already public on the original platform</li>
+                <li><strong>Privacy Policy</strong> - We use embedded content that may set cookies</li>
+            </ul>
+            <div class="warning">
+                Always ensure you embed videos from legitimate sources. Avoid embedding pirated or illegal content.
+                For commercial use, consider additional legal consultation.
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div style="margin-top: 30px; padding: 20px; background: #e7f5ff; border-radius: 12px; border-left: 4px solid #007bff;">
+            <h4 style="color: #007bff; margin-bottom: 10px;">💡 How This Works</h4>
+            <p style="color: #555; line-height: 1.8;">
+                This page uses a <strong>"two-click" solution</strong> for embedded videos. The video player only loads 
+                when you click the "Accept & Play" button. This protects user privacy by preventing automatic loading 
+                of third-party content and cookies.
+            </p>
+            <p style="color: #555; line-height: 1.8; margin-top: 10px;">
+                <strong>Technical Note:</strong> The video placeholders use CSS overlays and JavaScript to control 
+                when the actual iframe content is loaded. This is a common pattern for GDPR compliance.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // YouTube Video Embed Function
+        function loadYouTubeVideo() {
+            const wrapper = document.getElementById('youtubeWrapper');
+            const placeholder = document.getElementById('youtubePlaceholder');
+            
+            // Remove the placeholder
+            placeholder.style.display = 'none';
+            
+            // Create and insert the iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ'; // Replace with your video URL
+            iframe.title = 'YouTube video player';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            
+            wrapper.appendChild(iframe);
+            
+            // Log for analytics
+            console.log('YouTube video loaded with user consent');
+        }
+
+        // Facebook Video Embed Function
+        function loadFacebookVideo() {
+            const wrapper = document.getElementById('facebookWrapper');
+            const placeholder = document.getElementById('facebookPlaceholder');
+            
+            // Remove the placeholder
+            placeholder.style.display = 'none';
+            
+            // Create and insert the iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379946729%2F&show_text=0&width=560';
+            iframe.title = 'Facebook video player';
+            iframe.allow = 'encrypted-media';
+            iframe.allowFullscreen = true;
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            
+            wrapper.appendChild(iframe);
+            
+            // Log for analytics
+            console.log('Facebook video loaded with user consent');
+        }
+
+        // Optional: Auto-load videos with user consent (for testing)
+        // Uncomment the following lines to auto-load videos after 3 seconds
+        // setTimeout(() => {
+        //     loadYouTubeVideo();
+        //     loadFacebookVideo();
+        // }, 3000);
+    </script>
+
+    <!-- Additional Script for Better Privacy -->
+    <script>
+        // Store user consent preference in localStorage
+        function setVideoConsent(platform) {
+            const consent = JSON.parse(localStorage.getItem('videoConsent') || '{}');
+            consent[platform] = true;
+            localStorage.setItem('videoConsent', JSON.stringify(consent));
+        }
+
+        // Check if user has already given consent
+        function checkVideoConsent(platform) {
+            const consent = JSON.parse(localStorage.getItem('videoConsent') || '{}');
+            return consent[platform] === true;
+        }
+
+        // Auto-load videos if user has previously given consent
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkVideoConsent('youtube')) {
+                loadYouTubeVideo();
+            }
+            if (checkVideoConsent('facebook')) {
+                loadFacebookVideo();
+            }
+        });
+
+        // Override the load functions to store consent
+        const originalLoadYouTube = loadYouTubeVideo;
+        loadYouTubeVideo = function() {
+            setVideoConsent('youtube');
+            originalLoadYouTube();
+        };
+
+        const originalLoadFacebook = loadFacebookVideo;
+        loadFacebookVideo = function() {
+            setVideoConsent('facebook');
+            originalLoadFacebook();
+        };
+
+        console.log('🔒 Privacy-first video embedding initialized');
+        console.log('📝 Consent stored in localStorage for better UX');
+    </script>
+</body>
+</html>

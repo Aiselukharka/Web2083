@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <title>Admin Page - Edit Video Links</title>
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+    <style>
+        @font-face {
+            font-family: 'MySanskritFont';
+            src: url('../Sanskrit-2003.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        html{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+            font-size: 62.5%;
+        }
+        body { 
+            width: 100%;
+            height: auto;
+            font-family: Arial, sans-serif; 
+            min-height: 100%;
+            font-family: 'Arial', 'MySanskritFont', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+        }
+
+        #MainBody{
+            width: 96%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffaaaa;
+            min-height: 100%;
+            margin: 0 auto;    
+            padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+        }
+
+        #PageNaviggationBox {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            background: #000000;
+            padding: clamp(0.3rem, 1rem, 1.6rem);
+            text-align: center;
+        }
+        #LogoBox{
+            width: 6%;
+            height: auto;     
+        }
+        #LogoBox img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        #PageNavigationSelect{
+            width: 50%;
+            font-size: clamp(1.2rem, 2vw, 3rem);
+            font-weight: bold;
+            padding: clamp(0.3rem, 1rem, 1.6rem);;
+            border: 4px solid #000000;
+        }
+        #PageNaviggationBox button{
+            width: 20%;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+            background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+            color: #ffffff;
+            border-radius: 4vw;  
+            font-size: clamp(1rem, 2vw, 3rem);  
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #pageNaviggationBox button:hover{
+            background: linear-gradient(180deg, #009900, #00aa00, #009900);
+            color: #ffff00;
+        }
+
+        #DateBox{
+            width: 100%;
+            text-align: center;
+            font-size: clamp(1.2rem, 3vw, 2.5rem);
+            font-weight: 800;
+            color: #ffff00;
+            padding: clamp(0.3rem, 1rem, 1.6rem);   
+            background: linear-gradient(180deg, #111111, #333333); 
+        }
+        #UtilityBox{
+            width: 100%;
+            height: auto;
+            background: linear-gradient(180deg, #333333, #555555);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+        }
+        #EditNavigationSelect, #AdminToolsSelect{
+            width: 48%;
+            font-size: clamp(1.2rem, 2vw, 3rem);
+            font-weight: bold;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+            border: 4px solid #000000;
+        }
+        #VideoLinkContainer{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+        }
+        #PresentVideoList{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            border: 2px solid #000;
+            background: linear-gradient(180deg, #ccccff, #ccccee);
+            min-height: 100px;
+        }
+        .video-item {
+            width: 95%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .video-item .video-name {
+            font-size: 18px;
+            font-weight: bold;
+            flex: 2;
+            min-width: 150px;
+        }
+        .video-item .video-description {
+            font-size: 14px;
+            color: #555;
+            flex: 3;
+            min-width: 200px;
+            padding: 0 10px;
+        }
+        .video-item .video-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .video-item .video-actions button {
+            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-view {
+            background: #007bff;
+            color: white;
+        }
+        .btn-view:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background: #a71d2a;
+            transform: scale(1.05);
+        }
+        #AddVideoBox{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            margin: 12px 0;
+            background: linear-gradient(180deg, #ccffcc, #cceecc);
+            border: 2px solid #000;
+        }
+        #AddVideoLinkHead{
+            width: 100%;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 800;
+            color: #0000aa;
+            padding: 12px 0;   
+            text-shadow: 1px 1px 3px #000;
+        }
+        #NewVideoTitle, #NewVideoLink, #NewVideoDecription{
+            width: 80%;
+            font-size: 20px;
+            padding: 8px 12px;
+            margin: 6px 0;
+        }
+        #NewVideoLink {
+            font-size: 16px;
+        }
+        #btnAddVideoData{
+            width: 40%;
+            padding: 12px 0;
+            background: linear-gradient(180deg, #005500, #007700, #005500);
+            color: #ffffff;
+            border-radius: 4vw;  
+            font-size: 20px;  
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        #btnAddVideoData:hover{
+            background: linear-gradient(180deg, #003300, #005500, #003300);
+            color: #ffff00;
+        }
+
+        .video-link-hint {
+            font-size: 14px;
+            color: #555;
+            margin: 4px 0;
+            font-style: italic;
+        }
+
+        /* Video Modal Styles */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .video-modal-content {
+            background-color: #1a1a1a;
+            padding: 20px 20px 25px 20px;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-modal-close {
+            position: absolute;
+            top: -18px;
+            right: -18px;
+            width: 44px;
+            height: 44px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .video-modal-close:hover {
+            background: #a71d2a;
+            transform: scale(1.15) rotate(90deg);
+        }
+
+        .video-modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            padding-right: 40px;
+            color: #ffffff;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        .video-modal-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .video-modal-wrapper iframe,
+        .video-modal-wrapper video,
+        .video-modal-wrapper embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+            border: none;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .video-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .video-item .video-name {
+                font-size: 16px;
+                text-align: center;
+            }
+            .video-item .video-description {
+                font-size: 13px;
+                text-align: center;
+                padding: 0;
+            }
+            .video-item .video-actions {
+                justify-content: center;
+            }
+            .video-modal {
+                padding: 10px;
+            }
+            .video-modal-content {
+                padding: 15px 15px 20px 15px;
+                max-width: 100%;
+                width: 100%;
+                border-radius: 8px;
+            }
+            .video-modal-close {
+                top: -12px;
+                right: -12px;
+                width: 38px;
+                height: 38px;
+                font-size: 22px;
+            }
+            .video-modal-title {
+                font-size: 17px;
+                margin-bottom: 12px;
+                padding-right: 35px;
+            }
+            .video-modal-wrapper {
+                border-radius: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-modal-content {
+                padding: 12px 12px 16px 12px;
+            }
+            .video-modal-close {
+                top: -10px;
+                right: -10px;
+                width: 34px;
+                height: 34px;
+                font-size: 18px;
+            }
+            .video-modal-title {
+                font-size: 15px;
+                margin-bottom: 10px;
+                padding-right: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="MainBody">
+        <div id="PageNaviggationBox">
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
+            <select id="PageNavigationSelect">   
+                <option value="AdminPage">Admin</option>
+                <option value="LibraryPage">Library</option>
+                <option value="NoticePage">Notice</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="StudentPage">Students</option>
+                <option value="HumanResourcePage">Teachers</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="HomePage">Home</option>
+            </select>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>
+        <div id="DateBox"></div>
+        <div id="UtilityBox">
+            <select id="EditNavigationSelect">
+                <option selected disabled>Edit Video Links</option>
+                <option value="AttendanceCardEditBox">Edit Attendance Cards</option>
+                <option value="AdminEditBox">Admin</option>
+                <option value="IDCardEditBox">Edit ID Cards</option>
+                <option value="ResultEditBox">Edit Result</option>
+                <option value="RoutineEditBox">Edit Routine</option>
+                <option value="StudentAttendanceEditBox">Edit Student Attendance</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
+                <option value="LibraryEditBox">Edit Library</option>
+                <option value="NoticeEditBox">Edit Notice</option>
+                <option value="AboutUsEditBox">Edit About Us</option>
+                <option value="StudentEditBox">Edit Student Data</option>
+                <option value="HumanResourceEditBox">Edit Human Resource Data</option>
+                <option value="CalendarEditBox">Edit Calendar</option>
+                <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
+                <option value="GalleryEditBox">Edit Gallery</option>
+                <option value="HelpingHandEditBox">Edit Helping Hand</option>
+                <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
+                <option value="VideoLinkEditBox">Edit Video Links</option>
+            </select>
+            <select id="AdminToolsSelect">
+                <option disabled selected>Admin Tools</option>
+                <option value="ChangePasswordTool">Change Password</option>
+                <option value="LogoutThisDeviceTool">Logout This Device</option>
+                <option value="LogoutAllDevicesTool">Logout All Devices</option>
+                <option value="AddAdminTool">Add/Delete Admin</option>
+            </select>            
+        </div>
+        <div id="VideoLinkContainer">
+            <div id="PresentVideoList"></div>
+            <div id="AddVideoBox">
+                <div id="AddVideoLinkHead">Add New Video Link</div>
+                <input type="text" id="NewVideoTitle" placeholder="Enter new video title here..." />
+                <input type="text" id="NewVideoLink" placeholder="Paste YouTube URL or Embed Code here..." />
+                <div class="video-link-hint">💡 Paste: YouTube URL OR full embed iframe code</div>
+                <input type="text" id="NewVideoDecription" placeholder="Enter new video Description here..." />
+                <button id="btnAddVideoData">Add Video Link</button>
+            </div>
+        </div>  
+    </div>
+
+    <!-- Video Modal -->
+    <div id="VideoModal" class="video-modal">
+        <div class="video-modal-content">
+            <button class="video-modal-close" onclick="closeVideoModal()">&times;</button>
+            <div class="video-modal-title" id="VideoModalTitle">Video Title</div>
+            <div class="video-modal-wrapper" id="VideoModalWrapper">
+                <!-- Video embed will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Supabase first -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    
+    <!-- Your custom scripts -->
+    <script src="../SupabaseConfig.js"></script>
+    <script src="../DateConverter.js"></script>
+    <script src="../CustomDialog.js"></script>
+    <script src="../SmartCalculator.js"></script>
+    <script src="../NepaliCalendar.js"></script>
+    
+    <script>
+        // Check if Supabase client is available
+        if (typeof supabaseClient === 'undefined') {
+            console.error("Supabase client not found.");
+            document.getElementById('PresentVideoList').innerHTML = 
+                '<p style="padding:20px; color:red;">Error: Supabase client not loaded.</p>';
+        }
+
+        // ==================== VIDEO LINK MANAGEMENT ====================
+        
+        // Load videos on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVideoList();
+        });
+
+        // -------------------- LOAD VIDEO LIST --------------------
+        async function loadVideoList() {
+            const container = document.getElementById('PresentVideoList');
+            container.innerHTML = '<p style="padding:20px;">Loading videos...</p>';
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('VideoLinkTable')
+                    .select('*')
+                    .order('id', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="padding:20px; color:#666;">No videos found. Add your first video below!</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                data.forEach(video => {
+                    const videoItem = createVideoItem(video);
+                    container.appendChild(videoItem);
+                });
+
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                container.innerHTML = `<p style="padding:20px; color:red;">Error loading videos: ${error.message}</p>`;
+            }
+        }
+
+        // -------------------- CREATE VIDEO ITEM ELEMENT --------------------
+        function createVideoItem(video) {
+            const div = document.createElement('div');
+            div.className = 'video-item';
+            div.dataset.id = video.id;
+
+            let displayName = video.VideoName || 'Untitled Video';
+            let description = video.VideoDescription || '';
+
+            div.innerHTML = `
+                <div class="video-name">${displayName}</div>
+                <div class="video-description">${description}</div>
+                <div class="video-actions">
+                    <button class="btn-view" onclick="viewVideo(${video.id})">▶ View</button>
+                    <button class="btn-delete" onclick="deleteVideo(${video.id})">🗑 Delete</button>
+                </div>
+            `;
+
+            return div;
+        }
+
+        // -------------------- ADD VIDEO --------------------
+        document.getElementById('btnAddVideoData').addEventListener('click', addVideo);
+
+        async function addVideo() {
+            const titleInput = document.getElementById('NewVideoTitle');
+            const linkInput = document.getElementById('NewVideoLink');
+            const descInput = document.getElementById('NewVideoDecription');
+
+            const title = titleInput.value.trim();
+            let link = linkInput.value.trim();
+            const description = descInput.value.trim();
+
+            if (!title) {
+                alert('Please enter a video title.');
+                titleInput.focus();
+                return;
+            }
+
+            if (!link) {
+                alert('Please enter the video URL or embed code.');
+                linkInput.focus();
+                return;
+            }
+
+            // Clean the link
+            link = link.trim();
+
+            // If it's a YouTube URL, convert to embed URL for storage
+            if (link.includes('youtube.com/watch') || link.includes('youtu.be/')) {
+                const videoId = extractYouTubeId(link);
+                if (videoId) {
+                    link = `https://www.youtube.com/embed/${videoId}`;
+                }
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('VideoLinkTable')
+                    .insert([
+                        { 
+                            VideoName: title, 
+                            VideoLink: link, 
+                            VideoDescription: description 
+                        }
+                    ])
+                    .select();
+
+                if (error) throw error;
+
+                // Clear inputs
+                titleInput.value = '';
+                linkInput.value = '';
+                descInput.value = '';
+
+                // Reload video list
+                await loadVideoList();
+
+                alert('Video added successfully!');
+
+            } catch (error) {
+                console.error('Error adding video:', error);
+                alert(`Failed to add video: ${error.message}`);
+            }
+        }
+
+        // -------------------- VIEW VIDEO --------------------
+        function viewVideo(videoId) {
+            fetchVideoData(videoId);
+        }
+
+        async function fetchVideoData(videoId) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('VideoLinkTable')
+                    .select('*')
+                    .eq('id', videoId)
+                    .single();
+
+                if (error) throw error;
+
+                if (!data) {
+                    alert('Video data not found.');
+                    return;
+                }
+
+                // Open modal with video
+                openVideoModal(data);
+
+            } catch (error) {
+                console.error('Error fetching video:', error);
+                alert(`Failed to load video: ${error.message}`);
+            }
+        }
+
+        // -------------------- OPEN VIDEO MODAL --------------------
+        function openVideoModal(videoData) {
+            const modal = document.getElementById('VideoModal');
+            const title = document.getElementById('VideoModalTitle');
+            const wrapper = document.getElementById('VideoModalWrapper');
+
+            // Set title
+            title.textContent = videoData.VideoName || 'Video';
+
+            // Clear wrapper
+            wrapper.innerHTML = '';
+
+            let videoLink = videoData.VideoLink || '';
+            
+            // Clean the link
+            videoLink = videoLink.trim();
+            
+            console.log('Raw video link:', videoLink);
+
+            let iframeHtml = '';
+
+            // Check if it's an iframe embed code (contains <iframe)
+            if (videoLink.includes('<iframe')) {
+                // Extract the src from the iframe
+                const srcMatch = videoLink.match(/src=["']([^"']*)["']/);
+                if (srcMatch && srcMatch[1]) {
+                    const src = srcMatch[1];
+                    // Make sure the src is a valid URL
+                    if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+                        iframeHtml = `<iframe 
+                            src="${src}" 
+                            frameborder="0" 
+                            allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            title="${videoData.VideoName || 'Video'}"
+                            style="width:100%;height:100%;border:none;">
+                        </iframe>`;
+                    } else {
+                        // If src is not a valid URL, try to find any URL in the iframe
+                        const urlMatch = videoLink.match(/https?:\/\/[^\s"']+/);
+                        if (urlMatch) {
+                            iframeHtml = `<iframe 
+                                src="${urlMatch[0]}" 
+                                frameborder="0" 
+                                allowfullscreen
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                title="${videoData.VideoName || 'Video'}"
+                                style="width:100%;height:100%;border:none;">
+                            </iframe>`;
+                        } else {
+                            showError(wrapper, 'Could not find valid video source URL');
+                            showModal(modal);
+                            return;
+                        }
+                    }
+                } else {
+                    // If we can't extract src, try to find any URL in the iframe
+                    const urlMatch = videoLink.match(/https?:\/\/[^\s"']+/);
+                    if (urlMatch) {
+                        iframeHtml = `<iframe 
+                            src="${urlMatch[0]}" 
+                            frameborder="0" 
+                            allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            title="${videoData.VideoName || 'Video'}"
+                            style="width:100%;height:100%;border:none;">
+                        </iframe>`;
+                    } else {
+                        showError(wrapper, 'Could not find video source in embed code');
+                        showModal(modal);
+                        return;
+                    }
+                }
+            }
+            // Check if it's a YouTube embed URL
+            else if (videoLink.includes('youtube.com/embed')) {
+                iframeHtml = `<iframe 
+                    src="${videoLink}" 
+                    frameborder="0" 
+                    allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    title="${videoData.VideoName || 'Video'}"
+                    style="width:100%;height:100%;border:none;">
+                </iframe>`;
+            }
+            // Check if it's a YouTube watch URL or short URL
+            else if (videoLink.includes('youtube.com/watch') || videoLink.includes('youtu.be/')) {
+                const videoId = extractYouTubeId(videoLink);
+                if (videoId) {
+                    iframeHtml = `<iframe 
+                        src="https://www.youtube.com/embed/${videoId}" 
+                        frameborder="0" 
+                        allowfullscreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        title="${videoData.VideoName || 'Video'}"
+                        style="width:100%;height:100%;border:none;">
+                    </iframe>`;
+                } else {
+                    showError(wrapper, 'Could not extract YouTube video ID');
+                    showModal(modal);
+                    return;
+                }
+            }
+            // Check if it's a Facebook video
+            else if (videoLink.includes('facebook.com')) {
+                iframeHtml = `<iframe 
+                    src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoLink)}&show_text=false&width=800" 
+                    frameborder="0" 
+                    allowfullscreen="true"
+                    allow="encrypted-media"
+                    style="border:none;overflow:hidden;width:100%;height:100%;">
+                </iframe>`;
+            }
+            // If it's any other URL, try to embed it directly
+            else if (videoLink.match(/^https?:\/\/.+/)) {
+                iframeHtml = `<iframe 
+                    src="${videoLink}" 
+                    frameborder="0" 
+                    allowfullscreen
+                    allow="encrypted-media"
+                    style="border:none;overflow:hidden;width:100%;height:100%;">
+                </iframe>`;
+            }
+            // If nothing works
+            else {
+                showError(wrapper, 'Invalid video link format. Please check the embed code.');
+                showModal(modal);
+                return;
+            }
+
+            if (iframeHtml) {
+                console.log('Generated iframe:', iframeHtml);
+                wrapper.innerHTML = iframeHtml;
+            }
+
+            showModal(modal);
+        }
+
+        // Helper function to show error message in modal
+        function showError(wrapper, message) {
+            wrapper.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;padding:20px;text-align:center;background:#2a2a2a;border-radius:8px;">
+                    <div>
+                        <div style="font-size:48px;margin-bottom:10px;">⚠️</div>
+                        <p style="font-size:18px;margin:0;">${message}</p>
+                        <p style="font-size:14px;color:#999;margin-top:10px;">Please check the video link and try again.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper function to show modal
+        function showModal(modal) {
+            modal.style.display = 'flex';
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modal.style.transition = 'opacity 0.3s ease';
+            }, 10);
+
+            // Close on background click
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    closeVideoModal();
+                }
+            };
+
+            // Close on Escape key
+            const escHandler = function(e) {
+                if (e.key === 'Escape') {
+                    closeVideoModal();
+                    document.removeEventListener('keydown', escHandler);
+                }
+            };
+            document.addEventListener('keydown', escHandler);
+            modal._escHandler = escHandler;
+        }
+
+        // -------------------- CLOSE VIDEO MODAL --------------------
+        function closeVideoModal() {
+            const modal = document.getElementById('VideoModal');
+            const wrapper = document.getElementById('VideoModalWrapper');
+            
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                wrapper.innerHTML = '';
+            }, 300);
+        }
+
+        // -------------------- EXTRACT YOUTUBE VIDEO ID --------------------
+        function extractYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // -------------------- DELETE VIDEO --------------------
+        async function deleteVideo(videoId) {
+            if (!confirm('Are you sure you want to delete this video?')) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('VideoLinkTable')
+                    .delete()
+                    .eq('id', videoId);
+
+                if (error) throw error;
+
+                await loadVideoList();
+                alert('Video deleted successfully!');
+
+            } catch (error) {
+                console.error('Error deleting video:', error);
+                alert(`Failed to delete video: ${error.message}`);
+            }
+        }
+
+        // -------------------- NAVIGATION FUNCTIONS --------------------
+        function openCalculator() {
+            if (typeof window.openCalculator === 'function') {
+                window.openCalculator();
+            } else {
+                console.warn('Calculator function not loaded');
+                alert('Calculator feature is not available.');
+            }
+        }
+
+        function showCalendar() {
+            if (typeof window.showCalendar === 'function') {
+                window.showCalendar();
+            } else {
+                console.warn('Calendar function not loaded');
+                alert('Calendar feature is not available.');
+            }
+        }
+
+        // -------------------- PROTECTION FROM UNAUTHORIZED ACCESS --------------------
+        async function protectAdminPage() {
+            try {
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                if (error || !session) {
+                    alert('Please login first.');
+                    window.location.replace("LoginIndex.html");
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Auth check error:', error);
+                window.location.replace("LoginIndex.html");
+                return false;
+            }
+        }
+
+        // Run protection
+        (async function() {
+            const isAuthenticated = await protectAdminPage();
+            if (isAuthenticated) {
+                document.body.style.display = 'block';
+                loadDynamicLogoAndFavicon();
+            }
+        })();
+
+        // -------------------- DYNAMIC LOGO AND FAVICON --------------------
+        async function loadDynamicLogoAndFavicon() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('AboutSchoolTable')
+                    .select('Value')
+                    .eq('Name', 'SchoolLogo')
+                    .single();
+
+                if (error) {
+                    console.error("Error loading branding:", error.message);
+                    return;
+                }
+
+                if (data && data.Value) {
+                    const freshLogoUrl = data.Value;
+                    const faviconElement = document.getElementById('dynamicFavicon');
+                    if (faviconElement) {
+                        faviconElement.href = freshLogoUrl;
+                    }
+                    const logoImgElement = document.querySelector('#LogoBox img');
+                    if (logoImgElement) {
+                        logoImgElement.src = freshLogoUrl;
+                    }
+                }
+            } catch (error) {
+                console.error("Error setting up branding:", error);
+            }
+        }
+
+        // -------------------- DATE DISPLAY --------------------
+        const dateBox = document.getElementById('DateBox');
+        if (typeof AD2BS === 'function') {
+            dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
+        } else {
+            dateBox.innerText = new Date().toISOString().split('T')[0];
+        }
+
+        // -------------------- NAVIGATION DROPDOWNS --------------------
+        document.getElementById("PageNavigationSelect").addEventListener("change", function() {
+            const pageMap = {
+                "AdminPage": "LoginIndex.html",
+                "LibraryPage": "../LibraryPage/LibraryIndex.html",
+                "NoticePage": "../NoticePage/NoticeIndex.html",
+                "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
+                "StudentPage": "../StudentPage/StudentIndex.html",
+                "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
+                "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
+                "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
+                "GalleryPage": "../GalleryPage/GalleryIndex.html",
+                "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
+                "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
+                "HomePage": "../index.html"
+            };
+            if (pageMap[this.value]) {
+                window.location.href = pageMap[this.value];
+            }
+        });
+
+        document.getElementById("EditNavigationSelect").addEventListener("change", function() {
+            const pageMap = {
+                "AttendanceCardEditBox": "EditAttendanceCard.html",
+                "IDCardEditBox": "EditIDCard.html",
+                "ResultEditBox": "EditResult.html",
+                "RoutineEditBox": "EditRoutine.html",
+                "StudentAttendanceEditBox": "EditStudentAttendance.html",
+                "LibraryEditBox": "EditLibrary.html",
+                "NoticeEditBox": "EditNotice.html",
+                "AboutUsEditBox": "EditAboutUs.html",
+                "StudentEditBox": "EditStudent.html",
+                "HumanResourceEditBox": "EditHumanResource.html",
+                "CalendarEditBox": "EditCalendar.html",
+                "BalPratibhaEditBox": "EditBalPratibha.html",
+                "GalleryEditBox": "EditGallery.html",
+                "HelpingHandEditBox": "EditHelpingHand.html",
+                "SMC_TGC_EditBox": "EditSMC_TGC.html",
+                "AdminEditBox": "AdminIndex.html",
+                "QuestionBankEditBox": "EditQuestionBank.html"
+            };
+            if (pageMap[this.value]) {
+                window.location.href = pageMap[this.value];
+            }
+        });
+
+        document.getElementById("AdminToolsSelect").addEventListener("change", async function() {
+            switch (this.value) {
+                case "ChangePasswordTool":
+                    window.location.href = "ChangePasswordIndex.html";
+                    break;
+                case "LogoutAllDevicesTool":
+                    if (confirm("Logout from all devices?")) {
+                        await supabaseClient.auth.signOut({ scope: "global" });
+                        window.location.replace("LoginIndex.html");
+                    }
+                    break;
+                case "AddAdminTool":
+                    window.location.href = "AddAdminIndex.html";
+                    break;
+            }
+            this.selectedIndex = 0;
+        });
+
+        console.log('Video Link Management page loaded successfully!');
+    </script>    
+</body>
+</html>

@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script><title>Admin Page</title>
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+    <style>
+        @font-face {
+            font-family: 'MySanskritFont';
+            src: url('../Sanskrit-2003.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        html{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+            font-size: 62.5%;
+        }
+        body { 
+            width: 100%;
+            height: auto;
+            font-family: Arial, sans-serif; 
+            min-height: 100%;
+            font-family: 'Arial', 'MySanskritFont', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+        }
+
+        #MainBody{
+            width: 96%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffaaaa;
+            min-height: 100%;
+            margin: 0 auto;    
+            padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+        }
+
+        #PageNaviggationBox {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            background: #000000;
+            padding: clamp(0.3rem, 1rem, 1.6rem);
+            text-align: center;
+        }
+        #LogoBox{
+            width: 6%;
+            height: auto;     
+        }
+        #LogoBox img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        #PageNavigationSelect{
+            width: 50%;
+            font-size: clamp(1.2rem, 2vw, 3rem);
+            font-weight: bold;
+            padding: clamp(0.3rem, 1rem, 1.6rem);;
+            border: 4px solid #000000;
+        }
+        #PageNaviggationBox button{
+            width: 20%;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+            background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+            color: #ffffff;
+            border-radius: 4vw;  
+            font-size: clamp(1rem, 2vw, 3rem);  
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #pageNaviggationBox button:hover{
+            background: linear-gradient(180deg, #009900, #00aa00, #009900);
+            color: #ffff00;
+        }
+        #DateBox{
+            width: 100%;
+            text-align: center;
+            font-size: clamp(1.2rem, 3vw, 2.5rem);
+            font-weight: 800;
+            color: #ffff00;
+            padding: clamp(0.3rem, 1rem, 1.6rem);   
+            background: linear-gradient(180deg, #111111, #333333); 
+        }
+        #UtilityBox{
+            width: 100%;
+            height: auto;
+            background: linear-gradient(180deg, #333333, #555555);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+        }
+        #EditNavigationSelect, #AdminToolsSelect{
+            width: 48%;
+            font-size: clamp(1.2rem, 2vw, 3rem);
+            font-weight: bold;
+            padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+            border: 4px solid #000000;
+        }
+
+        #EditHumanResourceContainer{
+            width: 100%;
+            padding: clamp(0.4rem, 1.2vw, 2.6rem);     
+            display: flex;
+            flex-direction: column;
+            align-items: center;       
+        }
+        #EditHumanResourceHead{
+            width: 100%;
+            font-size: clamp(2.6rem, 4vw, 5rem);
+            font-weight: bold;
+            text-align: center;
+            color: #875400;
+            text-shadow: 1px 1px 3px #ffff00;
+            padding: clamp(0.4rem, 1vw, 2rem);
+        }
+        #EditTopicSelect{
+            width: 80%;
+            font-size: clamp(1.6rem, 2vw, 3rem);
+            font-weight: bold;
+            text-align: center;
+            color: #000;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            margin: clamp(0.4rem, 1vw, 2rem) 0;
+        }
+        .EditContainers {
+            display: none !important;
+        }
+        .EditContainers.visible {
+            display: flex !important;
+        }
+        /* Teacher Container Style */
+        #EditTeacherContainer{
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            border: 2px solid #000000;
+            background: linear-gradient(135deg, #ddffdd, #bbddbb);
+        }
+        #EditTeacherHead{
+            width: 100%;
+            font-size: clamp(2rem, 3vw, 4rem);
+            font-weight: bold;
+            text-align: center;
+            color: #0000aa;
+            text-shadow: 1px 1px 3px #fff;
+            padding: clamp(0.4rem, 1vw, 2rem);
+        }
+        #TeacherBox{
+            width: 100%;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1.2rem, 1.6vw, 3rem);
+            font-weight: bold;
+        }
+        /* Button wrapper for centering */
+        .button-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: clamp(0.4rem, 1vw, 2rem);
+        }
+        /* Common button styles */
+        .btn-action {
+            width: 30%;
+            min-width: 150px;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            background: linear-gradient(180deg, #005500, #007700, #005500);
+            color: #fff;
+            border: none;
+            border-radius: 2vw;
+            font-size: clamp(1.6rem, 2vw, 3.2rem);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .btn-action:hover {
+            background: linear-gradient(180deg, #003300, #005500, #003300);
+            color: #f0f;
+            transform: scale(1.02);
+        }
+        /* SMC Container Style */
+        #EditSMCContainer{
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            border: 2px solid #000000;
+            background: linear-gradient(135deg, #ddffdd, #bbddbb);
+        }
+        #EditSMCHead{
+            width: 100%;
+            font-size: clamp(2rem, 3vw, 4rem);
+            font-weight: bold;
+            text-align: center;
+            color: #0000aa;
+            text-shadow: 1px 1px 3px #fff;
+            padding: clamp(0.4rem, 1vw, 2rem);
+        }
+        #SMCBox{
+            width: 100%;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1.2rem, 1.6vw, 3rem);
+            font-weight: bold;
+        }
+        /* PTA Container Style */
+        #EditPTAContainer{
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            border: 2px solid #000000;
+            background: linear-gradient(135deg, #ddffdd, #bbddbb);
+        }
+        #EditPTAHead{
+            width: 100%;
+            font-size: clamp(2rem, 3vw, 4rem);
+            font-weight: bold;
+            text-align: center;
+            color: #0000aa;
+            text-shadow: 1px 1px 3px #fff;
+            padding: clamp(0.4rem, 1vw, 2rem);
+        }
+        #PTABox{
+            width: 100%;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1.2rem, 1.6vw, 3rem);
+            font-weight: bold;
+        }
+        /* Photo Container Style */
+        #EditPhotoContainer{
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            border: 2px solid #000000;
+            background: linear-gradient(135deg, #ddffdd, #bbddbb);
+        }
+        #EditPhotoHead{
+            width: 100%;
+            font-size: clamp(2rem, 3vw, 4rem);
+            font-weight: bold;
+            text-align: center;
+            color: #0000aa;
+            text-shadow: 1px 1px 3px #fff;
+            padding: clamp(0.4rem, 1vw, 2rem);
+        }
+        #PhotoBox{
+            width: 100%;
+            padding: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1.2rem, 1.6vw, 3rem);
+            font-weight: bold;
+        }
+        /* Fix for jspreadsheet dropdown styles */
+        .jspreadsheet .jdropdown {
+            z-index: 9999 !important;
+        }
+        .jspreadsheet .jdropdown-content {
+            z-index: 9999 !important;
+        }
+        /* Ensure jspreadsheet renders properly inside hidden containers */
+        .EditContainers.visible #TeacherBox,
+        .EditContainers.visible #SMCBox,
+        .EditContainers.visible #PTABox,
+        .EditContainers.visible #PhotoBox {
+            display: block !important;
+        }
+        /* Responsive adjustments for buttons */
+        @media (max-width: 768px) {
+            .btn-action {
+                width: 50%;
+                min-width: 120px;
+                font-size: clamp(1.2rem, 2vw, 1.8rem);
+            }    
+            .button-wrapper {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .btn-action {
+                width: 80%;
+                min-width: 100px;
+                font-size: clamp(1rem, 1.8vw, 1.4rem);
+            }
+        }
+        /* Photo Container Styles */
+        #PhotoListContainer {
+            width: 100%;
+            overflow-x: auto;
+            padding: clamp(0.4rem, 1vw, 2rem);
+        }
+        #PhotoTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: clamp(1.2rem, 1.6vw, 2rem);
+        }
+        #PhotoTable th {
+            background: #005500;
+            color: white;
+            padding: 10px;
+            border: 1px solid #000;
+            text-align: left;
+            font-weight: bold;
+        }
+        #PhotoTable td {
+            padding: 10px;
+            border: 1px solid #000;
+            vertical-align: middle;
+        }
+        #PhotoTable tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        #PhotoTable tr:hover {
+            background: #e6f3e6;
+        }
+        .photo-preview {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .photo-upload-btn {
+            padding: 6px 12px;
+            background: #007700;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: clamp(0.8rem, 1.2vw, 1.4rem);
+            transition: all 0.3s ease;
+        }
+        .photo-upload-btn:hover {
+            background: #005500;
+            transform: scale(1.05);
+        }
+        .photo-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: clamp(0.8rem, 1.2vw, 1.4rem);
+            font-weight: bold;
+        }
+        .photo-status.pending {
+            background: #ffaa00;
+            color: #000;
+        }
+        .photo-status.uploaded {
+            background: #00aa00;
+            color: #fff;
+        }
+        .photo-status.error {
+            background: #ff0000;
+            color: #fff;
+        }
+        .photo-file-input {
+            display: none;
+        }
+        .no-photo {
+            color: #999;
+            font-style: italic;
+        }
+        /* Delete button styles */
+        .delete-btn {
+            padding: 6px 12px;
+            background: #cc0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: clamp(0.8rem, 1.2vw, 1.4rem);
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #990000;
+            transform: scale(1.05);
+        }
+
+        .delete-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .delete-btn {
+                font-size: clamp(0.6rem, 0.8vw, 1rem);
+                padding: 4px 8px;
+            }
+            
+            #PhotoTable th,
+            #PhotoTable td {
+                font-size: clamp(0.7rem, 1vw, 1rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .delete-btn {
+                font-size: 0.6rem;
+                padding: 3px 6px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="MainBody">
+        <div id="PageNaviggationBox">
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
+            <select id="PageNavigationSelect">   
+                <option value="AdminPage">Admin</option>
+                <option value="LibraryPage">Library</option>
+                <option value="NoticePage">Notice</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="StudentPage">Students</option>
+                <option value="HumanResourcePage">Human Resource</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="HomePage">Home</option>
+            </select>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>  
+        <div id="DateBox"></div>
+        <div id="UtilityBox">
+            <select id="EditNavigationSelect">
+                <option>Edit Teacher Data</option>
+                <option value="AttendanceCardEditBox">Edit Attendance Cards</option>
+                <option value="IDCardEditBox">Edit ID Cards</option>
+                <option value="ResultEditBox">Edit Result</option>
+                <option value="RoutineEditBox">Edit Routine</option>
+                <option value="StudentAttendanceEditBox">Edit Student Attendance</option>
+                <option value="LibraryEditBox">Edit Library</option>
+                <option value="NoticeEditBox">Edit Notice</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
+                <option value="StudentEditBox">Edit Student Data</option>
+                <option value="AboutUsEditBox">Edit About Us</option>
+                <option value="CalendarEditBox">Edit Calendar</option>
+                <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
+                <option value="GalleryEditBox">Edit Gallery</option>
+                <option value="HelpingHandEditBox">Edit Helping Hand</option>
+                <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
+                <option value="AdminEditBox">Admin</option>
+            </select>
+            <select id="AdminToolsSelect">
+                <option disabled selected>Admin Tools</option>
+                <option value="ChangePasswordTool">Change Password</option>
+                <option value="LogoutThisDeviceTool">Logout This Device</option>
+                <option value="LogoutAllDevicesTool">Logout All Devices</option>
+                <option value="AddAdminTool">Add/Delete Admin</option>
+            </select>            
+        </div>  
+        <div id="EditHumanResourceContainer">    
+            <div id="EditHumanResourceHead">Edit Human Resources</div>
+            <select id="EditTopicSelect" onchange="handleTopicSelect(this.value)">
+                <option selected disabled>Select Edit Topics</option>
+                <option value="EditTeacherData">Edit Teacher Data</option>
+                <option value="EditSMCData">Edit SMC Data</option>
+                <option value="EditPTAData">Edit PTA Data</option>
+                <option value="EditPhoto">Add/Edit Photo</option>                
+            </select>            
+            <!--Teacher and Staff Container-->
+            <div id="EditTeacherContainer" class="EditContainers">
+                <div id="EditTeacherHead">Edit Teacher & Other Staffs</div>
+                <div id="TeacherBox"></div>
+                <div class="button-wrapper">
+                    <button type="button" id="btnSaveTeacher" class="btn-action" onclick="saveTeacherData()">Save Data</button>
+                </div>
+            </div>            
+            <!--School management Committee Container-->
+            <div id="EditSMCContainer" class="EditContainers">
+                <div id="EditSMCHead">Edit School Management Committee</div>
+                <div id="SMCBox"></div>
+                <div class="button-wrapper">
+                    <button type="button" id="btnSaveSMC" class="btn-action" onclick="saveSMCData()">Save SMC Data</button>
+                </div>
+            </div>            
+            <!--Parents-Teacher Association Container-->
+            <div id="EditPTAContainer" class="EditContainers">
+                <div id="EditPTAHead">Edit Parent-Teacher Association</div>
+                <div id="PTABox"></div>
+                <div class="button-wrapper">
+                    <button type="button" id="btnSavePTA" class="btn-action" onclick="savePTAData()">Save PTA Data</button>
+                </div>
+            </div>            
+            <!--Add/Edit Photo Container-->
+            <div id="EditPhotoContainer" class="EditContainers">
+                <div id="EditPhotoHead">Add/Edit Photos</div>
+                <div id="PhotoBox">
+                    <div id="PhotoListContainer">
+                        <table id="PhotoTable" style="width:100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #005500; color: white;">
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">S.N.</th>
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">Name</th>
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">Work Area</th>
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">Post</th>
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">Current Photo</th>
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">Upload New Photo</th>
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">Status</th>
+                                    <th style="padding: 10px; border: 1px solid #000; text-align: left;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="PhotoTableBody">
+                                <!-- Rows will be populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="button-wrapper">
+                    <button type="button" id="btnSavePhoto" class="btn-action" onclick="savePhoto()" style="display:none;">Save Photos</button>
+                </div>
+            </div>
+                <div class="button-wrapper">
+                    <button type="button" id="btnSavePhoto" class="btn-action" onclick="savePhoto()" style="display:none;">Save Photos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
+    <script src="../SupabaseConfig.js"></script> 
+    <script src="../DateConverter.js"></script>
+    <script src="../SmartCalculator.js"></script>
+    <script src="../NepaliCalendar.js"></script>
+    <script>
+
+if (typeof supabaseClient === 'undefined') {
+    console.error("Supabase client not found. Make sure SupabaseConfig.js is loaded first.");
+}
+// -------------------- CLOUDINARY --------------------
+const CLOUD_NAME = "dcdwpdnyp";
+
+// -------------------- PROTECTION FORM UNAUTHORIZED ACCESS --------------------
+protectAdminPage();
+async function protectAdminPage() {
+    const {
+        data: { session },
+        error
+    } = await supabaseClient.auth.getSession();
+    if (error || !session) {
+      showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
+        window.location.replace("LoginIndex.html");
+        return;
+    }
+    document.body.style.display = "block";
+}
+
+// -------------------- NAVIGATE PAGES --------------------
+const PageNavigationDropDown = document.getElementById("PageNavigationSelect");
+PageNavigationDropDown.addEventListener("change", function () {
+    const pageMap = {
+        "AdminPage": "LogInIndex.html",
+        "LibraryPage": "../LibraryPage/LibraryIndex.html",
+        "NoticePage": "../NoticePage/NoticeIndex.html",
+        "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
+        "StudentPage": "../StudentPage/StudentIndex.html",
+        "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
+        "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
+        "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
+        "GalleryPage": "../GalleryPage/GalleryIndex.html",
+        "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
+        "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
+        "HomePage": "../index.html"
+    };   
+    const selectedPage = pageMap[this.value];
+    if (selectedPage) {
+        window.location.href = selectedPage;
+    }
+});
+
+// -------------------- NAVIGATE ADMIN EDITS --------------------
+const EditNavigationDropDown = document.getElementById("EditNavigationSelect");
+EditNavigationDropDown.addEventListener("change", function () {
+    const pageMap = {
+        "AttendanceCardEditBox": "EditAttendanceCard.html",
+        "IDCardEditBox": "EditIDCard.html",
+        "ResultEditBox": "EditResult.html",
+        "RoutineEditBox": "EditRoutine.html",
+        "StudentAttendanceEditBox": "EditStudentAttendance.html",
+        "LibraryEditBox": "EditLibrary.html",
+        "NoticeEditBox": "EditNotice.html",
+        "QuestionBankEditBox": "EditQuestionBank.html",
+        "StudentEditBox": "EditStudent.html",
+        "AboutUsEditBox": "EditAboutUs.html",
+        "CalendarEditBox": "EditCalendar.html",
+        "BalPratibhaEditBox": "EditBalPratibha.html",
+        "GalleryEditBox": "EditGallery.html",
+        "HelpingHandEditBox": "EditHelpingHand.html",
+        "SMC_TGCEditBox": "EditSMC_TGC.html",
+        "AdminEditBox": "AdminIndex.html"
+    };   
+    const selectedEdit = pageMap[this.value];
+    if (selectedEdit) {
+        window.location.href = selectedEdit;
+    }
+});
+
+// -------------------- DATE --------------------
+const dateBox = document.getElementById('DateBox');
+dateBox.innerText =
+  AD2BS(new Date()) +
+  " (" +
+  new Date().toISOString().split('T')[0] +
+  ")";
+
+  //----------------------- Script for Admin Tools Dropdown -----------------------
+document.getElementById("AdminToolsSelect").addEventListener("change", async function () {
+    switch (this.value) {
+        case "ChangePasswordTool":
+            window.location.href = "ChangePasswordIndex.html";
+            break;
+        case "LogoutAllDevicesTool":
+          showCustomDialog2(
+              "Confirm Logout",
+              "Logout from all devices?",
+              "Yes",
+              "Cancel",
+              async function () {
+                  await supabaseClient.auth.signOut({
+                      scope: "global"
+                  });
+                  window.location.replace("LoginIndex.html");
+              },
+              function () {}
+          );
+          break;
+        case "LogoutAllDevicesTool":
+          const confirm = showCustomDialog2("Confirm Logout", "Logout from all devices?", "Yes", "Cancel", function() {}, function() {});
+            if (confirm==="Yes") {
+                await supabaseClient
+                .auth
+                .signOut({
+                    scope: "global"
+                });
+                window.location.replace("LoginIndex.html");
+            }
+            break;
+        case "AddAdminTool":
+            window.location.href = "AddAdminIndex.html";
+            break;
+    }
+    this.selectedIndex = 0;
+});
+
+// Dynamically show logo and favicon
+async function loadDynamicLogoAndFavicon() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('AboutSchoolTable')
+            .select('Value')
+            .eq('Name', 'SchoolLogo')
+            .single();
+        if (error) {
+            console.error("Supabase query error loading branding:", error.message);
+            return;
+        }
+        if (data && data.Value) {
+            const freshLogoUrl = data.Value;
+            const faviconElement = document.getElementById('dynamicFavicon');
+            if (faviconElement) {
+                faviconElement.href = freshLogoUrl;
+            }
+            const logoImgElement = document.querySelector('#LogoBox img');
+            if (logoImgElement) {
+                logoImgElement.src = freshLogoUrl;
+            }            
+            console.log("Logo and Favicon synced dynamically via supabaseClient!");
+        }
+    } catch (error) {
+        console.error("Unexpected error setting up branding layout:", error);
+    }
+}
+document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
+function loadTeacherSpreadsheet() {
+    const teacherBox = document.getElementById('TeacherBox');    
+    teacherBox.innerHTML = '';    
+    const columns = [
+        { title: 'Name', width: '300px', type: 'text' },
+        { title: 'Address', width: '450px', type: 'text' },
+        { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+        { title: 'Date of Birth', width: '150px', type: 'text' },
+        { title: "Father's Name", width: '300px', type: 'text' },
+        { title: "Mother's Name", width: '300px', type: 'text' },
+        { title: 'Contact', width: '150px', type: 'text' },
+        { title: 'Email', width: '300px', type: 'text' },
+        { title: 'Appointment Date(Temp.)', width: '300px', type: 'text' },
+        { title: 'Appointment Date(Perm.)', width: '300px', type: 'text' },
+        { title: 'Designation', width: '200px', type: 'text' },
+        { title: 'Level', width: '120px', type: 'dropdown', source: ['Primary', 'Lower Secondary', 'Secondary', 'Higher Secondary', 'Others'] },
+        { title: 'Nationality No.', width: '200px', type: 'text' },
+        { title: 'Pan No.', width: '200px', type: 'text' },
+        { title: 'NIN', width: '200px', type: 'text' },
+        { title: 'Teaching License No.', width: '200px', type: 'text' },
+        { title: 'CIF No.', width: '200px', type: 'text' },
+        { title: 'Service Type', width: '150px', type: 'dropdown', source: ['स्थायी', 'अस्थायी', 'राहत', 'कार्यालय सहयोगी', 'लेखापाल', 'बालकक्षा शिक्षक', 'निजीश्रोत', 'पालिका करार', 'अन्य'] },
+        { title: 'Qualification', width: '200px', type: 'text' },
+        { title: 'Major Subject', width: '300px', type: 'text' }
+    ];    
+    const initialData = Array(30).fill().map(() => Array(20).fill(''));    
+    const spreadsheet = jspreadsheet(teacherBox, {
+        data: initialData,
+        columns: columns,
+        minDimensions: [20, 30],
+        tableOverflow: true,
+        tableWidth: '100%',
+        tableHeight: '400px',
+        search: false,
+        contextMenu: true,
+        copyPaste: true,
+        columnSort: true,
+        lazyLoading: false,
+        onchange: function(el, cell, x, y, value) {
+            console.log(`Cell (${y}, ${x}) changed to: ${value}`);
+        }
+    });    
+    return spreadsheet;
+}
+
+function loadSMCSpreadsheet() {
+    const SMCBox = document.getElementById('SMCBox');    
+    SMCBox.innerHTML = '';    
+    const columns = [
+        { title: 'Name', width: '300px', type: 'text' },
+        { title: 'Address', width: '450px', type: 'text' },
+        { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+        { title: 'Contact', width: '200px', type: 'text' },
+        { title: 'Email', width: '300px', type: 'text' },
+        { title: 'Appointment Date', width: '200px', type: 'text' },
+        { title: 'Post', width: '200px', type: 'text' }        
+    ];    
+    const initialData = Array(12).fill().map(() => Array(7).fill(''));    
+    const spreadsheet = jspreadsheet(SMCBox, {
+        data: initialData,
+        columns: columns,
+        minDimensions: [7, 12],
+        tableOverflow: true,
+        tableWidth: '100%',
+        tableHeight: '300px',
+        search: false,
+        contextMenu: true,
+        copyPaste: true,
+        columnSort: true,
+        lazyLoading: false,
+        onchange: function(el, cell, x, y, value) {
+            console.log(`Cell (${y}, ${x}) changed to: ${value}`);
+        }
+    });    
+    return spreadsheet;
+}
+
+function loadPTASpreadsheet() {
+    const PTABox = document.getElementById('PTABox');    
+    PTABox.innerHTML = '';    
+    const columns = [
+        { title: 'Name', width: '300px', type: 'text' },
+        { title: 'Address', width: '450px', type: 'text' },
+        { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+        { title: 'Contact', width: '200px', type: 'text' },
+        { title: 'Email', width: '300px', type: 'text' },
+        { title: 'Appointment Date', width: '200px', type: 'text' },
+        { title: 'Post', width: '200px', type: 'text' }        
+    ];    
+    const initialData = Array(12).fill().map(() => Array(7).fill(''));    
+    const spreadsheet = jspreadsheet(PTABox, {
+        data: initialData,
+        columns: columns,
+        minDimensions: [7, 12],
+        tableOverflow: true,
+        tableWidth: '100%',
+        tableHeight: '300px',
+        search: false,
+        contextMenu: true,
+        copyPaste: true,
+        columnSort: true,
+        lazyLoading: false,
+        onchange: function(el, cell, x, y, value) {
+            console.log(`Cell (${y}, ${x}) changed to: ${value}`);
+        }
+    });    
+    return spreadsheet;
+}
+
+// Handle topic selection from dropdown
+function handleTopicSelect(value) {
+    hideAllContainers();
+    
+    switch(value) {
+        case 'EditTeacherData':
+            showTeacherContainer();
+            break;
+        case 'EditSMCData':
+            showSMCContainer();
+            break;
+        case 'EditPTAData':
+            showPTAContainer();
+            break;
+        case 'EditPhoto':
+            showPhotoContainer();
+            break;
+        default:
+            break;
+    }
+}
+
+// Function to show a specific container
+function showContainer(containerId) {
+    hideAllContainers();
+    
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.classList.remove('EditContainers');
+        container.classList.add('visible');
+    }
+}
+// Function to hide all containers
+function hideAllContainers() {
+    const containers = [
+        'EditTeacherContainer',
+        'EditSMCContainer', 
+        'EditPTAContainer',
+        'EditPhotoContainer'
+    ];    
+    containers.forEach(id => {
+        const container = document.getElementById(id);
+        if (container) {
+            container.classList.add('EditContainers');
+            container.classList.remove('visible');
+        }
+    });
+}
+// Function to toggle a container visibility
+function toggleContainer(containerId) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.classList.toggle('EditContainers');
+        container.classList.toggle('visible');
+    }
+}
+// Function to show container and load its content
+function showTeacherContainer() {
+    showContainer('EditTeacherContainer');    
+    // Load teacher spreadsheet with a slight delay to ensure container is visible
+    setTimeout(function() {
+        if (!window.spreadsheet) {
+            window.spreadsheet = loadTeacherSpreadsheet();
+        } else {
+            // Re-render if already exists
+            const teacherBox = document.getElementById('TeacherBox');
+            teacherBox.innerHTML = '';
+            window.spreadsheet = loadTeacherSpreadsheet();
+        }
+    }, 100);
+}
+
+function showSMCContainer() {
+    showContainer('EditSMCContainer');
+    // Load teacher spreadsheet with a slight delay to ensure container is visible
+    setTimeout(function() {
+        if (!window.spreadsheet) {
+            window.spreadsheet = loadSMCSpreadsheet();
+        } else {
+            // Re-render if already exists
+            const SMCBox = document.getElementById('SMCBox');
+            SMCBox.innerHTML = '';
+            window.spreadsheet = loadSMCSpreadsheet();
+        }
+    }, 100);
+}
+
+function showPTAContainer() {
+    showContainer('EditPTAContainer');
+    // Load teacher spreadsheet with a slight delay to ensure container is visible
+    setTimeout(function() {
+        if (!window.spreadsheet) {
+            window.spreadsheet = loadPTASpreadsheet();
+        } else {
+            // Re-render if already exists
+            const PTABox = document.getElementById('PTABox');
+            PTABox.innerHTML = '';
+            window.spreadsheet = loadPTASpreadsheet();
+        }
+    }, 100);
+}
+
+function showPhotoContainer() {
+    showContainer('EditPhotoContainer');
+    // Load Photo content here
+    const photoBox = document.getElementById('PhotoBox');
+    photoBox.innerHTML = '<p>Photo upload interface will be loaded here</p>';
+}
+
+// Placeholder functions for save operations
+function saveTeacherData() {
+    const data = getTeacherData();
+    console.log('Teacher Data:', data);
+    alert('Teacher data saved successfully!');
+}
+
+function saveSMCData() {
+    alert('SMC data saved successfully!');
+}
+function savePTAData() {
+    alert('PTA data saved successfully!');
+}
+function savePhoto() {
+    alert('Photos saved successfully!');
+}
+document.addEventListener('DOMContentLoaded', function() {
+    hideAllContainers();
+});
+
+// -------------------- GLOBAL VARIABLES --------------------
+let teacherSpreadsheet = null;
+let smcSpreadsheet = null;
+let ptaSpreadsheet = null;
+let currentSpreadsheet = null;
+let teacherDataChanged = false;
+let smcDataChanged = false;
+let ptaDataChanged = false;
+const COLUMN_MAPPING = {
+    'Name': 'Name',
+    'Address': 'Address',
+    'Gender': 'Gender',
+    'Date of Birth': 'DOB',
+    "Father's Name": 'Father',
+    "Mother's Name": 'Mother',
+    'Contact': 'Contact',
+    'Email': 'Email',
+    'Appointment Date(Temp.)': 'TemporaryAppointment',
+    'Appointment Date(Perm.)': 'PermanentAppointment',
+    'Designation': 'Post',
+    'Level': 'Level',
+    'Nationality No.': 'Nationality',
+    'Pan No.': 'Pan',
+    'NIN': 'NIN',
+    'Teaching License No.': 'License',
+    'CIF No.': 'CIF',
+    'Service Type': 'ServiceType',
+    'Qualification': 'Qualification',
+    'Major Subject': 'MajorSubject'
+};
+const SMC_COLUMN_MAPPING = {
+    'Name': 'Name',
+    'Address': 'Address',
+    'Gender': 'Gender',
+    'Contact': 'Contact',
+    'Email': 'Email',
+    'Appointment Date': 'TemporaryAppointment',
+    'Post': 'Post'
+};
+
+// -------------------- LOAD DATA ON PAGE LOAD --------------------
+async function loadAllData() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('*')
+            .order('id', { ascending: true });
+        if (error) {
+            console.error('Error loading data:', error);
+            return;
+        }
+        if (data && data.length > 0) {
+            // Separate data by WorkArea
+            const staffData = data.filter(item => item.WorkArea === 'Staff');
+            const smcData = data.filter(item => item.WorkArea === 'SMC');
+            const ptaData = data.filter(item => item.WorkArea === 'PTA');
+            if (staffData.length > 0) {
+                loadTeacherData(staffData);
+            }
+            if (smcData.length > 0) {
+                loadSMCData(smcData);
+            }
+            if (ptaData.length > 0) {
+                loadPTAData(ptaData);
+            }
+        }
+    } catch (error) {
+        console.error('Error in loadAllData:', error);
+    }
+}
+
+// -------------------- LOAD TEACHER DATA --------------------
+function loadTeacherData(data) {
+    const teacherBox = document.getElementById('TeacherBox');
+    teacherBox.innerHTML = '';    
+    const columns = [
+        { title: 'Name', width: '300px', type: 'text' },
+        { title: 'Address', width: '450px', type: 'text' },
+        { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+        { title: 'Date of Birth', width: '150px', type: 'text' },
+        { title: "Father's Name", width: '300px', type: 'text' },
+        { title: "Mother's Name", width: '300px', type: 'text' },
+        { title: 'Contact', width: '150px', type: 'text' },
+        { title: 'Email', width: '300px', type: 'text' },
+        { title: 'Appointment Date(Temp.)', width: '300px', type: 'text' },
+        { title: 'Appointment Date(Perm.)', width: '300px', type: 'text' },
+        { title: 'Designation', width: '200px', type: 'text' },
+        { title: 'Level', width: '120px', type: 'dropdown', source: ['Primary', 'Lower Secondary', 'Secondary', 'Higher Secondary', 'Others'] },
+        { title: 'Nationality No.', width: '200px', type: 'text' },
+        { title: 'Pan No.', width: '200px', type: 'text' },
+        { title: 'NIN', width: '200px', type: 'text' },
+        { title: 'Teaching License No.', width: '200px', type: 'text' },
+        { title: 'CIF No.', width: '200px', type: 'text' },
+        { title: 'Service Type', width: '150px', type: 'dropdown', source: ['स्थायी', 'अस्थायी', 'राहत', 'कार्यालय सहयोगी', 'लेखापाल', 'बालकक्षा शिक्षक', 'निजीश्रोत', 'पालिका करार', 'अन्य'] },
+        { title: 'Qualification', width: '200px', type: 'text' },
+        { title: 'Major Subject', width: '300px', type: 'text' }
+    ];    
+    const rowData = data.map(item => [
+        item.Name || '',
+        item.Address || '',
+        item.Gender || '',
+        item.DOB || '',
+        item.Father || '',
+        item.Mother || '',
+        item.Contact || '',
+        item.Email || '',
+        item.TemporaryAppointment || '',
+        item.PermanentAppointment || '',
+        item.Post || '',
+        item.Level || '',
+        item.Nationality || '',
+        item.Pan || '',
+        item.NIN || '',
+        item.License || '',
+        item.CIF || '',
+        item.ServiceType || '',
+        item.Qualification || '',
+        item.MajorSubject || ''
+    ]);    
+    const finalData = rowData.length > 0 ? rowData : Array(30).fill().map(() => Array(20).fill('')); 
+    teacherSpreadsheet = jspreadsheet(teacherBox, {
+        data: finalData,
+        columns: columns,
+        minDimensions: [20, 30],
+        tableOverflow: true,
+        tableWidth: '100%',
+        tableHeight: '400px',
+        search: false,
+        contextMenu: true,
+        copyPaste: true,
+        columnSort: true,
+        lazyLoading: false,
+        onchange: function(el, cell, x, y, value) {
+            teacherDataChanged = true;
+            document.getElementById('btnSaveTeacher').style.display = 'block';
+            console.log(`Teacher cell (${y}, ${x}) changed to: ${value}`);
+        }
+    });    
+    document.getElementById('btnSaveTeacher').style.display = 'none';
+}
+
+// -------------------- LOAD SMC DATA --------------------
+function loadSMCData(data) {
+    const smcBox = document.getElementById('SMCBox');
+    smcBox.innerHTML = '';    
+    const columns = [
+        { title: 'Name', width: '300px', type: 'text' },
+        { title: 'Address', width: '450px', type: 'text' },
+        { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+        { title: 'Contact', width: '200px', type: 'text' },
+        { title: 'Email', width: '300px', type: 'text' },
+        { title: 'Appointment Date', width: '200px', type: 'text' },
+        { title: 'Post', width: '200px', type: 'text' }
+    ];    
+    const rowData = data.map(item => [
+        item.Name || '',
+        item.Address || '',
+        item.Gender || '',
+        item.Contact || '',
+        item.Email || '',
+        item.TemporaryAppointment || '',
+        item.Post || ''
+    ]);    
+    const finalData = rowData.length > 0 ? rowData : Array(12).fill().map(() => Array(7).fill(''));    
+    smcSpreadsheet = jspreadsheet(smcBox, {
+        data: finalData,
+        columns: columns,
+        minDimensions: [7, 12],
+        tableOverflow: true,
+        tableWidth: '100%',
+        tableHeight: '300px',
+        search: false,
+        contextMenu: true,
+        copyPaste: true,
+        columnSort: true,
+        lazyLoading: false,
+        onchange: function(el, cell, x, y, value) {
+            smcDataChanged = true;
+            document.getElementById('btnSaveSMC').style.display = 'block';
+            console.log(`SMC cell (${y}, ${x}) changed to: ${value}`);
+        }
+    });    
+    document.getElementById('btnSaveSMC').style.display = 'none';
+}
+
+// -------------------- LOAD PTA DATA --------------------
+function loadPTAData(data) {
+    const ptaBox = document.getElementById('PTABox');
+    ptaBox.innerHTML = '';    
+    const columns = [
+        { title: 'Name', width: '300px', type: 'text' },
+        { title: 'Address', width: '450px', type: 'text' },
+        { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+        { title: 'Contact', width: '200px', type: 'text' },
+        { title: 'Email', width: '300px', type: 'text' },
+        { title: 'Appointment Date', width: '200px', type: 'text' },
+        { title: 'Post', width: '200px', type: 'text' }
+    ];    
+    const rowData = data.map(item => [
+        item.Name || '',
+        item.Address || '',
+        item.Gender || '',
+        item.Contact || '',
+        item.Email || '',
+        item.TemporaryAppointment || '',
+        item.Post || ''
+    ]);    
+    const finalData = rowData.length > 0 ? rowData : Array(12).fill().map(() => Array(7).fill(''));    
+    ptaSpreadsheet = jspreadsheet(ptaBox, {
+        data: finalData,
+        columns: columns,
+        minDimensions: [7, 12],
+        tableOverflow: true,
+        tableWidth: '100%',
+        tableHeight: '300px',
+        search: false,
+        contextMenu: true,
+        copyPaste: true,
+        columnSort: true,
+        lazyLoading: false,
+        onchange: function(el, cell, x, y, value) {
+            ptaDataChanged = true;
+            document.getElementById('btnSavePTA').style.display = 'block';
+            console.log(`PTA cell (${y}, ${x}) changed to: ${value}`);
+        }
+    });    
+    document.getElementById('btnSavePTA').style.display = 'none';
+}
+
+// -------------------- SAVE TEACHER DATA --------------------
+async function saveTeacherData() {
+    if (!teacherDataChanged) {
+        alert('No changes to save.');
+        return;
+    }
+    
+    try {
+        const data = teacherSpreadsheet.getData();
+        const records = [];
+        
+        // Get existing data with PhotoUrl
+        const { data: existingData, error: fetchError } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('id, Name, PhotoUrl')
+            .eq('WorkArea', 'Staff');
+            
+        if (fetchError) {
+            console.error('Error fetching existing records:', fetchError);
+            alert('Error fetching existing records.');
+            return;
+        }
+        
+        // Create a map of existing names to PhotoUrl
+        const existingMap = {};
+        existingData.forEach(item => {
+            existingMap[item.Name] = {
+                id: item.id,
+                PhotoUrl: item.PhotoUrl
+            };
+        });
+        
+        for (let row of data) {
+            // Skip empty rows
+            if (!row[0] || row[0].trim() === '') continue;
+            
+            const name = row[0] || '';
+            
+            // Check if this person already exists and preserve their PhotoUrl
+            const existing = existingMap[name];
+            const photoUrl = existing ? existing.PhotoUrl : null;
+            
+            const record = {
+                Name: name,
+                Address: row[1] || '',
+                Gender: row[2] || '',
+                DOB: row[3] || '',
+                Father: row[4] || '',
+                Mother: row[5] || '',
+                Contact: row[6] || '',
+                Email: row[7] || '',
+                TemporaryAppointment: row[8] || '',
+                PermanentAppointment: row[9] || '',
+                Post: row[10] || '',
+                Level: row[11] || '',
+                Nationality: row[12] || '',
+                Pan: row[13] || '',
+                NIN: row[14] || '',
+                License: row[15] || '',
+                CIF: row[16] || '',
+                ServiceType: row[17] || '',
+                Qualification: row[18] || '',
+                MajorSubject: row[19] || '',
+                WorkArea: 'Staff',
+                PhotoUrl: photoUrl // Preserve the existing PhotoUrl
+            };
+            
+            records.push(record);
+        }
+        
+        // Delete existing staff records
+        const { error: deleteError } = await supabaseClient
+            .from('HumanResourceTable')
+            .delete()
+            .eq('WorkArea', 'Staff');
+            
+        if (deleteError) {
+            console.error('Error deleting existing records:', deleteError);
+            alert('Error updating records.');
+            return;
+        }
+        
+        // Insert new records
+        if (records.length > 0) {
+            const { error: insertError } = await supabaseClient
+                .from('HumanResourceTable')
+                .insert(records);
+                
+            if (insertError) {
+                console.error('Error inserting records:', insertError);
+                alert('Error saving data.');
+                return;
+            }
+        }
+        
+        teacherDataChanged = false;
+        document.getElementById('btnSaveTeacher').style.display = 'none';
+        alert('Teacher data saved successfully!');
+        
+    } catch (error) {
+        console.error('Error in saveTeacherData:', error);
+        alert('Error saving teacher data.');
+    }
+}
+
+// -------------------- SAVE SMC DATA --------------------
+async function saveSMCData() {
+    if (!smcDataChanged) {
+        alert('No changes to save.');
+        return;
+    }
+    
+    try {
+        const data = smcSpreadsheet.getData();
+        const records = [];
+        
+        // Get existing data with PhotoUrl
+        const { data: existingData, error: fetchError } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('id, Name, PhotoUrl')
+            .eq('WorkArea', 'SMC');
+            
+        if (fetchError) {
+            console.error('Error fetching existing records:', fetchError);
+            alert('Error fetching existing records.');
+            return;
+        }
+        
+        const existingMap = {};
+        existingData.forEach(item => {
+            existingMap[item.Name] = item.PhotoUrl;
+        });
+        
+        for (let row of data) {
+            if (!row[0] || row[0].trim() === '') continue;
+            
+            const name = row[0] || '';
+            const photoUrl = existingMap[name] || null;
+            
+            const record = {
+                Name: name,
+                Address: row[1] || '',
+                Gender: row[2] || '',
+                Contact: row[3] || '',
+                Email: row[4] || '',
+                TemporaryAppointment: row[5] || '',
+                Post: row[6] || '',
+                WorkArea: 'SMC',
+                PhotoUrl: photoUrl // Preserve existing PhotoUrl
+            };
+            
+            records.push(record);
+        }
+        
+        // Delete existing SMC records
+        const { error: deleteError } = await supabaseClient
+            .from('HumanResourceTable')
+            .delete()
+            .eq('WorkArea', 'SMC');
+            
+        if (deleteError) {
+            console.error('Error deleting SMC records:', deleteError);
+            alert('Error updating records.');
+            return;
+        }
+        
+        if (records.length > 0) {
+            const { error: insertError } = await supabaseClient
+                .from('HumanResourceTable')
+                .insert(records);
+                
+            if (insertError) {
+                console.error('Error inserting SMC records:', insertError);
+                alert('Error saving data.');
+                return;
+            }
+        }
+        
+        smcDataChanged = false;
+        document.getElementById('btnSaveSMC').style.display = 'none';
+        alert('SMC data saved successfully!');
+        
+    } catch (error) {
+        console.error('Error in saveSMCData:', error);
+        alert('Error saving SMC data.');
+    }
+}
+
+// Update savePTAData to preserve PhotoUrl
+async function savePTAData() {
+    if (!ptaDataChanged) {
+        alert('No changes to save.');
+        return;
+    }
+    
+    try {
+        const data = ptaSpreadsheet.getData();
+        const records = [];
+        
+        // Get existing data with PhotoUrl
+        const { data: existingData, error: fetchError } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('id, Name, PhotoUrl')
+            .eq('WorkArea', 'PTA');
+            
+        if (fetchError) {
+            console.error('Error fetching existing records:', fetchError);
+            alert('Error fetching existing records.');
+            return;
+        }
+        
+        const existingMap = {};
+        existingData.forEach(item => {
+            existingMap[item.Name] = item.PhotoUrl;
+        });
+        
+        for (let row of data) {
+            if (!row[0] || row[0].trim() === '') continue;
+            
+            const name = row[0] || '';
+            const photoUrl = existingMap[name] || null;
+            
+            const record = {
+                Name: name,
+                Address: row[1] || '',
+                Gender: row[2] || '',
+                Contact: row[3] || '',
+                Email: row[4] || '',
+                TemporaryAppointment: row[5] || '',
+                Post: row[6] || '',
+                WorkArea: 'PTA',
+                PhotoUrl: photoUrl // Preserve existing PhotoUrl
+            };
+            
+            records.push(record);
+        }
+        
+        // Delete existing PTA records
+        const { error: deleteError } = await supabaseClient
+            .from('HumanResourceTable')
+            .delete()
+            .eq('WorkArea', 'PTA');
+            
+        if (deleteError) {
+            console.error('Error deleting PTA records:', deleteError);
+            alert('Error updating records.');
+            return;
+        }
+        
+        if (records.length > 0) {
+            const { error: insertError } = await supabaseClient
+                .from('HumanResourceTable')
+                .insert(records);
+                
+            if (insertError) {
+                console.error('Error inserting PTA records:', insertError);
+                alert('Error saving data.');
+                return;
+            }
+        }
+        
+        ptaDataChanged = false;
+        document.getElementById('btnSavePTA').style.display = 'none';
+        alert('PTA data saved successfully!');
+        
+    } catch (error) {
+        console.error('Error in savePTAData:', error);
+        alert('Error saving PTA data.');
+    }
+}
+
+// -------------------- SHOW FUNCTIONS --------------------
+function showTeacherContainer() {
+    showContainer('EditTeacherContainer');
+    setTimeout(function() {
+        if (!teacherSpreadsheet) {
+            // Load empty spreadsheet if no data exists
+            const teacherBox = document.getElementById('TeacherBox');
+            teacherBox.innerHTML = '';
+            const columns = [
+                { title: 'Name', width: '300px', type: 'text' },
+                { title: 'Address', width: '450px', type: 'text' },
+                { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+                { title: 'Date of Birth', width: '150px', type: 'text' },
+                { title: "Father's Name", width: '300px', type: 'text' },
+                { title: "Mother's Name", width: '300px', type: 'text' },
+                { title: 'Contact', width: '150px', type: 'text' },
+                { title: 'Email', width: '300px', type: 'text' },
+                { title: 'Appointment Date(Temp.)', width: '300px', type: 'text' },
+                { title: 'Appointment Date(Perm.)', width: '300px', type: 'text' },
+                { title: 'Designation', width: '200px', type: 'text' },
+                { title: 'Level', width: '120px', type: 'dropdown', source: ['Primary', 'Lower Secondary', 'Secondary', 'Higher Secondary', 'Others'] },
+                { title: 'Nationality No.', width: '200px', type: 'text' },
+                { title: 'Pan No.', width: '200px', type: 'text' },
+                { title: 'NIN', width: '200px', type: 'text' },
+                { title: 'Teaching License No.', width: '200px', type: 'text' },
+                { title: 'CIF No.', width: '200px', type: 'text' },
+                { title: 'Service Type', width: '150px', type: 'dropdown', source: ['स्थायी', 'अस्थायी', 'राहत', 'कार्यालय सहयोगी', 'लेखापाल', 'बालकक्षा शिक्षक', 'निजीश्रोत', 'पालिका करार', 'अन्य'] },
+                { title: 'Qualification', width: '200px', type: 'text' },
+                { title: 'Major Subject', width: '300px', type: 'text' }
+            ];            
+            const initialData = Array(30).fill().map(() => Array(20).fill(''));            
+            teacherSpreadsheet = jspreadsheet(teacherBox, {
+                data: initialData,
+                columns: columns,
+                minDimensions: [20, 30],
+                tableOverflow: true,
+                tableWidth: '100%',
+                tableHeight: '400px',
+                search: false,
+                contextMenu: true,
+                copyPaste: true,
+                columnSort: true,
+                lazyLoading: false,
+                onchange: function(el, cell, x, y, value) {
+                    teacherDataChanged = true;
+                    document.getElementById('btnSaveTeacher').style.display = 'block';
+                }
+            });            
+            document.getElementById('btnSaveTeacher').style.display = 'none';
+        }
+    }, 100);
+}
+
+function showSMCContainer() {
+    showContainer('EditSMCContainer');
+    setTimeout(function() {
+        if (!smcSpreadsheet) {
+            const smcBox = document.getElementById('SMCBox');
+            smcBox.innerHTML = '';
+            const columns = [
+                { title: 'Name', width: '300px', type: 'text' },
+                { title: 'Address', width: '450px', type: 'text' },
+                { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+                { title: 'Contact', width: '200px', type: 'text' },
+                { title: 'Email', width: '300px', type: 'text' },
+                { title: 'Appointment Date', width: '200px', type: 'text' },
+                { title: 'Post', width: '200px', type: 'text' }
+            ];            
+            const initialData = Array(12).fill().map(() => Array(7).fill(''));            
+            smcSpreadsheet = jspreadsheet(smcBox, {
+                data: initialData,
+                columns: columns,
+                minDimensions: [7, 12],
+                tableOverflow: true,
+                tableWidth: '100%',
+                tableHeight: '300px',
+                search: false,
+                contextMenu: true,
+                copyPaste: true,
+                columnSort: true,
+                lazyLoading: false,
+                onchange: function(el, cell, x, y, value) {
+                    smcDataChanged = true;
+                    document.getElementById('btnSaveSMC').style.display = 'block';
+                }
+            });            
+            document.getElementById('btnSaveSMC').style.display = 'none';
+        }
+    }, 100);
+}
+
+function showPTAContainer() {
+    showContainer('EditPTAContainer');
+    setTimeout(function() {
+        if (!ptaSpreadsheet) {
+            const ptaBox = document.getElementById('PTABox');
+            ptaBox.innerHTML = '';
+            const columns = [
+                { title: 'Name', width: '300px', type: 'text' },
+                { title: 'Address', width: '450px', type: 'text' },
+                { title: 'Gender', width: '120px', type: 'dropdown', source: ['Male', 'Female', 'Other'] },
+                { title: 'Contact', width: '200px', type: 'text' },
+                { title: 'Email', width: '300px', type: 'text' },
+                { title: 'Appointment Date', width: '200px', type: 'text' },
+                { title: 'Post', width: '200px', type: 'text' }
+            ];            
+            const initialData = Array(12).fill().map(() => Array(7).fill(''));            
+            ptaSpreadsheet = jspreadsheet(ptaBox, {
+                data: initialData,
+                columns: columns,
+                minDimensions: [7, 12],
+                tableOverflow: true,
+                tableWidth: '100%',
+                tableHeight: '300px',
+                search: false,
+                contextMenu: true,
+                copyPaste: true,
+                columnSort: true,
+                lazyLoading: false,
+                onchange: function(el, cell, x, y, value) {
+                    ptaDataChanged = true;
+                    document.getElementById('btnSavePTA').style.display = 'block';
+                }
+            });            
+            document.getElementById('btnSavePTA').style.display = 'none';
+        }
+    }, 100);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    hideAllContainers();    
+    loadAllData();
+});
+
+// -------------------- PHOTO CONTAINER FUNCTIONS --------------------
+let photoChanges = {};
+let photoData = [];
+let deletingIds = new Set();
+
+// Load photo data
+async function loadPhotoData() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('id, Name, WorkArea, Post, PhotoUrl')
+            .not('Name', 'is', null)
+            .order('WorkArea', { ascending: true });
+
+        if (error) {
+            console.error('Error loading photo data:', error);
+            return;
+        }
+
+        photoData = data || [];
+        renderPhotoTable(photoData);
+        document.getElementById('btnSavePhoto').style.display = 'none';
+        photoChanges = {};
+
+    } catch (error) {
+        console.error('Error in loadPhotoData:', error);
+    }
+}
+
+// Render photo table
+function renderPhotoTable(data) {
+    const tbody = document.getElementById('PhotoTableBody');
+    tbody.innerHTML = '';
+
+    if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">No records found</td></tr>';
+        return;
+    }
+
+    data.forEach((item, index) => {
+        const row = document.createElement('tr');
+        const hasPhoto = item.PhotoUrl && item.PhotoUrl.trim() !== '';
+        const isDeleting = deletingIds.has(item.id);
+
+        row.innerHTML = `
+            <td style="text-align: center;">${index + 1}</td>
+            <td><strong>${item.Name || 'N/A'}</strong></td>
+            <td>${item.WorkArea || 'N/A'}</td>
+            <td>${item.Post || 'N/A'}</td>
+            <td style="text-align: center;">
+                ${hasPhoto ? 
+                    `<img src="${item.PhotoUrl}" alt="${item.Name}" class="photo-preview" onerror="this.src='../images/no-photo.png'">` : 
+                    '<span class="no-photo">No Photo</span>'
+                }
+            </td>
+            <td style="text-align: center;">
+                <input type="file" id="photoInput_${item.id}" class="photo-file-input" accept="image/*" 
+                       onchange="handlePhotoSelect(${item.id}, this)">
+                <button class="photo-upload-btn" onclick="document.getElementById('photoInput_${item.id}').click()">
+                    📷 Choose Photo
+                </button>
+                ${photoChanges[item.id] ? 
+                    `<span style="margin-left: 10px; color: #ff6600; font-size: 0.9em;">New photo selected</span>` : 
+                    ''
+                }
+            </td>
+            <td style="text-align: center;">
+                <span class="photo-status ${photoChanges[item.id] ? 'pending' : (hasPhoto ? 'uploaded' : '')}">
+                    ${photoChanges[item.id] ? 'Pending Upload' : (hasPhoto ? 'Uploaded' : 'No Photo')}
+                </span>
+            </td>
+            <td style="text-align: center;">
+                <button class="delete-btn" onclick="deletePerson(${item.id})" ${isDeleting ? 'disabled' : ''}>
+                    ${isDeleting ? 'Deleting...' : '🗑️ Delete'}
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+}
+
+// Handle photo selection
+function handlePhotoSelect(id, input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        input.value = '';
+        return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        alert('File size should be less than 10MB.');
+        input.value = '';
+        return;
+    }
+
+    // Store the file for upload
+    photoChanges[id] = {
+        file: file,
+        fileName: file.name
+    };
+
+    // Show preview
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const row = input.closest('tr');
+        const previewCell = row.querySelector('td:nth-child(5)');
+        previewCell.innerHTML = `<img src="${e.target.result}" alt="Preview" class="photo-preview">`;
+        
+        // Update status
+        const statusCell = row.querySelector('td:nth-child(7) .photo-status');
+        statusCell.className = 'photo-status pending';
+        statusCell.textContent = 'Pending Upload';
+        
+        // Show save button
+        document.getElementById('btnSavePhoto').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+
+    console.log(`Photo selected for ID ${id}: ${file.name}`);
+}
+
+// Resize image to 300x450 before upload
+function resizeImage(file, targetWidth, targetHeight) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                // Create canvas with target dimensions
+                const canvas = document.createElement('canvas');
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+                const ctx = canvas.getContext('2d');
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw image with proper aspect ratio (cover mode - 300x450)
+                const aspectRatio = img.width / img.height;
+                const targetAspectRatio = targetWidth / targetHeight;
+                
+                let sourceX = 0, sourceY = 0;
+                let sourceWidth = img.width, sourceHeight = img.height;
+                
+                // Calculate cropping to maintain aspect ratio
+                if (aspectRatio > targetAspectRatio) {
+                    // Image is wider than target - crop width
+                    sourceWidth = img.height * targetAspectRatio;
+                    sourceX = (img.width - sourceWidth) / 2;
+                } else if (aspectRatio < targetAspectRatio) {
+                    // Image is taller than target - crop height
+                    sourceHeight = img.width / targetAspectRatio;
+                    sourceY = (img.height - sourceHeight) / 2;
+                }
+                
+                ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, targetWidth, targetHeight);
+                
+                // Convert to blob
+                canvas.toBlob(function(blob) {
+                    if (!blob) {
+                        reject(new Error('Failed to resize image'));
+                        return;
+                    }
+                    
+                    // Create a new file from the blob
+                    const resizedFile = new File([blob], file.name, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+                    
+                    resolve(resizedFile);
+                }, 'image/jpeg', 0.9);
+            };
+            img.onerror = function() {
+                reject(new Error('Failed to load image for resizing'));
+            };
+            img.src = event.target.result;
+        };
+        reader.onerror = function() {
+            reject(new Error('Failed to read file'));
+        };
+    });
+}
+
+// Save photos to Cloudinary and Supabase
+async function savePhoto() {
+    const pendingUploads = Object.keys(photoChanges);
+    
+    if (pendingUploads.length === 0) {
+        alert('No photos to upload.');
+        return;
+    }
+
+    // Confirm upload
+    if (!confirm(`Upload ${pendingUploads.length} photo(s)?`)) {
+        return;
+    }
+
+    // Disable save button to prevent multiple clicks
+    const saveBtn = document.getElementById('btnSavePhoto');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Uploading...';
+
+    let uploadSuccess = true;
+    let uploadedCount = 0;
+
+    try {
+        for (const id of pendingUploads) {
+            const change = photoChanges[id];
+            if (!change || !change.file) continue;
+
+            try {
+                // Resize image to 300x450
+                const resizedFile = await resizeImage(change.file, 300, 450);
+                
+                // Upload to Cloudinary
+                const cloudinaryUrl = await uploadToCloudinary(resizedFile);
+                
+                if (cloudinaryUrl) {
+                    // Get the current PhotoUrl to keep it
+                    const currentPerson = photoData.find(p => p.id === parseInt(id));
+                    const currentPhotoUrl = currentPerson ? currentPerson.PhotoUrl : null;
+                    
+                    // Update Supabase with the new PhotoUrl (keep other fields unchanged)
+                    const { error: updateError } = await supabaseClient
+                        .from('HumanResourceTable')
+                        .update({ PhotoUrl: cloudinaryUrl })
+                        .eq('id', id);
+
+                    if (updateError) {
+                        console.error(`Error updating photo for ID ${id}:`, updateError);
+                        uploadSuccess = false;
+                    } else {
+                        uploadedCount++;
+                        
+                        // Update local photoData
+                        const personIndex = photoData.findIndex(p => p.id === parseInt(id));
+                        if (personIndex !== -1) {
+                            photoData[personIndex].PhotoUrl = cloudinaryUrl;
+                        }
+                        
+                        // Remove from pending changes
+                        delete photoChanges[id];
+                        
+                        // Update the row status
+                        const row = document.querySelector(`#photoInput_${id}`).closest('tr');
+                        if (row) {
+                            const statusCell = row.querySelector('td:nth-child(7) .photo-status');
+                            statusCell.className = 'photo-status uploaded';
+                            statusCell.textContent = 'Uploaded';
+                            
+                            // Update preview
+                            const previewCell = row.querySelector('td:nth-child(5)');
+                            previewCell.innerHTML = `<img src="${cloudinaryUrl}" alt="Uploaded" class="photo-preview">`;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error(`Error uploading photo for ID ${id}:`, error);
+                uploadSuccess = false;
+                
+                // Update status to error
+                const row = document.querySelector(`#photoInput_${id}`).closest('tr');
+                if (row) {
+                    const statusCell = row.querySelector('td:nth-child(7) .photo-status');
+                    statusCell.className = 'photo-status error';
+                    statusCell.textContent = 'Upload Failed';
+                }
+            }
+        }
+
+        // Show success message
+        if (uploadedCount > 0) {
+            alert(`${uploadedCount} photo(s) uploaded successfully!`);
+        }
+
+        // Hide save button if no more pending uploads
+        if (Object.keys(photoChanges).length === 0) {
+            document.getElementById('btnSavePhoto').style.display = 'none';
+        }
+
+    } catch (error) {
+        console.error('Error in savePhoto:', error);
+        alert('Error uploading photos. Please try again.');
+    } finally {
+        // Re-enable save button
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Photos';
+    }
+}
+
+// Upload image to Cloudinary
+async function uploadToCloudinary(file) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'AdminFileUploadPreset');
+        formData.append('cloud_name', 'dcdwpdnyp');
+        // Let Cloudinary handle the resizing with transformations
+        formData.append('width', '300');
+        formData.append('height', '450');
+        formData.append('crop', 'fill');
+
+        const response = await fetch(
+            'https://api.cloudinary.com/v1_1/dcdwpdnyp/image/upload',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Cloudinary upload failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.secure_url;
+
+    } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        throw error;
+    }
+}
+
+// Helper function to extract public_id from Cloudinary URL
+function extractPublicIdFromUrl(photoUrl) {
+    try {
+        // Example URL: https://res.cloudinary.com/dcdwpdnyp/image/upload/v1234567890/folder/filename.jpg
+        // Expected public_id: folder/filename (without extension)
+        
+        // Parse the URL
+        const url = new URL(photoUrl);
+        const pathParts = url.pathname.split('/');
+        
+        // Find the index of 'upload' in the path
+        const uploadIndex = pathParts.indexOf('upload');
+        if (uploadIndex === -1) {
+            console.error('Invalid Cloudinary URL format: "upload" not found in path');
+            return null;
+        }
+        
+        // Get the version part (starts with 'v' and numbers)
+        const versionIndex = uploadIndex + 1;
+        if (versionIndex >= pathParts.length) {
+            console.error('Invalid Cloudinary URL format: No version found');
+            return null;
+        }
+        
+        // Get the public_id parts (everything after version)
+        const publicIdParts = pathParts.slice(versionIndex + 1);
+        if (publicIdParts.length === 0) {
+            console.error('Invalid Cloudinary URL format: No public_id found');
+            return null;
+        }
+        
+        // Join the parts and remove file extension
+        let publicId = publicIdParts.join('/');
+        // Remove file extension (e.g., .jpg, .png, .jpeg)
+        publicId = publicId.replace(/\.[^/.]+$/, '');
+        
+        return publicId;
+    } catch (error) {
+        console.error('Error extracting public_id from URL:', error);
+        return null;
+    }
+}
+
+// Delete person - removes photo from Cloudinary and record from Supabase
+async function deletePerson(id) {
+    // Find the person in the data
+    const person = photoData.find(p => p.id === id);
+    if (!person) {
+        alert('Person not found!');
+        return;
+    }
+
+    // Confirm deletion
+    const confirmDelete = confirm(
+        `Are you sure you want to delete "${person.Name}"?\n\n` +
+        `Work Area: ${person.WorkArea}\n` +
+        `Post: ${person.Post}\n\n` +
+        `This will also remove their photo from Cloudinary.`
+    );
+
+    if (!confirmDelete) return;
+
+    // Disable the delete button
+    deletingIds.add(id);
+    renderPhotoTable(photoData);
+    
+    try {
+        // Step 1: Extract public_id from Cloudinary URL
+        let publicIds = [];
+        
+        if (person.PhotoUrl && person.PhotoUrl.trim() !== '') {
+            try {
+                // Extract public_id from Cloudinary URL
+                const publicId = extractPublicIdFromUrl(person.PhotoUrl);
+                if (publicId) {
+                    publicIds = [publicId];
+                }
+            } catch (extractError) {
+                console.error('Error extracting public_id:', extractError);
+                // Continue with deletion even if extraction fails
+            }
+        }
+
+        // Step 2: Delete photo from Cloudinary using Edge Function
+        let photoDeleted = false;
+        
+        if (publicIds.length > 0) {
+            try {
+                // Call the Edge Function with the correct format (publicIds array)
+                const { data: edgeData, error: edgeError } = await supabaseClient.functions.invoke(
+                    'delete-student-photo',
+                    {
+                        body: { 
+                            publicIds: publicIds // Send as array as expected by the function
+                        }
+                    }
+                );
+
+                if (edgeError) {
+                    console.error('Error calling delete-student-photo edge function:', edgeError);
+                    // Continue with deletion even if edge function fails
+                } else {
+                    photoDeleted = true;
+                    console.log('Photo deleted from Cloudinary successfully:', edgeData);
+                }
+            } catch (edgeError) {
+                console.error('Edge function error:', edgeError);
+                // Continue with deletion even if edge function fails
+            }
+        } else {
+            console.log('No photo to delete or could not extract public_id');
+        }
+
+        // Step 3: Delete the record from Supabase
+        const { error: deleteError } = await supabaseClient
+            .from('HumanResourceTable')
+            .delete()
+            .eq('id', id);
+
+        if (deleteError) {
+            throw new Error(`Failed to delete record: ${deleteError.message}`);
+        }
+
+        // Step 4: Remove from local data
+        photoData = photoData.filter(item => item.id !== id);
+        deletingIds.delete(id);
+        
+        // Remove from pending changes if any
+        if (photoChanges[id]) {
+            delete photoChanges[id];
+        }
+
+        // Re-render the table
+        renderPhotoTable(photoData);
+
+        // Hide save button if no pending changes
+        if (Object.keys(photoChanges).length === 0) {
+            document.getElementById('btnSavePhoto').style.display = 'none';
+        }
+
+        alert(
+            `${person.Name} deleted successfully!\n` +
+            `Photo ${photoDeleted ? 'was' : 'was not'} deleted from Cloudinary.`
+        );
+
+    } catch (error) {
+        console.error('Error deleting person:', error);
+        alert(`Error deleting person: ${error.message}`);
+        
+        // Re-enable the delete button
+        deletingIds.delete(id);
+        renderPhotoTable(photoData);
+    }
+}
+
+// Function to show photo container
+function showPhotoContainer() {
+    showContainer('EditPhotoContainer');
+    setTimeout(function() {
+        loadPhotoData();
+    }, 100);
+}
+
+// Update the saveTeacherData function to preserve PhotoUrl
+
+
+// Update saveSMCData to preserve PhotoUrl
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    hideAllContainers();    
+    loadAllData();    
+});
+
+    </script> 
+</body>
+</html>

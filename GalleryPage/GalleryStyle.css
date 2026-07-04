@@ -4,33 +4,28 @@
     font-weight: normal;
     font-style: normal;
 }
-
 * { 
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
 }
-
-html{
+html {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;  
 }
-
 body { 
     width: 100%;
     max-width: 1200px;   
-    font-family: Arial, sans-serif; 
     min-height: 100%;
     font-family: 'Arial', 'MySanskritFont', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;  
 }
-
-#MainBody{
+#MainBody {
     width: 96%;
     max-width: 1100px;   
     height: auto;
@@ -41,43 +36,388 @@ body {
     min-height: 100%;
     margin: 0 auto;       
 }
-
+#SchoolLogo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;     
+}
+#SchoolNameBox{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(180deg, #000000, #222222);
+    padding: 10px 0;
+    text-align: center;
+}
+#SchoolName{
+    font-size: 40px;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 1px 1px 3px #ffffff;
+}
+#SchoolAddress{
+    font-size: 28px;
+    color: #ffff00;
+    margin-top: 8px;
+    text-shadow: 1px 1px 3px #00ff00;
+}
 #PageNaviggationBox {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    background: #000000;
-    padding: 1rem;
-    text-align: center;
+    flex-wrap: wrap;
+    background: linear-gradient(180deg, #222222, #444444);
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
 }
-#LogoBox{
-    width: 6%;
-    height: auto;     
-}
-#LogoBox img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-#PageNavigationSelect{
+#PageNavigationSelect {
     width: 40%;
-    font-size: 2vw;
+    min-width: 400px;
+    font-size: 32px;
     font-weight: bold;
-    padding: 2vh;
-    border: 4px solid #000000;
+    padding: 10px;
+    border: 2px solid #000000;
 }
-#PageNaviggationBox button{
+#PageNaviggationBox button {
     width: 20%;
-    padding: 2vh 0 2vh 0;
-    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    min-width: 300px;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #007700, #009900, #007700);
     color: #ffffff;
-    border-radius: 4vw;  
-    font-size: 2vw;  
+    border-radius: 12px;  
+    font-size: 32px;  
     font-weight: bold;
     cursor: pointer;
+    border: none;
 }
-#pageNaviggationBox button:hover{
-    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+#PageNaviggationBox button:hover {
+    background: linear-gradient(180deg, #005500, #007700, #005500);
     color: #ffff00;
+}
+#PublicGalleryContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+}
+.gallery-card {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+.gallery-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+.gallery-card img:hover {
+    transform: scale(1.02);
+    filter: brightness(0.9);
+}
+.gallery-info {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+}
+.gallery-desc {
+    font-size: 16px;
+    color: #000;
+    line-height: 1.4;
+    font-weight: 500;
+}
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    z-index: 9999; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); 
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    overflow: auto; 
+}
+.modal-top-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 30px;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 10000;
+}
+.modal-top-bar button {
+    background: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444;
+    width: 42px;
+    height: 42px;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.modal-top-bar button:hover {
+    background: #ffff00;
+    color: #000000;
+    border-color: #ffff00;
+}
+.modal-close {
+    color: #ffffff;
+    font-size: 38px;
+    font-weight: normal;
+    cursor: pointer;
+    line-height: 42px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.2s ease;
+    user-select: none;
+    margin-left: 10px;
+}
+.modal-close:hover {
+    color: #ff5555;
+}
+.modal-content-wrapper {
+    max-width: 550px; 
+    width: 90%;
+    background: #1c1c1c;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #ffffff;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s cubic-bezier(0.1, 0.8, 0.2, 1); 
+    transform-origin: center center;
+    animation: zoomIn 0.25s ease-out;
+}
+.modal-img-container {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.modal-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    border: none; 
+}
+#ModalTargetDesc {
+    color: #ffffff;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+@keyframes zoomIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+#FooterBox {
+    width: 100%;
+    background: linear-gradient(180deg, #444444, #000000);
+    padding: 20px 0;
+    margin-top: 20px;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 10px;   
+}
+#FooterBox a {
+    display: inline-block;     
+    width: 30%;
+    color: #00ffff;
+    font-size: 18px;
+    text-align: center;
+}
+#FooterBox a:hover {
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+}
+
+/* Styles for Large Mobile */
+@media (max-width: 768px) {
+body { 
+    max-width: 800px;    
+}
+#MainBody {
+    max-width: 800px;            
+}
+#SchoolLogo {
+    width: 80px;
+    height: 80px;
+}
+#SchoolNameBox{
+    padding: 8px 0;
+}
+#SchoolName{
+    font-size: 32px;    
+}
+#SchoolAddress{
+    font-size: 24px;
+    margin-top: 6px;
+}
+#PageNavigationSelect {
+    font-size: 24px;
+    padding: 8px;
+}
+#PageNaviggationBox button {
+    padding: 8px 0;
+    font-size: 24px;      
+}
+#PublicGalleryContainer {
+    gap: 12px;
+    padding: 12px;
+}
+.gallery-card img {
+    height: 300px;    
+}
+.gallery-info {
+    padding: 8px;
+}
+.gallery-desc {
+    font-size: 16px;
+}
+.modal-top-bar button {
+    width: 30px;
+    height: 24px;
+    font-size: 18px;
+}
+.modal-close {
+    font-size: 28px;
+    line-height: 36px;
+    width: 30px;
+    height: 24px;
+    margin-left: 6px;
+}
+.modal-content-wrapper {
+    max-width: 300px; 
+    padding: 8px;
+    border-radius: 10px;
+}
+.modal-img-container {
+    height: 200px;
+}
+#ModalTargetDesc {
+    margin-top: 8px;
+    font-size: 18px;
+}
+#FooterBox {
+    padding: 10px 0;
+    margin-top: 10px;
+}
+#FooterBox a {
+    font-size: 18px;
+}
+}
+
+/* Styles for Small Mobile */
+@media (max-width: 480px) {
+body { 
+    max-width: 600px;    
+}
+#MainBody {
+    max-width: 600px;            
+}
+#SchoolLogo {
+    width: 60px;
+    height: 60px;
+}
+#SchoolNameBox{
+    padding: 6px 0;
+}
+#SchoolName{
+    font-size: 32px;    
+}
+#SchoolAddress{
+    font-size: 24px;
+    margin-top: 6px;
+}
+#PageNavigationSelect {
+    font-size: 24px;
+    padding: 8px;
+    min-width: 300px;
+}
+#PageNaviggationBox button {
+    padding: 8px 0;
+    font-size: 24px;  
+    min-width: 200px;    
+}
+#PublicGalleryContainer {
+    gap: 8px;
+    padding: 8px;
+}
+.gallery-card img {
+    height: 200px;    
+}
+.gallery-info {
+    padding: 6px;
+}
+.gallery-desc {
+    font-size: 16px;
+}
+.modal-top-bar button {
+    width: 24px;
+    height: 18px;
+    font-size: 16px;
+}
+.modal-close {
+    font-size: 16px;
+    line-height: 18px;
+    width: 24px;
+    height: 18px;
+    margin-left: 6px;
+}
+.modal-content-wrapper {
+    max-width: 300px; 
+    padding: 6px;
+    border-radius: 8px;
+}
+.modal-img-container {
+    height: 150px;
+}
+#ModalTargetDesc {
+    margin-top: 6px;
+    font-size: 16px;
+}
+#FooterBox {
+    padding: 8px 0;
+    margin-top: 8px;
+}
+#FooterBox a {
+    font-size: 16px;
+}
 }

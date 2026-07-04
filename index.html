@@ -6,7 +6,6 @@
     <title>Home Page</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     
-    <!-- Required fonts and icons for slider -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
@@ -25,7 +24,7 @@
                 <option value="NoticePage">Notice</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="StudentPage">Students</option>
-                <option value="TeacherPage">Teachers</option>
+                <option value="HumanResourcePage">Human Resource</option>
                 <option value="BalPratibhaPage">Bal Pratibha</option>
                 <option value="AboutUsPage">About Us</option>
                 <option value="GalleryPage">Gallery</option>
@@ -36,7 +35,6 @@
             <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
         </div>
         
-        <!-- Slider Section -->
         <div class="slider-container">
             <div class="slider-wrapper">
                 <div class="slides-area" id="slidesArea">
@@ -51,11 +49,37 @@
             </div>
             <div class="dots-pagination" id="dotsContainer"></div>
         </div>
+
+        <div class="video-gallery-container">
+            <h2 class="video-gallery-title">Featured Videos</h2>
+            <div class="video-grid" id="videoGrid">
+                <div class="video-loader">
+                    <div class="spinner"></div>
+                    <p>Loading videos...</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <button class="video-modal-close" id="videoModalClose">&times;</button>
+            <div class="video-modal-body" id="videoModalBody">
+                <div class="video-wrapper" id="videoWrapper">
+                    </div>
+                <div class="video-modal-info">
+                    <h3 id="videoModalTitle">Video Title</h3>
+                    <p id="videoModalDescription">Video Description</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="SupabaseConfig.js"></script>
     <script src="NepaliCalendar.js"></script>
     <script src="SmartCalculator.js"></script>
+    <script src="VideoScript.js"></script>
     <script src="HomeScript.js"></script>
 </body>
 </html>

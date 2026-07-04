@@ -9,12 +9,16 @@
 </head>
 <body>
     <div id="MainBody">
+        <div id="SchoolNameBox">
+            <img id="SchoolLogo" src="" alt="Logo">
+            <div id="SchoolName">School Name Loading ........</div>
+            <div id="SchoolAddress">School Address Loading ........</div>
+        </div>
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
             <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
             <select id="PageNavigationSelect">   
                 <option value="GalleryPage">Gallery</option>
-                <option value="TeacherPage">Teachers</option>
+                <option value="HumanResourcePage">Human Resource</option>
                 <option value="StudentPage">Students</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="NoticePage">Notice</option>
@@ -27,8 +31,40 @@
                 <option value="AdminPage">Admin</option>                
             </select>
             <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>        
+        
+        <h2 style="margin: 20px 0; color: #333;">School Photo Gallery</h2>
+        <div id="PublicGalleryContainer"></div>
+    
+    <div id="GalleryModal" class="modal-overlay">
+        <div class="modal-top-bar">
+            <button type="button" id="btnZoomIn" title="Zoom In">+</button>
+            <button type="button" id="btnZoomOut" title="Zoom Out">&minus;</button>
+            <button type="button" id="btnZoomReset" title="Reset Size">&#128472;</button>
+            <span class="modal-close" title="Close">&times;</span>
         </div>
         
+        <div class="modal-content-wrapper">
+            <div class="modal-img-container">
+                <img id="ModalTargetImage" src="" alt="Large View">
+            </div>
+            <p id="ModalTargetDesc"></p>
+        </div>
+    </div>
+        <div id="FooterBox">
+            <a href="../index.html">Home</a>
+            <a href="../AdminPage/AdminIndex.html">Admin</a>
+            <a href="../BalPratibhaPage/BalPratibhaIndex.html">Bal Pratibha</a>
+            <a href="../HelpingHandPage/HelpingHandIndex.html">Helping Hand</a>
+            <a href="../HumanResourcePage/HumanResourceIndex.html">Human Resources</a>
+            <a href="../LibraryPage/LibraryIndex.html">Library</a>
+            <a href="../NoticePage/NoticeIndex.html">Notice</a>
+            <a href="../QuestionBankPage/QuestionBankIndex.html">Question Bank</a>
+            <a href="../SMC_TGC_Page/SMC_TGC_Index.html">SMC & TGC</a>
+            <a href="../StudentPage/StudentIndex.html">Students</a>
+            
+        </div>     
+    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../SupabaseConfig.js"></script>

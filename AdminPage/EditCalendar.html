@@ -8,7 +8,6 @@
 
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
     <script src="https://jsuites.net/v4/jsuites.js"></script>
-
     <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
     <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
     <style>
@@ -168,7 +167,7 @@
                 <option value="NoticePage">Notice</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="StudentPage">Students</option>
-                <option value="TeacherPage">Teachers</option>
+                <option value="HumanResourcePage">Human Resource</option>
                 <option value="BalPratibhaPage">Bal Pratibha</option>
                 <option value="AboutUsPage">About Us</option>
                 <option value="GalleryPage">Gallery</option>
@@ -191,7 +190,7 @@
                 <option value="NoticeEditBox">Edit Notice</option>
                 <option value="QuestionBankEditBox">Edit Question Bank</option>
                 <option value="StudentEditBox">Edit Student Data</option>
-                <option value="TeacherEditBox">Edit Teacher Data</option>
+                <option value="HumanResourceEditBox">Edit Human Resource Data</option>
                 <option value="AboutUsEditBox">Edit About Us</option>
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
@@ -246,7 +245,7 @@ PageNavigationDropDown.addEventListener("change", function () {
         "NoticePage": "../NoticePage/NoticeIndex.html",
         "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
         "StudentPage": "../StudentPage/StudentIndex.html",
-        "TeacherPage": "../TeacherPage/TeacherIndex.html",
+        "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
         "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
         "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
         "GalleryPage": "../GalleryPage/GalleryIndex.html",
@@ -273,7 +272,7 @@ EditNavigationDropDown.addEventListener("change", function () {
         "NoticeEditBox": "EditNotice.html",
         "QuestionBankEditBox": "EditQuestionBank.html",
         "StudentEditBox": "EditStudent.html",
-        "TeacherEditBox": "EditTeacher.html",
+        "HumanResourceEditBox": "EditHumanResource.html",
         "AboutUsEditBox": "EditAboutUs.html",
         "BalPratibhaEditBox": "EditBalPratibha.html",
         "GalleryEditBox": "EditGallery.html",
@@ -456,7 +455,6 @@ function getJexcelColumns() {
         const config = {
             name: col,
             title: columnDisplayNames[col] || col,
-            // Use the special width if defined, otherwise fall back to a default of 80px
             width: specialWidths[col] || 80, 
             type: 'text'
         };

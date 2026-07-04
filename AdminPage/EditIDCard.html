@@ -268,11 +268,56 @@
             font-weight: bold;
             cursor: pointer;
         }
+        #btnPrevIDCard {
+            width: 20%;
+            padding: clamp(0.4rem, 1vw, 2rem) 0;
+            margin: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1rem, 2vw, 3rem);
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(180deg, #000077, #000099, #000077);
+            color: #ffffff;
+            border-radius: 2vw;
+        }
+        #btnPrevIDCard:hover {
+            background: linear-gradient(180deg, #000055, #000077, #000055);
+            color: #ffff00;
+        }
+        #btnNextIDCard {
+            width: 20%;
+            padding: clamp(0.4rem, 1vw, 2rem) 0;
+            margin: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1rem, 2vw, 3rem);
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(180deg, #777700, #999900, #777700);
+            color: #ffffff;
+            border-radius: 2vw;
+        }
+        #btnNextIDCard:hover {
+            background: linear-gradient(180deg, #555500, #777700, #555500);
+            color: #ffff00;
+        }
+        #btnExportIDCards {
+            width: 20%;
+            padding: clamp(0.4rem, 1vw, 2rem) 0;
+            margin: clamp(0.4rem, 1vw, 2rem);
+            font-size: clamp(1rem, 2vw, 3rem);
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(180deg, #770077, #990099, #770077);
+            color: #ffffff;
+            border-radius: 2vw;
+        }
+        #btnExportIDCards:hover {
+            background: linear-gradient(180deg, #550055, #770077, #550055);
+            color: #ffff00;
+        }
         .IDCard {
             width: 1000px;
             height: 620px;
             background: white;
-            border: 10px solid #004080;
+            border: 10px solid #008040;
             border-radius: 20px;
             font-family: Arial, sans-serif;
             overflow: hidden;
@@ -315,7 +360,7 @@
             height: 140px;
             display: flex;
             align-items: center;
-            background: #004080;
+            background: #008040;
             color: white;
             padding: 0 30px;
             box-sizing: border-box;
@@ -337,7 +382,7 @@
         }
         .CardSchoolAddress {
             font-size: 1.8rem;
-            color: #77aa55;
+            color: #ffff33;
             font-weight: bold;
             font-style: italic;
         }
@@ -375,52 +420,45 @@
             padding: 2.5rem;
             box-sizing: border-box;
         }
-        .RollBox {
-            width: 195px;
-            height: 195px;
-            border: 6px solid #004080;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #fff;
+        .PhotoBox {
+            width: 20rem;
+            height: 26rem;            
         }
-        .RollNo {
-            font-size: 115px;
-            font-weight: bold;
-            color: #a00000;
+        .PhotoBox img{
+            width: 100%;
+            height: 100%;            
         }
         .SignatureBox {
             text-align: center;
-            width: 95%;
+            width: 100%;
         }
         .SignatureDottedLine {
             border-bottom: 2px dashed #333;
             width: 100%;
             margin-bottom: 6px;
-            height: 25px;
+            height: 2.5rem;
         }
         .PrincipalName {
-            font-size: 22px;
+            font-size: 2rem;
             font-weight: bold;
             color: #000080;
             white-space: nowrap;
         }
         .PrincipalTitle {
-            font-size: 16px;
+            font-size: 1.6rem;
             font-weight: bold;
             color: #444;
         }
         .CardFooter {
             position: relative;
             z-index: 3;
-            height: 50px;
-            background: #144d18;
+            height: 5rem;
+            background: #004080;
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 22px;
+            font-size: 2rem;
             font-style: italic;
             font-weight: bold;
             box-sizing: border-box;
@@ -439,7 +477,7 @@
                 <option value="NoticePage">Notice</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="StudentPage">Students</option>
-                <option value="TeacherPage">Teachers</option>
+                <option value="HumanResourcePage">Human Resource</option>
                 <option value="BalPratibhaPage">Bal Pratibha</option>
                 <option value="AboutUsPage">About Us</option>
                 <option value="GalleryPage">Gallery</option>
@@ -462,7 +500,7 @@
                 <option value="NoticeEditBox">Edit Notice</option>
                 <option value="QuestionBankEditBox">Edit Question Bank</option>
                 <option value="StudentEditBox">Edit Student Data</option>
-                <option value="TeacherEditBox">Edit Teacher Data</option>
+                <option value="HumanResourceEditBox">Edit Human Resource Data</option>
                 <option value="CalendarEditBox">Edit Calendar</option>
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
@@ -516,7 +554,7 @@
                 <div id="IDPreviewFooter">
                     <button id="btnPrevIDCard" type="button">Previous</button>
                     <button id="btnNextIDCard" type="button">Next</button>
-                    <button id="btnExportIDCards" type="button" style="background: #0066cc; color: white;">Download / Export</button>
+                    <button id="btnExportIDCards" type="button">Download</button>
                 </div>
             </div>
         </div>
@@ -570,7 +608,7 @@ if (PageNavigationDropDown) {
             "NoticePage": "../NoticePage/NoticeIndex.html",
             "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
             "StudentPage": "../StudentPage/StudentIndex.html",
-            "TeacherPage": "../TeacherPage/TeacherIndex.html",
+            "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
             "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
             "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
             "GalleryPage": "../GalleryPage/GalleryIndex.html",
@@ -598,7 +636,7 @@ if (EditNavigationDropDown) {
             "NoticeEditBox": "EditNotice.html",
             "QuestionBankEditBox": "EditQuestionBank.html",
             "AboutUsEditBox": "EditAboutUs.html",
-            "TeacherEditBox": "EditTeacher.html",
+            "HumanResourceEditBox": "EditHumanResource.html",
             "CalendarEditBox": "EditCalendar.html",
             "BalPratibhaEditBox": "EditBalPratibha.html",
             "GalleryEditBox": "EditGallery.html",
@@ -723,7 +761,7 @@ async function loadStudents(className) {
     }
     const { data: students, error: studentError } = await supabaseClient
         .from("StudentDataTable")
-        .select(` RollNo, StudentName, StudentAddress, Contact, FatherName, MotherName `)
+        .select(` RollNo, StudentName, StudentAddress, Contact, FatherName, MotherName, PhotoUrl `)
         .eq("ClassID", classRow.id)
         .order("RollNo");
     if (studentError) {
@@ -826,6 +864,7 @@ function buildIDCard(student, school, year, motto, className, designation, liveP
     }
     watermarkHTML += '</div>';
     const visualPrincipalName = livePrincipalName || school.PrincipalName || school.principal_name || "Principal Name";
+    const finalPhotoUrl = student.PhotoUrl || student.photo_url || "";
     return `
 <div class="IDCard">
     ${watermarkHTML}
@@ -841,14 +880,15 @@ function buildIDCard(student, school, year, motto, className, designation, liveP
         <div class="CardLeft">
             <div><b>Name :</b> ${student.StudentName || ''}</div>
             <div><b>Address :</b> ${student.StudentAddress || ''}</div>
+            <div><b>Roll No. :</b> ${student.RollNo || ''}</div>
             <div><b>Contact :</b> ${student.Contact || ''}</div>
             <div><b>Father :</b> ${student.FatherName || ''}</div>
             <div><b>Mother :</b> ${student.MotherName || ''}</div>
             <div><b>Class :</b> ${className || ''}</div>
         </div>
         <div class="CardRight">
-            <div class="RollBox">
-                <div class="RollNo">${student.RollNo || ''}</div>
+            <div class="PhotoBox">
+                <img src="${student.PhotoUrl || ''}" alt="StudentPhoto" width="100" height="100">
             </div>
             <div class="SignatureBox">
                 <div class="SignatureDottedLine"></div>
@@ -896,7 +936,7 @@ async function createIDCards(){
 }
 
 function showIDCard() {
-    const container = document.getElementById("IDPreviewBody");    
+    const container = document.getElementById("IDPreviewBody");  
     if (!container) {
         console.error("Error: Element with ID 'IDPreviewBody' was not found in the HTML.");
         return;
@@ -934,6 +974,9 @@ document.addEventListener("DOMContentLoaded", () => {
 async function exportIDCards(){
     const exportBox = document.getElementById("IDExportBox");
     const zip = new JSZip();    
+    const btnExport = document.getElementById('btnExportIDCards');
+    btnExport.innerText = "Downloading ....";
+    btnExport.disabled = true;  
     exportBox.style.visibility = "visible";     
     for(let i=0; i<SelectedIDStudents.length; i++){
         const student = JSON.parse(SelectedIDStudents[i].dataset.student);
@@ -948,7 +991,16 @@ async function exportIDCards(){
     exportBox.style.visibility = "hidden";    
     const content = await zip.generateAsync({ type: "blob" });
     saveAs(content, "IDCards.zip");
-    alert("ID cards exported successfully.");
+    // Clean up interface variables back to normal state
+    btnExport.innerText = "Download";
+    btnExport.disabled = false; 
+    
+    showCustomDialog1("Exported", "ID cards are exported successfully.", "OK", function(){
+        const previewOverlay = document.getElementById("IDPreviewOverlay");
+        if (previewOverlay) {
+            previewOverlay.style.display = "none";
+        }
+    });
 }
 
     </script> 

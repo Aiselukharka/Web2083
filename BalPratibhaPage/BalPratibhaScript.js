@@ -7,7 +7,7 @@ PageNavigationDripDown.addEventListener("change", function () {
         "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
         "BalPratibhaPage": "BalPratibhaIndex.html",
         "StudentPage": "../StudentPage/StudentIndex.html",
-        "TeacherPage": "../TeacherPage/TeacherIndex.html",
+        "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
         "HomePage": "../index.html",
         "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
         "GalleryPage": "../GalleryPage/GalleryIndex.html",

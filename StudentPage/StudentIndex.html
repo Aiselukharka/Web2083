@@ -4,41 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Page</title>
-    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
-    
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jspreadsheet-ce@4/dist/jspreadsheet.min.css" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/jspreadsheet-ce@4/dist/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsuites@4/dist/jsuites.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsuites@4/dist/jsuites.min.css" type="text/css" />
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsuites@4/dist/jsuites.min.css" type="text/css" />    
     <link rel="stylesheet" href="StudentStyle.css">
 </head>
 <body>
-    <div id="MainBody">
-        
-        <div id="PageNaviggationBox">
-            <div id="IdentityHeaderRow">
-                <div id="LogoBox"><img src="" alt="Logo"></div>
-                <div id="SchoolMetaBlock">
-                    <h1 id="SchoolNameLabel">Loading School...</h1>
-                    <p id="SchoolAddressLabel">Loading Address...</p>
-                </div>
+    <div id="MainBody">        
+            <div id="HeaderBox">
+                <img id="SchoolLogo" src="" alt="Logo">
+                <h1 id="SchoolName">Loading School...</h1>
+                <p id="SchoolAddress">Loading Address...</p>
+                <select id="PageNavigationSelect">   
+                    <option value="StudentPage" selected>Students</option>
+                    <option value="QuestionBankPage">Question Bank</option>
+                    <option value="NoticePage">Notice</option>
+                    <option value="LibraryPage">Library</option>
+                    <option value="HumanResourcePage">Human Resource</option>
+                    <option value="HomePage">Home</option>
+                    <option value="BalPratibhaPage">Bal Pratibha</option>
+                    <option value="AboutUsPage">About Us</option>
+                    <option value="GalleryPage">Gallery</option>
+                    <option value="SMC_TGC_Page">SMC & TGC</option>
+                    <option value="HelpingHandPage">Helping Hand</option>
+                    <option value="AdminPage">Admin</option>                
+                </select>  
             </div>
-            <select id="PageNavigationSelect">   
-                <option value="StudentPage" selected>Students</option>
-                <option value="QuestionBankPage">Question Bank</option>
-                <option value="NoticePage">Notice</option>
-                <option value="LibraryPage">Library</option>
-                <option value="TeacherPage">Teachers</option>
-                <option value="HomePage">Home</option>
-                <option value="BalPratibhaPage">Bal Pratibha</option>
-                <option value="AboutUsPage">About Us</option>
-                <option value="GalleryPage">Gallery</option>
-                <option value="SMC_TGC_Page">SMC & TGC</option>
-                <option value="HelpingHandPage">Helping Hand</option>
-                <option value="AdminPage">Admin</option>                
-            </select>  
-        </div>
 
         <div id="FilterControlPanel">
             <div class="filters-inner-row">
@@ -100,10 +93,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <script src="../SupabaseConfig.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>    
     <script src="../NepaliCalendar.js"></script>
     <script src="../SmartCalculator.js"></script>
     <script src="StudentScript.js"></script>

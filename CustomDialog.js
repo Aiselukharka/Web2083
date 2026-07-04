@@ -5,7 +5,7 @@ function showCustomDialog1(title, message, btnText, onClick) {
         width: '100vw', height: '100vh',
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         display: 'flex', justifyContent: 'center',
-        alignItems: 'center', zIndex: '2000'
+        alignItems: 'center', zIndex: '200000'
     });
 
     const dialogBox = document.createElement('div');
@@ -40,7 +40,6 @@ function showCustomDialog1(title, message, btnText, onClick) {
         document.body.removeChild(overlay);
     };
 
-    // MOVED INSIDE: Hover logic for Dialog 1
     button.onmouseenter = () => {
         button.style.backgroundColor = "#00aa00";
         button.style.transform = "scale(1.05)";
@@ -49,7 +48,7 @@ function showCustomDialog1(title, message, btnText, onClick) {
         button.style.backgroundColor = "#aaaa00";
         button.style.transform = "scale(1)";
     };
-} // <--- Properly ends showCustomDialog1
+}
 
 function showCustomDialog2(title, message, btnText1, btnText2, onClick1, onClick2) {
     const overlay = document.createElement('div');

@@ -115,6 +115,413 @@
             padding: clamp(0.3rem, 1rem, 1.6rem) 0;
             border: 4px solid #000000;
         }
+        /* Upload Section Styles */
+        #UploadSection {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #UploadSection h2 {
+            font-size: 2.4rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        #UploadForm {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        #UploadArea {
+            width: 100%;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        #dropArea {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            border: 3px dashed #ccc;
+            border-radius: 12px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 200px;
+        }
+
+        #dropArea:hover {
+            border-color: #666;
+            background: #f0f0f0;
+        }
+
+        #dropArea.dragover {
+            border-color: #00aa00;
+            background: #e8f5e9;
+            transform: scale(1.02);
+        }
+
+        #dropArea svg {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        #dropArea p {
+            font-size: 1.8rem;
+            color: #333;
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+
+        #dropArea span {
+            font-size: 1.4rem;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+
+        /* Image Preview Grid */
+        #PreviewGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        #PreviewGrid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #PreviewGrid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        #PreviewGrid::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        #PreviewGrid::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #f5f5f5;
+            transition: transform 0.2s ease;
+        }
+
+        .preview-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .preview-item .remove-btn:hover {
+            background: rgba(255, 0, 0, 1);
+            transform: scale(1.1);
+        }
+
+        .preview-item .file-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #UploadControls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        #UploadControls button {
+            padding: 1.2rem 3rem;
+            font-size: 1.6rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #uploadBtn {
+            background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+            color: #ffffff;
+            flex: 2;
+        }
+
+        #uploadBtn:hover:not(:disabled) {
+            background: linear-gradient(180deg, #009900, #00aa00, #009900);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 170, 0, 0.4);
+        }
+
+        #uploadBtn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #clearBtn {
+            background: #f44336;
+            color: white;
+            flex: 1;
+        }
+
+        #clearBtn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+        }
+
+        /* Progress Bar */
+        #UploadProgress {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        #ProgressBar {
+            width: 100%;
+            height: 24px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #ProgressFill {
+            height: 100%;
+            background: linear-gradient(90deg, #00aa00, #00cc00);
+            border-radius: 12px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        #ProgressText {
+            text-align: center;
+            margin-top: 0.8rem;
+            font-size: 1.4rem;
+            color: #555;
+        }
+
+        /* Status Messages */
+        #UploadStatus {
+            margin-top: 1.5rem;
+        }
+
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+
+        .status-message.error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+
+        .status-message.info {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border-left: 4px solid #2196f3;
+        }
+
+        .status-message .status-icon {
+            font-size: 2rem;
+        }
+
+        /* Responsive for Upload Section */
+        @media (max-width: 768px) {
+            #UploadSection {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+
+            #dropArea {
+                padding: 2rem 1rem;
+                min-height: 150px;
+            }
+
+            #dropArea p {
+                font-size: 1.4rem;
+            }
+
+            #PreviewGrid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 1rem;
+            }
+
+            #UploadControls {
+                flex-direction: column;
+            }
+
+            #UploadControls button {
+                padding: 1rem 2rem;
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #PreviewGrid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+        /* Manage Gallery Section */
+        #ManageSection {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+        }
+
+        #ManageSection h2 {
+            font-size: 2.4rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        #ManageSection p {
+            font-size: 1.6rem;
+            color: #555;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        #ManageControls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #manageGalleryBtn {
+            padding: 1.4rem 4rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: linear-gradient(180deg, #2196f3, #1976d2);
+            color: white;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        #manageGalleryBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+            background: linear-gradient(180deg, #1976d2, #1565c0);
+        }
+
+        #manageNote {
+            font-size: 1.2rem;
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            padding: 0.5rem;
+        }
+        #deleteHelpBtn {
+            padding: 1rem 2rem;
+            font-size: 1.4rem;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        #deleteHelpBtn:hover {
+            background: #e0e0e0;
+            border-color: #bbb;
+        }
+
+        /* Responsive for Manage Section */
+        @media (max-width: 768px) {
+            #ManageSection {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+            
+            #manageGalleryBtn {
+                padding: 1.2rem 2rem;
+                font-size: 1.6rem;
+                width: 100%;
+                justify-content: center;
+            }
+        }
         
     </style>
 </head>
@@ -129,7 +536,7 @@
                 <option value="NoticePage">Notice</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="StudentPage">Students</option>
-                <option value="TeacherPage">Teachers</option>
+                <option value="HumanResourcePage">Human Resource</option>
                 <option value="BalPratibhaPage">Bal Pratibha</option>
                 <option value="AboutUsPage">About Us</option>
                 <option value="GalleryPage">Gallery</option>
@@ -152,7 +559,7 @@
                 <option value="NoticeEditBox">Edit Notice</option>
                 <option value="QuestionBankEditBox">Edit Question Bank</option>
                 <option value="StudentEditBox">Edit Student Data</option>
-                <option value="TeacherEditBox">Edit Teacher Data</option>
+                <option value="HumanResourceEditBox">Edit Human Resource Data</option>
                 <option value="CalendarEditBox">Edit Calendar</option>
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="AboutUsEditBox">Edit About Us</option>
@@ -168,10 +575,53 @@
                 <option value="AddAdminTool">Add/Delete Admin</option>
             </select>            
         </div>      
-              
+        <div id="UploadSection">
+            <h2>Upload Gallery Image</h2>
+            <div id="UploadForm">
+                <div style="margin-bottom: 15px;">
+                    <label for="imageDescriptionInput" style="display:block; margin-bottom: 5px; font-weight: bold;">Image Description:</label>
+                    <input type="text" id="imageDescriptionInput" placeholder="Enter image description here..." style="width: 100%; padding: 8px; box-sizing: border-box;">
+                </div>
+
+                <div id="UploadArea">
+                    <input type="file" id="imageInput" accept="image/*">
+                    <label for="imageInput" id="dropArea">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <p>Drag & drop an image here or click to browse</p>
+                        <span>Supports: JPG, PNG, GIF, WebP (Max 5MB)</span>
+                    </label>
+                </div>
+                <div id="PreviewGrid"></div>
+                <div id="UploadControls">
+                    <button type="button" id="uploadBtn" disabled>Upload Image</button>
+                    <button type="button" id="clearBtn">Clear All</button>
+                </div>
+            </div>
+            <div id="UploadProgress" style="display:none;">
+                <div id="ProgressBar">
+                    <div id="ProgressFill"></div>
+                </div>
+                <p id="ProgressText">Uploading image...</p>
+            </div>
+            <div id="UploadStatus"></div>
+        </div>
+        <div id="ManageSection">
+            <h2>Manage Gallery Images</h2>
+            <p>Click the button below to open your PostImages gallery. From there, you can delete images to free up space.</p>
+            <div id="ManageControls">
+                <button type="button" id="manageGalleryBtn" onclick="openPostImagesGallery()">🗑️ Open PostImages Gallery</button>
+                <button type="button" id="deleteHelpBtn" onclick="showDeleteHelp()">❓ How to delete</button>
+                <span id="manageNote">Note: Deleting images here will remove them from your gallery page.</span>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
     <script src="../SupabaseConfig.js"></script> 
+    <script src="../CustomDialog.js"></script>
     <script src="../DateConverter.js"></script>
     <script src="../SmartCalculator.js"></script>
     <script src="../NepaliCalendar.js"></script>
@@ -183,7 +633,7 @@ if (typeof supabaseClient === 'undefined') {
 // -------------------- CLOUDINARY --------------------
 const CLOUD_NAME = "dcdwpdnyp";
 
-// -------------------- PROTECTION FORM UNAUTHORIZED ACCESS --------------------
+// -------------------- PROTECTION FROM UNAUTHORIZED ACCESS --------------------
 protectAdminPage();
 async function protectAdminPage() {
     const {
@@ -207,7 +657,7 @@ PageNavigationDropDown.addEventListener("change", function () {
         "NoticePage": "../NoticePage/NoticeIndex.html",
         "QuestionBankPage": "../QuestionBankPage/QuestionBankIndex.html",
         "StudentPage": "../StudentPage/StudentIndex.html",
-        "TeacherPage": "../TeacherPage/TeacherIndex.html",
+        "HumanResourcePage": "../HumanResourcePage/HumanResourceIndex.html",
         "BalPratibhaPage": "../BalPratibhaPage/BalPratibhaIndex.html",
         "AboutUsPage": "../AboutUsPage/AboutUsIndex.html",
         "GalleryPage": "../GalleryPage/GalleryIndex.html",
@@ -234,7 +684,7 @@ EditNavigationDropDown.addEventListener("change", function () {
         "NoticeEditBox": "EditNotice.html",
         "QuestionBankEditBox": "EditQuestionBank.html",
         "StudentEditBox": "EditStudent.html",
-        "TeacherEditBox": "EditTeacher.html",
+        "HumanResourceEditBox": "EditHumanResource.html",
         "CalendarEditBox": "EditCalendar.html",
         "BalPratibhaEditBox": "EditBalPratibha.html",
         "AboutUsEditBox": "EditAboutUs.html",
@@ -277,17 +727,6 @@ document.getElementById("AdminToolsSelect").addEventListener("change", async fun
               function () {}
           );
           break;
-        case "LogoutAllDevicesTool":
-          const confirm = showCustomDialog2("Confirm Logout", "Logout from all devices?", "Yes", "Cancel", function() {}, function() {});
-            if (confirm==="Yes") {
-                await supabaseClient
-                .auth
-                .signOut({
-                    scope: "global"
-                });
-                window.location.replace("LoginIndex.html");
-            }
-            break;
         case "AddAdminTool":
             window.location.href = "AddAdminIndex.html";
             break;
@@ -329,6 +768,326 @@ async function loadDynamicLogoAndFavicon() {
     }
 }
 document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
+
+// -------------------- IMAGE UPLOAD SYSTEM --------------------
+class ImageUploader {
+    constructor() {
+        this.selectedFiles = [];
+        this.isUploading = false;
+        
+        // DOM Elements
+        this.imageInput = document.getElementById('imageInput');
+        this.descriptionInput = document.getElementById('imageDescriptionInput');
+        this.dropArea = document.getElementById('dropArea');
+        this.previewGrid = document.getElementById('PreviewGrid');
+        this.uploadBtn = document.getElementById('uploadBtn');
+        this.clearBtn = document.getElementById('clearBtn');
+        this.uploadProgress = document.getElementById('UploadProgress');
+        this.progressFill = document.getElementById('ProgressFill');
+        this.progressText = document.getElementById('ProgressText');
+        this.uploadStatus = document.getElementById('UploadStatus');
+        
+        // Initialize
+        this.init();
+    }
+    
+    init() {
+        // Event Listeners
+        this.imageInput.addEventListener('change', (e) => this.handleFileSelect(e));
+        this.dropArea.addEventListener('dragover', (e) => this.handleDragOver(e));
+        this.dropArea.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+        this.dropArea.addEventListener('drop', (e) => this.handleDrop(e));
+        this.uploadBtn.addEventListener('click', () => this.uploadFiles());
+        this.clearBtn.addEventListener('click', () => this.clearAll());
+    }
+    
+    handleFileSelect(e) {
+        const files = Array.from(e.target.files);
+        this.addFiles(files);
+        this.imageInput.value = '';
+    }
+    
+    handleDragOver(e) {
+        e.preventDefault();
+        this.dropArea.classList.add('dragover');
+    }
+    
+    handleDragLeave(e) {
+        e.preventDefault();
+        this.dropArea.classList.remove('dragover');
+    }
+    
+    handleDrop(e) {
+        e.preventDefault();
+        this.dropArea.classList.remove('dragover');
+        const files = Array.from(e.dataTransfer.files);
+        this.addFiles(files);
+    }
+    
+    addFiles(files) {
+        const imageFiles = files.filter(file => file.type.startsWith('image/'));
+        
+        if (imageFiles.length === 0) {
+            this.showStatus('No valid image files found. Please select a JPG, PNG, GIF, or WebP image.', 'error');
+            return;
+        }
+        
+        const oversizedFiles = imageFiles.filter(file => file.size > 5 * 1024 * 1024);
+        if (oversizedFiles.length > 0) {
+            this.showStatus(`File exceeds 5MB limit. Please resize it first.`, 'error');
+            return;
+        }
+        
+        // Processing one file to guarantee precise image-description matching
+        this.selectedFiles = [imageFiles[0]];
+        this.updatePreview();
+        this.uploadBtn.disabled = false;
+        this.clearStatus();
+    }
+    
+    updatePreview() {
+        this.previewGrid.innerHTML = '';
+        
+        this.selectedFiles.forEach((file, index) => {
+            const item = document.createElement('div');
+            item.className = 'preview-item';
+            
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.alt = file.name;
+            img.style.maxWidth = "200px";
+            img.style.display = "block";
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = '×';
+            removeBtn.title = 'Remove image';
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.removeFile(index);
+            });
+            
+            const fileName = document.createElement('div');
+            fileName.className = 'file-name';
+            fileName.textContent = file.name;
+            
+            item.appendChild(img);
+            item.appendChild(removeBtn);
+            item.appendChild(fileName);
+            this.previewGrid.appendChild(item);
+        });
+    }
+    
+    removeFile(index) {
+        this.selectedFiles.splice(index, 1);
+        this.updatePreview();
+        
+        if (this.selectedFiles.length === 0) {
+            this.uploadBtn.disabled = true;
+        }
+        
+        const previewItems = this.previewGrid.querySelectorAll('.preview-item img');
+        previewItems.forEach(img => {
+            URL.revokeObjectURL(img.src);
+        });
+    }
+    
+    clearAll() {
+        if (this.selectedFiles.length === 0 && this.descriptionInput.value === "") return;
+        
+        showCustomDialog2(
+            'Confirm Clear',
+            'Remove selected image and clear data?',
+            'Yes',
+            'Cancel',
+            () => {
+                this.selectedFiles = [];
+                this.descriptionInput.value = '';
+                this.updatePreview();
+                this.uploadBtn.disabled = true;
+                this.clearStatus();
+                this.hideProgress();
+                
+                const previewItems = this.previewGrid.querySelectorAll('.preview-item img');
+                previewItems.forEach(img => {
+                    URL.revokeObjectURL(img.src);
+                });
+            },
+            () => {}
+        );
+    }
+    
+    async uploadFiles() {
+        if (this.selectedFiles.length === 0 || this.isUploading) return;
+        
+        const descriptionValue = this.descriptionInput.value.trim();
+        if (!descriptionValue) {
+            this.showStatus('❌ Please provide an image description before uploading.', 'error');
+            return;
+        }
+        
+        this.isUploading = true;
+        this.uploadBtn.disabled = true;
+        this.uploadBtn.textContent = 'Uploading...';
+        this.showProgress();
+        this.clearStatus();
+        
+        const file = this.selectedFiles[0];
+        
+        try {
+            // Step 1: Uploading the file to PostImages Edge/Cloud function
+            const result = await this.uploadSingleFile(file);
+            
+            if (result.success) {
+                // Step 2: Saving properties to Supabase table
+                const { error: supabaseError } = await supabaseClient
+                    .from('GalleryImageLinkTable')
+                    .insert([
+                        { 
+                            ImageDescription: descriptionValue, 
+                            ImageUrl: result.url 
+                        }
+                    ]);
+                
+                if (supabaseError) {
+                    throw new Error(`Failed to save to Database: ${supabaseError.message}`);
+                }
+                
+                this.showStatus(`✅ Successfully uploaded & added to Database!`, 'success');
+                this.selectedFiles = [];
+                this.descriptionInput.value = '';
+                this.updatePreview();
+            } else {
+                this.showStatus(`❌ PostImages upload failed: ${result.error}`, 'error');
+            }
+        } catch (error) {
+            this.showStatus(`❌ Error processing request: ${error.message}`, 'error');
+        } finally {
+            this.isUploading = false;
+            this.uploadBtn.textContent = 'Upload Image';
+            this.uploadBtn.disabled = this.selectedFiles.length === 0;
+            this.hideProgress();
+        }
+    }
+    
+    async uploadSingleFile(file) {
+        try {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            const timestamp = Date.now();
+            const randomStr = Math.random().toString(36).substring(2, 8);
+            const extension = file.name.split('.').pop();
+            const filename = `gallery/${timestamp}_${randomStr}.${extension}`;
+            formData.append('filename', filename);
+            
+            const response = await fetch(`${_supabaseUrl}/functions/v1/upload-postimage`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${_supabaseKey}`
+                },
+                body: formData
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Upload failed');
+            }
+            
+            const data = await response.json();
+            return {
+                success: true,
+                url: data.url
+            };
+        } catch (error) {
+            console.error('Upload error:', error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+    
+    showProgress() {
+        this.uploadProgress.style.display = 'block';
+        this.progressFill.style.width = '50%';
+        this.progressText.textContent = 'Uploading to PostImages...';
+    }
+    
+    hideProgress() {
+        this.progressFill.style.width = '100%';
+        setTimeout(() => {
+            this.uploadProgress.style.display = 'none';
+        }, 500);
+    }
+    
+    showStatus(message, type = 'info') {
+        const statusDiv = document.createElement('div');
+        statusDiv.className = `status-message ${type}`;
+        
+        const icon = document.createElement('span');
+        icon.className = 'status-icon';
+        
+        switch(type) {
+            case 'success':
+                icon.textContent = '✅ ';
+                break;
+            case 'error':
+                icon.textContent = '❌ ';
+                break;
+            default:
+                icon.textContent = 'ℹ️ ';
+        }
+        
+        const text = document.createElement('span');
+        text.textContent = message;
+        
+        statusDiv.appendChild(icon);
+        statusDiv.appendChild(text);
+        this.uploadStatus.appendChild(statusDiv);
+        statusDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    
+    clearStatus() {
+        this.uploadStatus.innerHTML = '';
+    }
+}
+
+// Initialize uploader when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('UploadSection')) {
+        const uploader = new ImageUploader();
+        console.log('Image uploader initialized');
+    }
+});
+
+// -------------------- MANAGE POSTIMAGES GALLERY --------------------
+function openPostImagesGallery() {
+    window.open('https://postimg.cc/gallery/YLsjRbC', '_blank');
+    
+    showCustomDialog1(
+        'Gallery Management',
+        '✅ Your PostImages gallery is opening in a new tab.\n\nFrom there, you can:\n• View all uploaded images\n• Delete images you no longer need\n• Organize your gallery\n\nNote: Deleting images from PostImages will remove them from your website gallery.',
+        'OK',
+        function() {}
+    );
+}
+
+// Optional: Add a help button to explain the deletion process
+function showDeleteHelp() {
+    showCustomDialog1(
+        'How to Delete Images from PostImages',
+        '1. Click "Open PostImages Gallery"\n' +
+        '2. Find the image you want to delete\n' +
+        '3. Click on the image to open it\n' +
+        '4. Look for the "Delete" or "Remove" option\n' +
+        '5. Confirm deletion\n\n' +
+        '⚠️ Deleted images will be removed from your website gallery.',
+        'Got it',
+        function() {}
+    );
+}
+
     </script> 
 </body>
 </html>
