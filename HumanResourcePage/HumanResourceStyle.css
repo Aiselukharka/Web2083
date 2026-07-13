@@ -43,56 +43,67 @@ body {
     border-radius: 12px;
     overflow: visible;
 }
-#HeaderBox{
+#SchoolLogo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;     
+}
+#SchoolNameBox{
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 0;
-    margin: 0 0 20px 0;
-    background: linear-gradient(180deg, #392cd0, #483dc1, #6155e0);
-    color: #ffffff;
-}
-#SchoolLogo{
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin-bottom: 10px;
+    background: linear-gradient(180deg, #000000, #222222);
+    padding: 10px 0;
+    text-align: center;
 }
 #SchoolName{
-    width: 100%;
-    text-align: center;
     font-size: 40px;
     font-weight: bold;
-    padding: 5px 0;
-    margin: 5px 0;
-    color: #f00;
-    text-shadow: 1px 1px 3px #ff0;
+    color: #ff0000;
+    text-shadow: 1px 1px 3px #ffffff;
 }
 #SchoolAddress{
-    width: 100%;
-    text-align: center;
-    font-size: 32px;
-    padding: 5px 0;
-    margin: 5px 0;
-    color: #ff0;
-    font-weight: bold;
-    font-style: italic;
-    text-shadow: 1px 1px 3px #f00;
-}    
-#PageNavigationSelect {
-    width: 80%;
-    font-size: 32px;
-    font-weight: bold;
-    padding: 12px 0;
-    margin: 12px 0;
-    border: 2px solid #4a90e2;
-    border-radius: 12px;
-    background: #fff;
-    color: #333;
-    cursor: pointer;
-    text-align: center;
+    font-size: 28px;
+    color: #ffff00;
+    margin-top: 8px;
+    text-shadow: 1px 1px 3px #00ff00;
 }
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background: linear-gradient(180deg, #222222, #444444);
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
+}
+#PageNavigationSelect {
+    width: 40%;
+    min-width: 400px;
+    font-size: 32px;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #000000;
+}
+#PageNaviggationBox button {
+    width: 20%;
+    min-width: 300px;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #007700, #009900, #007700);
+    color: #ffffff;
+    border-radius: 12px;  
+    font-size: 32px;  
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+#PageNaviggationBox button:hover {
+    background: linear-gradient(180deg, #005500, #007700, #005500);
+    color: #ffff00;
+}
+
 #HumanResourceDisplay {
     width: 100%;
     padding: 20px;
@@ -433,6 +444,28 @@ body {
 .staff-card.visible {
     opacity: 1;
     transform: translateY(0);
+}
+#FooterBox {
+    width: 100%;
+    background: linear-gradient(180deg, #444444, #000000);
+    padding: 20px 0;
+    margin-top: 20px;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 10px;   
+}
+#FooterBox a {
+    display: inline-block;     
+    width: 30%;
+    color: #00ffff;
+    font-size: 18px;
+    text-align: center;
+}
+#FooterBox a:hover {
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
 }
 
 /*Style for medium Mobile device*/

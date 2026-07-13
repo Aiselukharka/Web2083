@@ -113,316 +113,204 @@
             padding: clamp(0.3rem, 1rem, 1.6rem) 0;
             border: 4px solid #000000;
         }
-        #AttendanceCardContainer{
+        #AttendanceContainer{
             width: 100%;
-            padding: clamp(0.3rem, 1rem, 1.6rem);
-            margin: clamp(0.3rem, 1rem, 1.6rem) 0;
-            border: 2px solid #000000;
-            background: linear-gradient(45deg, #77aa77, #99aa99);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #AttendanceCardHead{
-            width: 100%;
-            text-align: center;
-            font-size: clamp(1.6rem, 3vw, 4rem);
-            font-weight: bold;
-            color: #0000aa;
-            padding: clamp(0.4rem, 1vw, 2.6rem);
-        }
-        #AttendanceCardClassSelectionSelect{
-            width: 100%;
-            font-size: clamp(1rem, 2vw, 3rem);
-            font-weight: bold;
-            padding: clamp(0.4rem, 1vw, 2.6rem);
-        }
-        #AttendanceCardStudentListBox{
-            width: 100%;
-            font-size: clamp(0.7rem, 1.2vw, 2rem);
-            padding: clamp(0.4rem, 1vw, 2.6rem) 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #AttendanceTableBox{
-            width:100%;
-            margin-top:1rem;
-            background:#eeeeee;
-            padding:1.5rem;
-            border-radius:8px;
-        }
-        #btnCreateAttendanceCard{
-            width: 50%;
-            font-size: clamp(1rem, 2vw, 3rem);
-            font-weight: bold;
-            padding: clamp(0.4rem, 1vw, 2.6rem) 0;
-            border-radius: 2vw;
-            background: linear-gradient(180deg, #007700, #009900, #007700);
-            color: #ffffff;
-        }
-        #btnCreateAttendanceCard:hover{
-            background: linear-gradient(180deg, #005500, #007700, #005500);
-            color: #ffff00;
-        }
-        #AttendancePopupOverlay, #AttendancePreviewOverlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.75);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 99999;
-        }
-        #AttendancePopup {
-            width: min(92%, 500px);
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,.35);
-        }
-        #AttendancePopupTitle {
-            background: #000066;
-            color: white;
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            padding: 1.2rem;
-        }
-        .AttendancePopupRow {
-            display: flex;
-            flex-direction: column;
-            padding: 1.2rem 1.6rem;
-        }
-        .AttendancePopupRow label {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: .6rem;
-        }
-        .AttendancePopupRow input {
-            font-size: 1.6rem;
-            padding: .8rem;
-        }
-        .AttendancePopupButtons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            padding: 1.5rem;
-        }
-        .AttendancePopupButtons button {
-            min-width: 130px;
-            padding: .9rem;
-            font-size: 1.6rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        #AttendancePreviewWindow {
-            width: 95%;
-            height: 92%;
-            background: #fff;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        #AttendancePreviewHeader {
-            height: 6rem;
-            background: #003366;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-        }
-        #AttendancePreviewHeader button {
-            padding: 0.5rem 1.5rem;
-            font-size: 1.6rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        #AttendancePreviewTitle {
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        #AttendancePreviewBody {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            background: #ddd;
-            overflow: auto;
-            padding: 40px;
-        }
-        #AttendancePreviewFooter {
-            height: 6rem;
-            background: #f5f5f5;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 1rem;
-            padding: 0 2rem;
-        }
-        #AttendancePreviewFooter button {
-            padding: .8rem 2rem;
-            font-size: 1.6rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .AttendanceCard {
-            width: 1000px;
-            height: 620px;
-            background: white;
-            border: 10px solid #004080;
-            border-radius: 20px;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        .CardWatermark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 1000px;
-            height: 620px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
             padding: 10px;
-            opacity: 0.04;
-            transform: rotate(-12deg) scale(1.2);
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-            user-select: none;
-            box-sizing: border-box;
-        }
-        .WatermarkRow {
-            display: flex;
-            justify-content: space-between;
-            white-space: nowrap;
-            gap: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #000;
-        }
-        .CardHeader {
-            position: relative;
-            z-index: 2;
-            height: 140px;
-            display: flex;
-            align-items: center;
-            background: #004080;
-            color: white;
-            padding: 0 30px;
-            box-sizing: border-box;
-        }
-        .CardLogo {
-            width: 90px;
-            height: 90px;
-            object-fit: contain;
-        }
-        .CardSchool {
-            flex: 1;
-            text-align: center;
-            padding-right: 90px;
-        }
-        .CardSchoolName {
-            font-size: 34px;
-            font-weight: bold;
-        }
-        .CardSchoolAddress {
-            font-size: 16px;
-            color: #ffcccc;
-            font-weight: bold;
-        }
-        .CardTitle {
-            display: inline-block;
-            background: #ffffff; 
-            color: #004080;
-            font-size: 22px;
-            font-weight: bold;
-            padding: 4px 24px;
-            border-radius: 4px;
-            margin-top: 4px;
-        }
-        .CardBody {
-            position: relative;
-            z-index: 2;
-            height: 410px;
-            display: flex;
-            background: transparent;
-            box-sizing: border-box;
-        }
-        .CardLeft {
-            width: 60%;
-            padding: 25px 40px;
-            font-size: 24px;
-            line-height: 2.1;
-        }
-        .CardRight {
-            width: 40%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
-            padding: 25px 30px;
-            box-sizing: border-box;
+            margin: 10px 0;
+            border: 2px solid #000000;
+            background: linear-gradient(135deg, #ffc, #ffa );
         }
-        .RollBox {
-            width: 195px;
-            height: 195px;
-            border: 6px solid #004080;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #fff;
-        }
-        .RollNo {
-            font-size: 115px;
-            font-weight: bold;
-            color: #a00000;
-        }
-        .SignatureBox {
-            text-align: center;
-            width: 95%;
-        }
-        .SignatureDottedLine {
-            border-bottom: 2px dashed #333;
+        #AttendanceSelectionBox{
             width: 100%;
-            margin-bottom: 6px;
-            height: 25px;
-        }
-        .PrincipalName {
-            font-size: 22px;
-            font-weight: bold;
-            color: #000080;
-            white-space: nowrap;
-        }
-        .PrincipalTitle {
-            font-size: 16px;
-            font-weight: bold;
-            color: #444;
-        }
-        .CardFooter {
-            position: relative;
-            z-index: 3;
-            height: 50px;
-            background: #144d18;
-            color: white;
             display: flex;
-            justify-content: center;
+            flex-direction: row;
             align-items: center;
-            font-size: 22px;
-            font-style: italic;
+            justify-content: space-evenly;
+            text-align: center;
+        }
+        #AttendanceClassSelec{
+            width: 20%;
+            padding: 10px 0;
+            font-size: 24px;
             font-weight: bold;
-            box-sizing: border-box;
+        }
+        #btnDecreaseDate, #btnIncreaseDate{
+            width: 10%;
+            padding: 10px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #a0a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        #btnDecreaseDate:hover, #btnIncreaseDate:hover{
+            color: #00aa00;
+            font-size: 26px;
+        }
+        #ADDateBox, #BSDateBox{
+            width: 20%;
+            padding: 10px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #00cc00aa;
+        }
+        #btnToday{
+            width: 20%;
+            background: linear-gradient(180deg, #070, #090, #070);
+            padding: 10px;
+            color: #ffffff;
+            cursor: pointer;
+            border: 2px solid #000000;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #btnToday:hover{
+            background: linear-gradient(180deg, #050, #070, #050);
+            color: #ffff00;            
+        }
+        #ADDateBox, #BSDateBox {
+            width: 20%;
+            padding: 10px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #00cc00aa;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
+        #ADDateBox:hover, #BSDateBox:hover {
+            color: #00ff00;
+            transform: scale(1.05);
+        }
+        #AttendanceListBox{
+            width: 100%;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        #btnByName, #btnByRollNumber, #btnShowAttendance{
+            width: 30%;
+            padding: 10px 0;
+            background: linear-gradient(180deg, #777, #999, #777);
+            color: #ffffff;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none; 
+            cursor: pointer;
+        }
+        .SelectedClasses {
+            background: linear-gradient(180deg, #050, #070, #050);
+            color: #ffff00;
+        }
+        #AttendanceListBox button.SelectedClasses {
+            background: linear-gradient(180deg, #050, #070, #050);
+            color: #ffff00;
+        }
+        #AttendanceBox {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background: white;
+            min-height: 100px;
+        }
+
+        #btnSubmitAttendance {
+            padding: 12px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #28a745;
+            color: white;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        #btnSubmitAttendance:hover {
+            background: #218838;
+            transform: scale(1.02);
+        }       
+
+        #btnSubmitAttendance.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Add to your existing CSS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #attendancePopupOverlay {
+            animation: fadeIn 0.3s ease;
+        }
+
+        #attendancePopup table {
+            border-collapse: collapse;
+        }
+
+        #attendancePopup th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        #attendancePopup .attendance-view-btn.active {
+            background: #007bff;
+            color: white;
+        }
+
+        #attendancePopup .attendance-view-btn:not(.active) {
+            background: #6c757d;
+            color: white;
+        }
+
+        #attendancePopup .attendance-view-btn {
+            transition: all 0.3s ease;
+        }
+
+        #attendancePopup .attendance-view-btn:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        #attendancePopup table th {
+            border: 1px solid #dee2e6;
+        }
+
+        #attendancePopup table td {
+            border: 1px solid #dee2e6;
+        }
+
+        /* Sticky header for table */
+        #monthAttendanceTable thead th {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -475,49 +363,23 @@
                 <option value="AddAdminTool">Add/Delete Admin</option>
             </select>            
         </div>   
-        <div id="AttendanceCardContainer">
-            <div id="AttendanceCardHead">Create Student Attendance Card</div>
-            <select id="AttendanceCardClassSelectionSelect">
-                <option selected disabled>Select Class</option>
-            </select>
-            <div id="AttendanceCardStudentListBox"></div>
-        </div>            
-        <div id="AttendancePopupOverlay">
-            <div id="AttendancePopup">
-                <div id="AttendancePopupTitle">Create Attendance Cards</div>
-                <div class="AttendancePopupRow">
-                    <label>Educational Year (BS)</label>
-                    <input type="text" id="AttendanceYear" placeholder="2083" value="2083">
-                </div>
-                <div class="AttendancePopupRow">
-                    <label>School Motto</label>
-                    <input type="text" id="AttendanceMotto" placeholder="Enter school motto" value="Quality Education is Our Motto !">
-                </div>
-                <div class="AttendancePopupRow">
-                    <label>Approver's Designation</label>
-                    <input type="text" id="AttendanceDesignation" placeholder="Head Teacher / Principal" value="Head Teacher">
-                </div>
-                <div class="AttendancePopupButtons">
-                    <button id="btnAttendanceCancel" type="button">Cancel</button>
-                    <button id="btnAttendanceCreate" type="button">Create Cards</button>
-                </div>
+        <div id="AttendanceContainer">
+            <div id="AttendanceSelectionBox">
+                <select id="AttendanceClassSelec"></select>
+                <button type="button" id="btnDecreaseDate" onclick="decreaseDate()"><</button>            
+                <div id="ADDateBox">AD: 2026-7-6</div>
+                <button type="button" id="btnToday" onclick="goToToday()">Today</button>
+                <div id="BSDateBox">BS: 2083-3-22</div>
+                <button type="button" id="btnIncreaseDate" onclick="increaseDate()">></button>
             </div>
-        </div>
-        <div id="AttendancePreviewOverlay">
-            <div id="AttendancePreviewWindow">
-                <div id="AttendancePreviewHeader">
-                    <span id="AttendancePreviewTitle">Attendance Card Preview</span>
-                    <button id="btnCloseAttendancePreview" type="button">X</button>
-                </div>                
-                <div id="AttendancePreviewBody"></div>                
-                <div id="AttendancePreviewFooter">
-                    <button id="btnPrevAttendanceCard" type="button">Previous</button>
-                    <button id="btnNextAttendanceCard" type="button">Next</button>
-                    <button id="btnExportAttendanceCards" type="button" style="background: #0066cc; color: white;">Download / Export</button>
-                </div>
+            <div id="AttendanceListBox">
+                <button type="button" id="btnByName" class="SelectedClasses" onclick="takeAttendanceByName()">By Names</button>
+                <button type="button" id="btnByRollNumber" onclick="takeAttendanceByRollNumber()">By Roll Numbers</button>
+                <button type="button" id="btnShowAttendance" onclick="showAttendance()">Show Attendance</button>
             </div>
+            <div id="AttendanceBox"></div>
+            <button type="button" id="btnSubmitAttendance" onclick="submitAttendance()">Submit</button>
         </div>
-        <div id="AttendanceExportBox" style="position:absolute;left:-99999px;top:0;"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -534,13 +396,14 @@
 if (typeof supabaseClient === 'undefined') {
     console.error("Supabase client not found. Make sure SupabaseConfig.js is loaded first.");
 }
+
+// Global variables
+let currentADDate = new Date(); // This will track the displayed date
+let adCalendarVisible = false;
+let bsCalendarVisible = false;
+
 // -------------------- CLOUDINARY --------------------
 const CLOUD_NAME = "dcdwpdnyp";
-let SelectedAttendanceStudents=[];
-let AttendanceSchoolInfo={};
-let AttendanceYear="";
-let AttendanceMotto="";
-let AttendanceClassName="";
 
 // -------------------- PROTECTION FROM UNAUTHORIZED ACCESS --------------------
 protectAdminPage();
@@ -581,6 +444,7 @@ if (PageNavigationDropDown) {
         }
     });
 }
+
 // -------------------- NAVIGATE ADMIN EDITS --------------------
 const EditNavigationDropDown = document.getElementById("EditNavigationSelect");
 if (EditNavigationDropDown) {
@@ -609,12 +473,444 @@ if (EditNavigationDropDown) {
         }
     });
 }
-// -------------------- DATE --------------------
-const dateBox = document.getElementById('DateBox');
-if (dateBox && typeof AD2BS === 'function') {
-    dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
+
+// -------------------- DATE FUNCTIONS --------------------
+
+// Function to get BS Year, Month, Day from AD Date
+function getBSDateComponents(adDate) {
+    if (typeof AD2BS !== 'function') {
+        console.error('AD2BS function not available');
+        return { year: 2080, month: 1, day: 1 };
+    }
+    
+    try {
+        const bsFullString = AD2BS(adDate);
+        
+        // Extract the Nepali date parts
+        // Format: "YYYY साल Month DD गते DayName"
+        const parts = bsFullString.split(' ');
+        
+        // Extract year (Devanagari)
+        let yearStr = parts[0];
+        // Convert Devanagari to English numerals
+        const devanagariToEnglish = {
+            '०': '0', '१': '1', '२': '2', '३': '3', '४': '4',
+            '५': '5', '६': '6', '७': '7', '८': '8', '९': '9'
+        };
+        for (let key in devanagariToEnglish) {
+            yearStr = yearStr.replace(new RegExp(key, 'g'), devanagariToEnglish[key]);
+        }
+        const year = parseInt(yearStr);
+        
+        // Extract month
+        let month = 0;
+        for (let i = 0; i < NEPALI_MONTHS.length; i++) {
+            if (bsFullString.includes(NEPALI_MONTHS[i])) {
+                month = i + 1;
+                break;
+            }
+        }
+        
+        // Extract day
+        let dayStr = parts[3]; // The day part before "गते"
+        // Convert Devanagari to English numerals
+        for (let key in devanagariToEnglish) {
+            dayStr = dayStr.replace(new RegExp(key, 'g'), devanagariToEnglish[key]);
+        }
+        const day = parseInt(dayStr);
+        
+        // Extract day of week (Nepali)
+        let dayOfWeek = 0;
+        for (let i = 0; i < NEPALI_DAYS.length; i++) {
+            if (bsFullString.includes(NEPALI_DAYS[i])) {
+                dayOfWeek = i;
+                break;
+            }
+        }
+        
+        return { year, month, day, dayOfWeek };
+        
+    } catch (error) {
+        console.error('Error getting BS date components:', error);
+        return { year: 2080, month: 1, day: 1, dayOfWeek: 0 };
+    }
 }
-//----------------------- Script for Admin Tools Dropdown -----------------------
+
+// Function to get BS date components for any given BS year and month
+function getBSDateComponentsForMonth(bsYear, bsMonth) {
+    // Find the AD date for the first day of the BS month
+    const bsDateString = `${bsYear}-${String(bsMonth).padStart(2, '0')}-01`;
+    try {
+        const adDateString = BS2AD_YMD(bsDateString);
+        const parts = adDateString.split('-').map(Number);
+        const adDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        const bsComponents = getBSDateComponents(adDate);
+        return bsComponents;
+    } catch (e) {
+        console.error('Error getting BS date components for month:', e);
+        return { year: bsYear, month: bsMonth, day: 1, dayOfWeek: 0 };
+    }
+}
+
+// Format AD date as YYYY-MM-DD
+function formatADDate(adDate) {
+    const year = adDate.getFullYear();
+    const month = String(adDate.getMonth() + 1).padStart(2, '0');
+    const day = String(adDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+// Update all date displays
+function updateDates() {
+    // Update AD date box
+    const adDateBox = document.getElementById('ADDateBox');
+    if (adDateBox) {
+        adDateBox.textContent = `AD: ${formatADDate(currentADDate)}`;
+    }
+    
+    // Update BS date box
+    const bsDateBox = document.getElementById('BSDateBox');
+    if (bsDateBox && typeof AD2BS === 'function') {
+        const bsComponents = getBSDateComponents(currentADDate);
+        const bsDateString = `${bsComponents.year}-${String(bsComponents.month).padStart(2, '0')}-${String(bsComponents.day).padStart(2, '0')}`;
+        bsDateBox.textContent = `BS: ${bsDateString}`;
+    }
+}
+
+// Decrease date by one day
+function decreaseDate() {
+    currentADDate.setDate(currentADDate.getDate() - 1);
+    updateDates();
+}
+
+// Increase date by one day
+function increaseDate() {
+    currentADDate.setDate(currentADDate.getDate() + 1);
+    updateDates();
+}
+
+// Go back to today's date
+function goToToday() {
+    currentADDate = new Date();
+    updateDates();
+}
+
+// Initialize dates
+function initializeDates() {
+    // Set current date to today
+    currentADDate = new Date();
+    updateDates();
+}
+
+// -------------------- CALENDAR FUNCTIONS --------------------
+
+// Create AD Calendar Popup
+function openADCalendar() {
+    // Remove existing calendar if any
+    const existingCal = document.getElementById('adCalendarPopup');
+    if (existingCal) {
+        existingCal.remove();
+        adCalendarVisible = false;
+        return;
+    }
+    
+    adCalendarVisible = true;
+    
+    const popup = document.createElement('div');
+    popup.id = 'adCalendarPopup';
+    popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 2px solid #333;
+        border-radius: 10px;
+        padding: 20px;
+        z-index: 10000;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        min-width: 300px;
+        background: #fff;
+    `;
+    
+    // Prevent clicks inside popup from closing it
+    popup.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    renderADCalendar(popup);
+    document.body.appendChild(popup);
+}
+
+// Render AD Calendar
+function renderADCalendar(popup) {
+    const year = currentADDate.getFullYear();
+    const month = currentADDate.getMonth();
+    
+    let html = `
+        <div style="text-align: center; margin-bottom: 15px;">
+            <button onclick="event.stopPropagation(); changeADMonth(-1);" style="padding: 5px 15px; margin: 0 10px; cursor: pointer; font-size: 18px;">&lt;</button>
+            <span style="font-size: 20px; font-weight: bold;">${ENGLISH_MONTHS[month]} ${year}</span>
+            <button onclick="event.stopPropagation(); changeADMonth(1);" style="padding: 5px 15px; margin: 0 10px; cursor: pointer; font-size: 18px;">&gt;</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
+    `;
+    
+    // Day headers
+    const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayHeaders.forEach((day, index) => {
+        const isWeekend = (index === 0 || index === 6);
+        html += `<div style="font-weight: bold; padding: 5px; color: ${isWeekend ? '#dc3545' : '#333'};">${day}</div>`;
+    });
+    
+    // Get first day of month and days in month
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+        html += `<div></div>`;
+    }
+    
+    // Days
+    const today = new Date();
+    for (let i = 1; i <= daysInMonth; i++) {
+        const dateObj = new Date(year, month, i);
+        const dayOfWeek = dateObj.getDay();
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const isToday = (year === today.getFullYear() && month === today.getMonth() && i === today.getDate());
+        const isSelected = (year === currentADDate.getFullYear() && month === currentADDate.getMonth() && i === currentADDate.getDate());
+        html += `
+            <div onclick="event.stopPropagation(); selectADDate(${year}, ${month}, ${i})" 
+                 style="padding: 8px; cursor: pointer; border-radius: 5px;
+                        ${isSelected ? 'background: #007bff; color: white;' : ''}
+                        ${isToday && !isSelected ? 'border: 2px solid #007bff;' : ''}
+                        ${!isSelected ? 'hover:background: #f0f0f0;' : ''}
+                        ${!isSelected && isWeekend ? 'color: #dc3545;' : ''}
+                        ${!isSelected && !isWeekend ? 'color: #333;' : ''}">
+                ${i}
+            </div>
+        `;
+    }
+    
+    html += `</div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button onclick="event.stopPropagation(); closeADCalendar();" style="padding: 8px 20px; cursor: pointer; background: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px;">Close</button>
+        </div>
+    `;
+    
+    popup.innerHTML = html;
+}
+
+// Change AD month in calendar
+function changeADMonth(delta) {
+    const newDate = new Date(currentADDate);
+    newDate.setMonth(newDate.getMonth() + delta);
+    currentADDate = newDate;
+    updateDates();
+    
+    // Re-render the calendar
+    const popup = document.getElementById('adCalendarPopup');
+    if (popup) {
+        renderADCalendar(popup);
+    }
+}
+
+// Select AD date from calendar
+function selectADDate(year, month, day) {
+    currentADDate = new Date(year, month, day);
+    updateDates();
+    closeADCalendar();
+}
+
+// Close AD calendar
+function closeADCalendar() {
+    const popup = document.getElementById('adCalendarPopup');
+    if (popup) {
+        popup.remove();
+        adCalendarVisible = false;
+    }
+}
+
+// Create BS Calendar Popup
+function openBSCalendar() {
+    // Remove existing calendar if any
+    const existingCal = document.getElementById('bsCalendarPopup');
+    if (existingCal) {
+        existingCal.remove();
+        bsCalendarVisible = false;
+        return;
+    }
+    
+    bsCalendarVisible = true;
+    
+    const popup = document.createElement('div');
+    popup.id = 'bsCalendarPopup';
+    popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 2px solid #333;
+        border-radius: 10px;
+        padding: 20px;
+        z-index: 10000;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        min-width: 300px;
+        background: #fff;
+    `;
+    
+    // Prevent clicks inside popup from closing it
+    popup.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    renderBSCalendar(popup);
+    document.body.appendChild(popup);
+}
+
+// Render BS Calendar
+function renderBSCalendar(popup) {
+    const bsComponents = getBSDateComponents(currentADDate);
+    const bsYear = bsComponents.year;
+    const bsMonth = bsComponents.month;
+    
+    // Get days in BS month
+    const yearData = NEPALI_CALENDAR_DATA.find(data => data[0] === bsYear);
+    const daysInMonth = yearData ? yearData[bsMonth] : 30;
+    
+    // Get the day of week for the first day of the BS month
+    const firstDayComponents = getBSDateComponentsForMonth(bsYear, bsMonth);
+    const firstDayOfWeek = firstDayComponents.dayOfWeek;
+    
+    let html = `
+        <div style="text-align: center; margin-bottom: 15px;">
+            <button onclick="event.stopPropagation(); changeBSMonth(-1);" style="padding: 5px 15px; margin: 0 10px; cursor: pointer; font-size: 18px;">&lt;</button>
+            <span style="font-size: 20px; font-weight: bold;">${NEPALI_MONTHS[bsMonth - 1]} ${bsYear}</span>
+            <button onclick="event.stopPropagation(); changeBSMonth(1);" style="padding: 5px 15px; margin: 0 10px; cursor: pointer; font-size: 18px;">&gt;</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
+    `;
+    
+    // Day headers in Nepali with weekend days in red
+    const bsDayHeaders = ['आइत', 'सोम', 'मंगल', 'बुध', 'बिही', 'शुक्र', 'शनि'];
+    bsDayHeaders.forEach((day, index) => {
+        // Sunday (index 0) and Saturday (index 6) are weekends
+        const isWeekend = (index === 0 || index === 6);
+        html += `<div style="font-weight: bold; padding: 5px; color: ${isWeekend ? '#dc3545' : '#333'};">${day}</div>`;
+    });
+    
+    // Empty cells before first day
+    for (let i = 0; i < firstDayOfWeek; i++) {
+        html += `<div></div>`;
+    }
+    
+    // Days
+    const currentDay = bsComponents.day;
+    for (let i = 1; i <= daysInMonth; i++) {
+        // Calculate day of week for this specific day
+        const dayOfWeek = (firstDayOfWeek + i - 1) % 7;
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const isSelected = (i === currentDay);
+        html += `
+            <div onclick="event.stopPropagation(); selectBSDate(${bsYear}, ${bsMonth}, ${i})" 
+                 style="padding: 8px; cursor: pointer; border-radius: 5px;
+                        ${isSelected ? 'background: #28a745; color: white;' : ''}
+                        ${!isSelected && isWeekend ? 'color: #dc3545;' : ''}
+                        ${!isSelected && !isWeekend ? 'color: #333;' : ''}
+                        ${!isSelected ? 'hover:background: #f0f0f0;' : ''}">
+                ${i}
+            </div>
+        `;
+    }
+    
+    html += `</div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button onclick="event.stopPropagation(); closeBSCalendar();" style="padding: 8px 20px; cursor: pointer; background: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px;">Close</button>
+        </div>
+    `;
+    
+    popup.innerHTML = html;
+}
+
+// Change BS month in calendar
+function changeBSMonth(delta) {
+    const bsComponents = getBSDateComponents(currentADDate);
+    let bsYear = bsComponents.year;
+    let bsMonth = bsComponents.month + delta;
+    
+    if (bsMonth > 12) {
+        bsMonth = 1;
+        bsYear++;
+    } else if (bsMonth < 1) {
+        bsMonth = 12;
+        bsYear--;
+    }
+    
+    // Convert BS to AD and update
+    const bsDateString = `${bsYear}-${String(bsMonth).padStart(2, '0')}-01`;
+    try {
+        // Use the existing BS2AD_YMD function
+        const adDateString = BS2AD_YMD(bsDateString);
+        const parts = adDateString.split('-').map(Number);
+        currentADDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        updateDates();
+        
+        // Re-render the calendar
+        const popup = document.getElementById('bsCalendarPopup');
+        if (popup) {
+            renderBSCalendar(popup);
+        }
+    } catch (e) {
+        console.error('Error changing BS month:', e);
+    }
+}
+
+// Select BS date from calendar
+function selectBSDate(year, month, day) {
+    const bsDateString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    try {
+        // Use the existing BS2AD_YMD function
+        const adDateString = BS2AD_YMD(bsDateString);
+        const parts = adDateString.split('-').map(Number);
+        currentADDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        updateDates();
+        closeBSCalendar();
+    } catch (e) {
+        console.error('Error selecting BS date:', e);
+    }
+}
+
+// Close BS calendar
+function closeBSCalendar() {
+    const popup = document.getElementById('bsCalendarPopup');
+    if (popup) {
+        popup.remove();
+        bsCalendarVisible = false;
+    }
+}
+
+// Close calendars when clicking outside
+document.addEventListener('click', function(e) {
+    const adPopup = document.getElementById('adCalendarPopup');
+    const bsPopup = document.getElementById('bsCalendarPopup');
+    
+    if (adPopup && !adPopup.contains(e.target) && e.target.id !== 'ADDateBox') {
+        if (!e.target.closest('#adCalendarPopup')) {
+            adPopup.remove();
+            adCalendarVisible = false;
+        }
+    }
+    if (bsPopup && !bsPopup.contains(e.target) && e.target.id !== 'BSDateBox') {
+        if (!e.target.closest('#bsCalendarPopup')) {
+            bsPopup.remove();
+            bsCalendarVisible = false;
+        }
+    }
+});
+
+// -------------------- ADMIN TOOLS DROPDOWN -----------------------
 const adminToolsSelect = document.getElementById("AdminToolsSelect");
 if (adminToolsSelect) {
     adminToolsSelect.addEventListener("change", async function () {
@@ -675,278 +971,2040 @@ async function loadDynamicLogoAndFavicon() {
         console.error("Unexpected error setting up branding layout:", error);
     }
 }
+
+async function loadClasses() {
+    const select = document.getElementById("AttendanceClassSelec");
+    select.innerHTML = `<option value="" disabled selected>Select Class</option>`;
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from("ClassTable")
+            .select("ClassName")
+            .order("SortOrder");
+            
+        if (error) {
+            console.error('Error loading classes:', error);
+            select.innerHTML = `<option value="" disabled selected>Error Loading Classes</option>`;
+            return;
+        }
+        
+        if (data && data.length > 0) {
+            data.forEach(row => {
+                const option = document.createElement("option");
+                option.value = row.ClassName;
+                option.textContent = row.ClassName;
+                select.appendChild(option);
+            });
+            
+            // Add change event listener
+            select.addEventListener('change', function() {
+                const selectedValue = this.value;
+                if (selectedValue && selectedValue !== '' && selectedValue !== 'Select Class' && selectedValue !== 'Error Loading Classes') {
+                    loadStudentsForAttendance(selectedValue);
+                } else {
+                    document.getElementById('AttendanceBox').innerHTML = '';
+                    currentClass = '';
+                }
+            });
+        } else {
+            select.innerHTML = `<option value="" disabled selected>No Classes Found</option>`;
+        }
+    } catch (error) {
+        console.error('Error in loadClasses:', error);
+        select.innerHTML = `<option value="" disabled selected>Error Loading Classes</option>`;
+    }
+}
+
+// DOM Content Loaded
 document.addEventListener("DOMContentLoaded", async () => {
     loadDynamicLogoAndFavicon();
     loadClasses();
+    initializeDates();
+    
+    // DateBox - Keep the existing code as is
+    const dateBox = document.getElementById('DateBox');
+    if (dateBox && typeof AD2BS === 'function') {
+        dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
+    }
+    
+    // Add click event listeners to date boxes
+    const adDateBox = document.getElementById('ADDateBox');
+    const bsDateBox = document.getElementById('BSDateBox');
+    
+    if (adDateBox) {
+        adDateBox.style.cursor = 'pointer';
+        adDateBox.addEventListener('click', openADCalendar);
+    }
+    if (bsDateBox) {
+        bsDateBox.style.cursor = 'pointer';
+        bsDateBox.addEventListener('click', openBSCalendar);
+    }
 });
 
+// Make functions globally available for onclick attributes
+window.decreaseDate = decreaseDate;
+window.increaseDate = increaseDate;
+window.goToToday = goToToday;
+window.openADCalendar = openADCalendar;
+window.openBSCalendar = openBSCalendar;
+window.changeADMonth = changeADMonth;
+window.changeBSMonth = changeBSMonth;
+window.selectADDate = selectADDate;
+window.selectBSDate = selectBSDate;
+window.closeADCalendar = closeADCalendar;
+window.closeBSCalendar = closeBSCalendar;
+
+// Add these global variables at the top of your script section
+let currentAttendanceMode = 'byName'; 
+let currentStudents = [];
+let currentClass = '';
+let hasAttendanceChanged = false;
+
+function takeAttendanceByName() {
+    setActiveButton('btnByName');
+    console.log("Taking attendance by names...");
+}
+
+function takeAttendanceByRollNumber() {
+    setActiveButton('btnByRollNumber');
+    console.log("Taking attendance by roll numbers...");
+}
+
+function showAttendance() {
+    setActiveButton('btnShowAttendance');
+    
+}
+
+function setActiveButton(activeId) {
+    const targetIds = ['btnByName', 'btnByRollNumber', 'btnShowAttendance'];
+    
+    targetIds.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.classList.remove('SelectedClasses');
+            btn.blur(); 
+        }
+    });        
+    
+    const activeBtn = document.getElementById(activeId);
+    if (activeBtn) {
+        activeBtn.classList.add('SelectedClasses');
+    } else {
+        console.error("Could not find button with ID: " + activeId);
+    }
+}
+
+// -------------------- ATTENDANCE FUNCTIONS --------------------
+// Load students when class is selected
+async function loadStudentsForAttendance(className) {
+    if (!className || className === 'Select Class' || className === '') {
+        document.getElementById('AttendanceBox').innerHTML = '';
+        return;
+    }
+    
+    currentClass = className;
+    
+    try {
+        // First get the ClassID from ClassTable
+        const { data: classData, error: classError } = await supabaseClient
+            .from('ClassTable')
+            .select('id')
+            .eq('ClassName', className)
+            .maybeSingle();
+            
+        if (classError) {
+            console.error('Error fetching class ID:', classError);
+            alert('Error loading class. Please try again.');
+            return;
+        }
+        
+        if (!classData) {
+            console.error('Class not found:', className);
+            alert(`Class "${className}" not found. Please check your class data.`);
+            return;
+        }
+        
+        // Then get students from StudentDataTable including id
+        const { data: students, error: studentError } = await supabaseClient
+            .from('StudentDataTable')
+            .select('id, RollNo, StudentName')
+            .eq('ClassID', classData.id)
+            .order('RollNo');
+            
+        if (studentError) {
+            console.error('Error fetching students:', studentError);
+            alert('Error loading students. Please try again.');
+            return;
+        }
+        
+        currentStudents = students || [];
+        renderAttendanceMode();
+        
+    } catch (error) {
+        console.error('Error loading students:', error);
+        alert('Error loading data. Please refresh and try again.');
+    }
+}
+
+// Render attendance based on current mode
+function renderAttendanceMode() {
+    const attendanceBox = document.getElementById('AttendanceBox');
+    
+    if (currentAttendanceMode === 'byName') {
+        renderByName(attendanceBox);
+    } else {
+        renderByRollNumber(attendanceBox);
+    }
+}
+
+// Render "By Names" mode with Present and Leave checkboxes
+function renderByName(container) {
+    if (!currentStudents || currentStudents.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No students found in this class</div>';
+        return;
+    }
+    
+    let html = `
+        <div style="display: grid; grid-template-columns: 60px 80px 1fr 80px 80px; gap: 5px; padding: 10px; border-bottom: 2px solid #333; font-weight: bold; background: #f0f0f0; position: sticky; top: 0; z-index: 10;">
+            <div>S.No.</div>
+            <div>Roll No.</div>
+            <div>Student Name</div>
+            <div style="text-align: center;">
+                <input type="checkbox" id="selectAllPresent" onchange="toggleAllPresent()" style="width: 16px; height: 16px; cursor: pointer;">
+                <div style="font-size: 11px;">Present</div>
+            </div>
+            <div style="text-align: center;">
+                <input type="checkbox" id="selectAllLeave" onchange="toggleAllLeave()" style="width: 16px; height: 16px; cursor: pointer;">
+                <div style="font-size: 11px;">Leave</div>
+            </div>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+    `;
+    
+    currentStudents.forEach((student, index) => {
+        html += `
+            <div style="display: grid; grid-template-columns: 60px 80px 1fr 80px 80px; gap: 5px; padding: 8px 10px; border-bottom: 1px solid #eee; ${index % 2 === 0 ? 'background: #f9f9f9;' : ''}">
+                <div style="display: flex; align-items: center;">${index + 1}</div>
+                <div style="display: flex; align-items: center;">${student.RollNo}</div>
+                <div style="display: flex; align-items: center;">${student.StudentName}</div>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <input type="checkbox" class="present-checkbox" data-roll="${student.RollNo}" 
+                           onchange="handlePresentCheck(this)" style="width: 20px; height: 20px; cursor: pointer;">
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <input type="checkbox" class="leave-checkbox" data-roll="${student.RollNo}" 
+                           onchange="handleLeaveCheck(this)" style="width: 20px; height: 20px; cursor: pointer;">
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `</div>`;
+    container.innerHTML = html;
+    
+    // Reset change flag when rendering
+    hasAttendanceChanged = false;
+    document.getElementById('btnSubmitAttendance').style.display = 'none';
+}
+
+// Toggle all Present checkboxes
+function toggleAllPresent() {
+    const selectAll = document.getElementById('selectAllPresent');
+    const checkboxes = document.querySelectorAll('.present-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+        // Uncheck Leave if Present is checked
+        if (selectAll.checked) {
+            const rollNo = checkbox.getAttribute('data-roll');
+            const leaveCheckbox = document.querySelector(`.leave-checkbox[data-roll="${rollNo}"]`);
+            if (leaveCheckbox) {
+                leaveCheckbox.checked = false;
+            }
+        }
+    });
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Update toggleAllLeave to track changes
+function toggleAllLeave() {
+    const selectAll = document.getElementById('selectAllLeave');
+    const checkboxes = document.querySelectorAll('.leave-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+        // Uncheck Present if Leave is checked
+        if (selectAll.checked) {
+            const rollNo = checkbox.getAttribute('data-roll');
+            const presentCheckbox = document.querySelector(`.present-checkbox[data-roll="${rollNo}"]`);
+            if (presentCheckbox) {
+                presentCheckbox.checked = false;
+            }
+        }
+    });
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Handle Present checkbox change (uncheck Leave if Present is checked)
+function handlePresentCheck(checkbox) {
+    const rollNo = checkbox.getAttribute('data-roll');
+    const leaveCheckbox = document.querySelector(`.leave-checkbox[data-roll="${rollNo}"]`);
+    if (checkbox.checked && leaveCheckbox) {
+        leaveCheckbox.checked = false;
+    }
+    // Update select all state
+    updateSelectAllState();
+    // Mark as changed and show submit button
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Handle Leave checkbox change (uncheck Present if Leave is checked)
+function handleLeaveCheck(checkbox) {
+    const rollNo = checkbox.getAttribute('data-roll');
+    const presentCheckbox = document.querySelector(`.present-checkbox[data-roll="${rollNo}"]`);
+    if (checkbox.checked && presentCheckbox) {
+        presentCheckbox.checked = false;
+    }
+    // Update select all state
+    updateSelectAllState();
+    // Mark as changed and show submit button
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Update select all checkboxes state
+function updateSelectAllState() {
+    const presentCheckboxes = document.querySelectorAll('.present-checkbox');
+    const leaveCheckboxes = document.querySelectorAll('.leave-checkbox');
+    const selectAllPresent = document.getElementById('selectAllPresent');
+    const selectAllLeave = document.getElementById('selectAllLeave');
+    
+    if (selectAllPresent && presentCheckboxes.length > 0) {
+        const allChecked = Array.from(presentCheckboxes).every(cb => cb.checked);
+        selectAllPresent.checked = allChecked;
+    }
+    
+    if (selectAllLeave && leaveCheckboxes.length > 0) {
+        const allChecked = Array.from(leaveCheckboxes).every(cb => cb.checked);
+        selectAllLeave.checked = allChecked;
+    }
+}
+
+// Render "By Roll Numbers" mode with individual inputs
+function renderByRollNumber(container) {
+    if (!currentStudents || currentStudents.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No students found in this class</div>';
+        return;
+    }
+    
+    // Create a set of all roll numbers
+    const allRolls = new Set(currentStudents.map(s => s.RollNo));
+    
+    let html = `
+        <div style="display: flex; flex-direction: column; gap: 15px; padding: 10px;">
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <input type="checkbox" id="selectAllPresentRolls" onchange="toggleAllPresentRolls()" style="width: 18px; height: 18px; cursor: pointer;">
+                        <div style="font-weight: bold; color: #28a745;">Present Roll Numbers</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 2px solid #28a745; border-radius: 5px; min-height: 60px; background: #f8fff8;" id="presentInputContainer">
+                        <div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number below to mark as Present</div>
+                    </div>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <input type="checkbox" id="selectAllLeaveRolls" onchange="toggleAllLeaveRolls()" style="width: 18px; height: 18px; cursor: pointer;">
+                        <div style="font-weight: bold; color: #dc3545;">Leave Roll Numbers</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 2px solid #dc3545; border-radius: 5px; min-height: 60px; background: #fff8f8;" id="leaveInputContainer">
+                        <div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number in Available with right-click or use the buttons below</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: bold; color: #666; margin-bottom: 8px;">Available Roll Numbers</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #f0f0f0; border-radius: 5px; min-height: 40px; border: 1px solid #ccc;" id="availableRollsContainer">
+    `;
+    
+    // Show available roll numbers as clickable chips with both click and right-click
+    allRolls.forEach(roll => {
+        html += `
+            <span class="roll-chip" data-roll="${roll}" 
+                  style="display: inline-block; padding: 5px 15px; background: #e9ecef; border-radius: 15px; font-size: 14px; color: #333; border: 1px solid #ccc; cursor: pointer; transition: all 0.2s; position: relative;"
+                  onclick="handleRollClick(${roll})"
+                  oncontextmenu="handleRollRightClick(event, ${roll})"
+                  onmouseover="this.style.background='#d4d8dd'"
+                  onmouseout="this.style.background='#e9ecef'"
+                  title="Left-click: Present | Right-click: Leave">
+                ${roll}
+                <span style="font-size: 10px; margin-left: 5px; color: #666;">(L/R)</span>
+            </span>
+        `;
+    });
+    
+    html += `
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 5px; display: flex; gap: 20px; flex-wrap: wrap;">
+                    <span><span style="color: #28a745; font-weight: bold;">●</span> Left-click = Present</span>
+                    <span><span style="color: #dc3545; font-weight: bold;">●</span> Right-click = Leave</span>
+                    <span><span style="color: #666; font-weight: bold;">●</span> Click on chip in Present/Leave to remove</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Reset change flag when rendering
+    hasAttendanceChanged = false;
+    document.getElementById('btnSubmitAttendance').style.display = 'none';
+}
+
+// Handle left click on roll number - add to Present
+function handleRollClick(roll) {
+    addRollToPresent(roll);
+}
+
+// Handle right click on roll number - add to Leave
+function handleRollRightClick(event, roll) {
+    event.preventDefault(); // Prevent context menu
+    addRollToLeave(roll);
+    return false;
+}
+
+// Handle double click on roll number - add to Leave
+function handleRollDoubleClick(roll) {
+    addRollToLeave(roll);
+}
+
+// Toggle all Present roll numbers
+function toggleAllPresentRolls() {
+    const selectAll = document.getElementById('selectAllPresentRolls');
+    if (!selectAll) return;
+    
+    const container = document.getElementById('presentInputContainer');
+    if (!container) return;
+    
+    if (selectAll.checked) {
+        // Get all available roll numbers that are visible
+        const availableChips = document.querySelectorAll('.roll-chip:not([style*="display: none"])');
+        availableChips.forEach(chip => {
+            const roll = parseInt(chip.getAttribute('data-roll'));
+            addRollToPresent(roll);
+        });
+    } else {
+        // Remove all from Present
+        const presentChips = container.querySelectorAll('[data-roll]');
+        presentChips.forEach(chip => {
+            const roll = parseInt(chip.getAttribute('data-roll'));
+            removeFromPresent(roll);
+        });
+    }
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Update toggleAllLeaveRolls to track changes
+function toggleAllLeaveRolls() {
+    const selectAll = document.getElementById('selectAllLeaveRolls');
+    if (!selectAll) return;
+    
+    const container = document.getElementById('leaveInputContainer');
+    if (!container) return;
+    
+    if (selectAll.checked) {
+        // Get all available roll numbers that are visible
+        const availableChips = document.querySelectorAll('.roll-chip:not([style*="display: none"])');
+        availableChips.forEach(chip => {
+            const roll = parseInt(chip.getAttribute('data-roll'));
+            addRollToLeave(roll);
+        });
+    } else {
+        // Remove all from Leave
+        const leaveChips = container.querySelectorAll('[data-roll]');
+        leaveChips.forEach(chip => {
+            const roll = parseInt(chip.getAttribute('data-roll'));
+            removeFromLeave(roll);
+        });
+    }
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Add roll number to Present
+function addRollToPresent(roll) {
+    // Remove from available list
+    removeFromAvailable(roll);
+    // Remove from Leave if present
+    removeFromLeave(roll);
+    // Add to Present
+    addToPresent(roll);
+    updateAvailableRolls();
+    updateSelectAllRollsState();
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Update addRollToLeave to track changes
+function addRollToLeave(roll) {
+    // Remove from available list
+    removeFromAvailable(roll);
+    // Remove from Present if present
+    removeFromPresent(roll);
+    // Add to Leave
+    addToLeave(roll);
+    updateAvailableRolls();
+    updateSelectAllRollsState();
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Remove roll from Present
+function removeFromPresent(roll) {
+    const container = document.getElementById('presentInputContainer');
+    if (!container) return;
+    
+    const chip = container.querySelector(`[data-roll="${roll}"]`);
+    if (chip) {
+        chip.remove();
+    }
+    
+    // If container is empty, show placeholder
+    if (container.children.length === 0) {
+        container.innerHTML = '<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number below to mark as Present</div>';
+    }
+    
+    // Add back to available list
+    addToAvailable(roll);
+    updateAvailableRolls();
+    updateSelectAllRollsState();
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Update removeFromLeave to track changes
+function removeFromLeave(roll) {
+    const container = document.getElementById('leaveInputContainer');
+    if (!container) return;
+    
+    const chip = container.querySelector(`[data-roll="${roll}"]`);
+    if (chip) {
+        chip.remove();
+    }
+    
+    // If container is empty, show placeholder
+    if (container.children.length === 0) {
+        container.innerHTML = '<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number in Available with right-click or use the buttons below</div>';
+    }
+    
+    // Add back to available list
+    addToAvailable(roll);
+    updateAvailableRolls();
+    updateSelectAllRollsState();
+    hasAttendanceChanged = true;
+    document.getElementById('btnSubmitAttendance').style.display = 'block';
+}
+
+// Update select all checkboxes state
+function updateSelectAllRollsState() {
+    const presentContainer = document.getElementById('presentInputContainer');
+    const leaveContainer = document.getElementById('leaveInputContainer');
+    const selectAllPresent = document.getElementById('selectAllPresentRolls');
+    const selectAllLeave = document.getElementById('selectAllLeaveRolls');
+    
+    // Get visible available chips
+    const availableChips = document.querySelectorAll('.roll-chip:not([style*="display: none"])');
+    
+    if (selectAllPresent && presentContainer) {
+        const presentChips = presentContainer.querySelectorAll('[data-roll]');
+        selectAllPresent.checked = (availableChips.length === 0 && presentChips.length > 0);
+    }
+    
+    if (selectAllLeave && leaveContainer) {
+        const leaveChips = leaveContainer.querySelectorAll('[data-roll]');
+        selectAllLeave.checked = (availableChips.length === 0 && leaveChips.length > 0);
+    }
+}
+
+// Add roll to Present container
+function addToPresent(roll) {
+    const container = document.getElementById('presentInputContainer');
+    if (!container) return;
+    
+    // Remove the placeholder if it exists
+    if (container.children.length === 1) {
+        const firstChild = container.children[0];
+        if (firstChild && firstChild.textContent && firstChild.textContent.includes('Click on a roll number')) {
+            container.innerHTML = '';
+        }
+    }
+    
+    // Check if roll already exists in Present
+    const existing = container.querySelector(`[data-roll="${roll}"]`);
+    if (existing) return;
+    
+    const chip = document.createElement('span');
+    chip.setAttribute('data-roll', roll);
+    chip.className = 'present-chip';
+    chip.style.cssText = `
+        display: inline-block; 
+        padding: 5px 15px; 
+        background: #28a745; 
+        color: white; 
+        border-radius: 15px; 
+        font-size: 14px; 
+        border: 1px solid #1e7e34; 
+        cursor: pointer; 
+        transition: all 0.2s;
+    `;
+    chip.textContent = roll;
+    chip.onclick = function() { removeFromPresent(roll); };
+    chip.onmouseover = function() { this.style.background='#1e7e34'; };
+    chip.onmouseout = function() { this.style.background='#28a745'; };
+    chip.title = 'Click to remove from Present';
+    
+    container.appendChild(chip);
+}
+
+// Add roll to Leave container
+function addToLeave(roll) {
+    const container = document.getElementById('leaveInputContainer');
+    if (!container) return;
+    
+    // Remove the placeholder if it exists
+    if (container.children.length === 1) {
+        const firstChild = container.children[0];
+        if (firstChild && firstChild.textContent && firstChild.textContent.includes('Click on a roll number in Available')) {
+            container.innerHTML = '';
+        }
+    }
+    
+    // Check if roll already exists in Leave
+    const existing = container.querySelector(`[data-roll="${roll}"]`);
+    if (existing) return;
+    
+    const chip = document.createElement('span');
+    chip.setAttribute('data-roll', roll);
+    chip.className = 'leave-chip';
+    chip.style.cssText = `
+        display: inline-block; 
+        padding: 5px 15px; 
+        background: #dc3545; 
+        color: white; 
+        border-radius: 15px; 
+        font-size: 14px; 
+        border: 1px solid #bd2130; 
+        cursor: pointer; 
+        transition: all 0.2s;
+    `;
+    chip.textContent = roll;
+    chip.onclick = function() { removeFromLeave(roll); };
+    chip.onmouseover = function() { this.style.background='#bd2130'; };
+    chip.onmouseout = function() { this.style.background='#dc3545'; };
+    chip.title = 'Click to remove from Leave';
+    
+    container.appendChild(chip);
+}
+
+// Add roll back to Available list
+function addToAvailable(roll) {
+    const container = document.getElementById('availableRollsContainer');
+    if (!container) return;
+    
+    // Check if roll already exists in Available (not hidden)
+    const existing = container.querySelector(`.roll-chip[data-roll="${roll}"]`);
+    if (existing) {
+        existing.style.display = 'inline-block';
+        return;
+    }
+    
+    // Create new chip if it doesn't exist
+    const chip = document.createElement('span');
+    chip.setAttribute('data-roll', roll);
+    chip.className = 'roll-chip';
+    chip.style.cssText = `
+        display: inline-block; 
+        padding: 5px 15px; 
+        background: #e9ecef; 
+        border-radius: 15px; 
+        font-size: 14px; 
+        color: #333; 
+        border: 1px solid #ccc; 
+        cursor: pointer; 
+        transition: all 0.2s;
+        position: relative;
+    `;
+    chip.innerHTML = `${roll} <span style="font-size: 10px; margin-left: 5px; color: #666;">(L/R)</span>`;
+    chip.onclick = function() { handleRollClick(roll); };
+    chip.oncontextmenu = function(event) { handleRollRightClick(event, roll); };
+    chip.onmouseover = function() { this.style.background='#d4d8dd'; };
+    chip.onmouseout = function() { this.style.background='#e9ecef'; };
+    chip.title = 'Left-click: Present | Right-click: Leave';
+    
+    container.appendChild(chip);
+}
+
+// Remove roll from available list
+function removeFromAvailable(roll) {
+    const container = document.getElementById('availableRollsContainer');
+    if (!container) return;
+    
+    const chip = container.querySelector(`.roll-chip[data-roll="${roll}"]`);
+    if (chip) {
+        chip.style.display = 'none';
+    }
+}
+
+// Update available rolls visibility
+function updateAvailableRolls() {
+    const container = document.getElementById('availableRollsContainer');
+    if (!container) return;
+    
+    const chips = container.querySelectorAll('.roll-chip');
+    chips.forEach(chip => {
+        const roll = parseInt(chip.getAttribute('data-roll'));
+        const presentContainer = document.getElementById('presentInputContainer');
+        const leaveContainer = document.getElementById('leaveInputContainer');
+        
+        const inPresent = presentContainer && presentContainer.querySelector(`[data-roll="${roll}"]`);
+        const inLeave = leaveContainer && leaveContainer.querySelector(`[data-roll="${roll}"]`);
+        
+        if (inPresent || inLeave) {
+            chip.style.display = 'none';
+        } else {
+            chip.style.display = 'inline-block';
+        }
+    });
+}
+
+// Switch to "By Names" mode
+function takeAttendanceByName() {
+    currentAttendanceMode = 'byName';
+    
+    // Update button styles
+    document.getElementById('btnByName').classList.add('SelectedClasses');
+    document.getElementById('btnByRollNumber').classList.remove('SelectedClasses');
+    document.getElementById('btnShowAttendance').classList.remove('SelectedClasses');
+    renderAttendanceMode();
+}
+
+// Switch to "By Roll Numbers" mode
+function takeAttendanceByRollNumber() {
+    currentAttendanceMode = 'byRollNumber';
+    
+    // Update button styles
+    document.getElementById('btnByRollNumber').classList.add('SelectedClasses');
+    document.getElementById('btnByName').classList.remove('SelectedClasses');
+    document.getElementById('btnShowAttendance').classList.remove('SelectedClasses');
+    renderAttendanceMode();
+}
+
+// Submit attendance
+function submitAttendance() {
+    if (!currentClass || currentStudents.length === 0) {
+        alert('Please select a class first.');
+        return;
+    }
+    
+    let attendanceData = [];
+    const currentDate = formatADDate(currentADDate);
+    const bsComponents = getBSDateComponents(currentADDate);
+    const bsDate = `${bsComponents.year}-${String(bsComponents.month).padStart(2, '0')}-${String(bsComponents.day).padStart(2, '0')}`;
+    
+    if (currentAttendanceMode === 'byName') {
+        // Get all checkboxes
+        const presentCheckboxes = document.querySelectorAll('.present-checkbox:checked');
+        const leaveCheckboxes = document.querySelectorAll('.leave-checkbox:checked');
+        
+        const presentRolls = new Set();
+        const leaveRolls = new Set();
+        
+        presentCheckboxes.forEach(cb => {
+            presentRolls.add(parseInt(cb.getAttribute('data-roll')));
+        });
+        
+        leaveCheckboxes.forEach(cb => {
+            leaveRolls.add(parseInt(cb.getAttribute('data-roll')));
+        });
+        
+        // Check for conflicts
+        let hasConflict = false;
+        presentRolls.forEach(roll => {
+            if (leaveRolls.has(roll)) {
+                hasConflict = true;
+                const student = currentStudents.find(s => s.RollNo === roll);
+                alert(`Conflict: Student "${student ? student.StudentName : roll}" is marked both Present and Leave.`);
+            }
+        });
+        
+        if (hasConflict) return;
+        
+        // Build attendance data
+        currentStudents.forEach(student => {
+            const roll = student.RollNo;
+            let status = 'absent';
+            if (presentRolls.has(roll)) {
+                status = 'present';
+            } else if (leaveRolls.has(roll)) {
+                status = 'leave';
+            }
+            
+            attendanceData.push({
+                rollNo: roll,
+                name: student.StudentName,
+                status: status
+            });
+        });
+        
+    } else {
+        // By Roll Numbers - get from containers
+        const presentContainer = document.getElementById('presentInputContainer');
+        const leaveContainer = document.getElementById('leaveInputContainer');
+        
+        if (!presentContainer || !leaveContainer) {
+            alert('Please switch to "By Names" mode and try again.');
+            return;
+        }
+        
+        // Get roll numbers from chips
+        const presentRolls = new Set();
+        const leaveRolls = new Set();
+        
+        presentContainer.querySelectorAll('[data-roll]').forEach(chip => {
+            presentRolls.add(parseInt(chip.getAttribute('data-roll')));
+        });
+        
+        leaveContainer.querySelectorAll('[data-roll]').forEach(chip => {
+            leaveRolls.add(parseInt(chip.getAttribute('data-roll')));
+        });
+        
+        // Check for conflicts
+        let hasConflict = false;
+        presentRolls.forEach(roll => {
+            if (leaveRolls.has(roll)) {
+                hasConflict = true;
+                alert(`Conflict: Roll number ${roll} is marked both Present and Leave.`);
+            }
+        });
+        
+        if (hasConflict) return;
+        
+        // Build attendance data
+        currentStudents.forEach(student => {
+            const roll = student.RollNo;
+            let status = 'absent';
+            if (presentRolls.has(roll)) {
+                status = 'present';
+            } else if (leaveRolls.has(roll)) {
+                status = 'leave';
+            }
+            
+            attendanceData.push({
+                rollNo: roll,
+                name: student.StudentName,
+                status: status
+            });
+        });
+    }
+    
+    // Get ClassID for the current class
+    getClassID(currentClass).then(async (classID) => {
+        if (!classID) {
+            alert('Error: Could not find class ID.');
+            return;
+        }
+        
+        // Prepare data for Supabase
+        const records = [];
+        attendanceData.forEach(item => {
+            // Find student ID from StudentDataTable
+            const student = currentStudents.find(s => s.RollNo === item.rollNo);
+            if (student) {
+                records.push({
+                    ClassID: classID,
+                    StudentID: student.id || null,
+                    ADDate: currentDate,
+                    BSDate: bsDate,
+                    ClassName: currentClass,
+                    RollNumber: item.rollNo,
+                    StudentName: item.name,
+                    AttendanceStatus: item.status
+                });
+            }
+        });
+        
+        if (records.length === 0) {
+            alert('No attendance records to submit.');
+            return;
+        }
+        
+        try {
+            // Submit to Supabase
+            const { data, error } = await supabaseClient
+                .from('StudentAttendanceTable')
+                .insert(records);
+            
+            if (error) {
+                console.error('Error submitting attendance:', error);
+                alert('Error submitting attendance: ' + error.message);
+                return;
+            }
+            
+            // Success
+            const presentCount = attendanceData.filter(a => a.status === 'present').length;
+            const leaveCount = attendanceData.filter(a => a.status === 'leave').length;
+            const absentCount = attendanceData.filter(a => a.status === 'absent').length;
+            const totalCount = attendanceData.length;
+            
+            alert(`✅ Attendance submitted successfully!\n\nClass: ${currentClass}\nDate: ${currentDate}\nBS Date: ${bsDate}\n\nPresent: ${presentCount}\nLeave: ${leaveCount}\nAbsent: ${absentCount}\nTotal: ${totalCount}`);
+            
+            // Hide submit button after successful submission
+            document.getElementById('btnSubmitAttendance').style.display = 'none';
+            hasAttendanceChanged = false;
+            
+            // Refresh the attendance view to reset all selections
+            renderAttendanceMode();
+            
+        } catch (error) {
+            console.error('Error submitting attendance:', error);
+            alert('Error submitting attendance: ' + error.message);
+        }
+    });
+}
+
+// Helper function to get ClassID from ClassTable
+async function getClassID(className) {
+    // Validate className
+    if (!className || className === '' || className === 'Select Class' || className === 'No Classes Found') {
+        console.error('Invalid class name provided:', className);
+        return null;
+    }
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from('ClassTable')
+            .select('id')
+            .eq('ClassName', className)
+            .maybeSingle();
+            
+        if (error) {
+            console.error('Error fetching class ID:', error);
+            return null;
+        }
+        
+        if (!data) {
+            console.error('Class not found:', className);
+            return null;
+        }
+        
+        return data.id;
+    } catch (error) {
+        console.error('Error in getClassID:', error);
+        return null;
+    }
+}
+
+// Toggle all students (for By Names mode - compatibility)
+function toggleAllStudents() {
+    // This is handled by toggleAllPresent and toggleAllLeave
+    console.log('toggleAllStudents called - use toggleAllPresent or toggleAllLeave instead');
+}
+
+// Update the loadClasses function to handle class selection
 async function loadClasses() {
-    const select = document.getElementById("AttendanceCardClassSelectionSelect");
-    select.innerHTML =
-        `<option disabled selected>Select Class</option>`;
+    const select = document.getElementById("AttendanceClassSelec");
+    select.innerHTML = `<option value="" disabled selected>Select Class</option>`;
+    
     const { data, error } = await supabaseClient
         .from("ClassTable")
         .select("ClassName")
         .order("SortOrder");
+        
     if (error) {
         console.error(error);
         alert(error.message);
         return;
     }
+    
     data.forEach(row => {
         const option = document.createElement("option");
         option.value = row.ClassName;
         option.textContent = row.ClassName;
         select.appendChild(option);
     });
+    
+    // Add change event listener
+    select.addEventListener('change', function() {
+        if (this.value) {
+            loadStudentsForAttendance(this.value);
+        } else {
+            document.getElementById('AttendanceBox').innerHTML = '';
+        }
+    });
 }
-document.getElementById("AttendanceCardClassSelectionSelect")
-.addEventListener("change",function(){
-    loadStudents(this.value);
+
+// Update the DOMContentLoaded event listener
+document.addEventListener("DOMContentLoaded", async () => {
+    loadDynamicLogoAndFavicon();
+    loadClasses();
+    initializeDates();
+    
+    // DateBox - Keep the existing code as is
+    const dateBox = document.getElementById('DateBox');
+    if (dateBox && typeof AD2BS === 'function') {
+        dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
+    }
+    
+    // Add click event listeners to date boxes
+    const adDateBox = document.getElementById('ADDateBox');
+    const bsDateBox = document.getElementById('BSDateBox');
+    
+    if (adDateBox) {
+        adDateBox.style.cursor = 'pointer';
+        adDateBox.addEventListener('click', openADCalendar);
+    }
+    if (bsDateBox) {
+        bsDateBox.style.cursor = 'pointer';
+        bsDateBox.addEventListener('click', openBSCalendar);
+    }
+    
+    // Set default mode
+    document.getElementById('btnByName').classList.add('SelectedClasses');
+    currentAttendanceMode = 'byName';
 });
 
-async function loadStudents(className) {
-    const box = document.getElementById("AttendanceCardStudentListBox");
-    box.innerHTML = "Loading...";
-    const { data: classRow, error: classError } = await supabaseClient
-        .from("ClassTable")
-        .select("id")
-        .eq("ClassName", className)
-        .single();
-    if (classError) {
-        console.error(classError);
-        box.innerHTML = "Unable to find class.";
-        return;
-    }
-    const { data: students, error: studentError } = await supabaseClient
-        .from("StudentDataTable")
-        .select(` RollNo, StudentName, StudentAddress, Contact, FatherName, MotherName `)
-        .eq("ClassID", classRow.id)
-        .order("RollNo");
-    if (studentError) {
-        console.error(studentError);
-        box.innerHTML = "Unable to load students.";
-        return;
-    }
-    let html = `
-    <div id="AttendanceTableBox">
-    <table id="AttendanceTable"
-    style="width:100%;border-collapse:collapse;background:#fff;">
-        <thead>
-            <tr style="background:#000;color:#fff;">
-                <th style="padding:12px;text-align:center;">
-                    <input type="checkbox" checked id="SelectAllStudents">
-                </th>
-                <th style="padding: clamp(0.4rem, 1vw, 2rem) 0;">Roll</th>
-                <th style="padding: clamp(0.4rem, 1vw, 2rem) 0;">Name</th>
-                <th style="padding: clamp(0.4rem, 1vw, 2rem) 0;">Address</th>
-                <th style="padding: clamp(0.4rem, 1vw, 2rem) 0;">Contact</th>
-                <th style="padding: clamp(0.4rem, 1vw, 2rem) 0;">Father</th>
-                <th style="padding: clamp(0.4rem, 1vw, 2rem) 0;">Mother</th>
-            </tr>
-        </thead>
-        <tbody>        
-    `;
-    students.forEach(student => {
-        html += `
-        <tr style="height:3vw;">
-            <td><input type="checkbox" class="AttendanceStudentCheck" checked data-student='${JSON.stringify(student)}'></td>
-            <td>${student.RollNo}</td>
-            <td>${student.StudentName}</td>
-            <td>${student.StudentAddress}</td>
-            <td>${student.Contact}</td>
-            <td>${student.FatherName}</td>
-            <td>${student.MotherName}</td>
-        </tr>
-        `;
-    });
-    html += `
-        </tbody>
-    </table>
-    </div>
-    <br>
-    <button id="btnCreateAttendanceCard">Create Attendance Card</button>
-    `;
-    box.innerHTML = html;
-    document.getElementById("btnCreateAttendanceCard").onclick = openAttendancePopup;
-    const selectAll = document.getElementById("SelectAllStudents");
-    selectAll.addEventListener("change", function () {
-        document.querySelectorAll(".AttendanceStudentCheck")
-            .forEach(cb => {
-                cb.checked = this.checked;
-            });
-    });    
-}
-document.getElementById("btnAttendanceCreate").onclick=createAttendanceCards;
-
-function openAttendancePopup(){
-    const selected=document.querySelectorAll(
-        ".AttendanceStudentCheck:checked"
-    );
-    if(selected.length===0){
-        alert("Please select at least one student.");
-        return;
-    }
-    document.getElementById("AttendancePopupOverlay").style.display="flex";
-}
-document.getElementById("btnAttendanceCancel")
-.onclick=function(){
-    document.getElementById(
-        "AttendancePopupOverlay"
-    ).style.display="none";
-};
-
-async function getSchoolInformation(){
-    const {data,error}=await supabaseClient
-        .from("AboutSchoolTable")
-        .select("Name,Value");
-    if(error){
-        console.error(error);
-        return null;
-    }
-    const school={};
-    data.forEach(item=>{
-        school[item.Name]=item.Value;
-    });
-    return school;
-}
-
-let AttendanceCards=[];
-let CurrentAttendanceCard=0;
-function buildAttendanceCard(student, school, year, motto, className, designation, livePrincipalName) {
-    const singleText = `${school.SchoolName || 'SCHOOL'}, ${school.SchoolAddress || 'ADDRESS'}`;
-    const rowRepeatedText = `${singleText} &nbsp;&nbsp;&bull;&nbsp;&nbsp; `.repeat(4);    
-    let watermarkHTML = '<div class="CardWatermark">';
-    for (let i = 0; i < 30; i++) {
-        watermarkHTML += `<div class="WatermarkRow">${rowRepeatedText}</div>`;
-    }
-    watermarkHTML += '</div>';
-    const visualPrincipalName = livePrincipalName || school.PrincipalName || school.principal_name || "Principal Name";
-    return `
-<div class="AttendanceCard">
-    ${watermarkHTML}
-    <div class="CardHeader">
-        <img class="CardLogo" src="${school.SchoolLogo || ''}" alt="Logo">
-        <div class="CardSchool">
-            <div class="CardSchoolName">${school.SchoolName || ''}</div>
-            <div class="CardSchoolAddress">${school.SchoolAddress || ''}</div>
-            <div class="CardTitle">ATTENDANCE CARD (${year})</div>
-        </div>
-    </div>
-    <div class="CardBody">
-        <div class="CardLeft">
-            <div><b>Name :</b> ${student.StudentName || ''}</div>
-            <div><b>Address :</b> ${student.StudentAddress || ''}</div>
-            <div><b>Contact :</b> ${student.Contact || ''}</div>
-            <div><b>Father :</b> ${student.FatherName || ''}</div>
-            <div><b>Mother :</b> ${student.MotherName || ''}</div>
-            <div><b>Class :</b> ${className || ''}</div>
-        </div>
-        <div class="CardRight">
-            <div class="RollBox">
-                <div class="RollNo">${student.RollNo || ''}</div>
-            </div>
-            <div class="SignatureBox">
-                <div class="SignatureDottedLine"></div>
-                <div class="PrincipalName">${visualPrincipalName}</div>
-                <div class="PrincipalTitle">${designation || 'Head Teacher'}</div>
-            </div>
-        </div>
-    </div>
-    <div class="CardFooter">${motto || ''}</div>
-</div>
-`;
-}
-
-async function createAttendanceCards(){
-    const year = document.getElementById("AttendanceYear").value.trim();
-    const motto = document.getElementById("AttendanceMotto").value.trim();
-    const designation = document.getElementById("AttendanceDesignation").value.trim();
-    const className = document.getElementById("AttendanceCardClassSelectionSelect").selectedOptions[0].text;    
-    const school = await getSchoolInformation();
-    if(!school) return;    
-    let livePrincipalName = "";
-    if (school && (school.PrincipalName || school.principal_name)) {
-        livePrincipalName = school.PrincipalName || school.principal_name;
-    }    
-    const selected = [...document.querySelectorAll(".AttendanceStudentCheck:checked")];
-    if(selected.length === 0) {
-        alert("Please select at least one student!");
+async function loadStudentsForAttendance(className) {
+    // Validate className
+    if (!className || className === '' || className === 'Select Class' || className === 'No Classes Found') {
+        document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Please select a valid class.</div>';
+        currentClass = '';
         return;
     }
     
-    SelectedAttendanceStudents = selected;
-    AttendanceSchoolInfo = school;
-    AttendanceYear = year;
-    AttendanceMotto = motto;
-    AttendanceClassName = className;
-    AttendanceCards = [];    
-    selected.forEach(cb => {
-        const student = JSON.parse(cb.dataset.student);
-        AttendanceCards.push(buildAttendanceCard(student, school, year, motto, className, designation, livePrincipalName));
-    });    
-    CurrentAttendanceCard = 0;
-    showAttendanceCard();
-    document.getElementById("AttendancePopupOverlay").style.display = "none";
-    document.getElementById("AttendancePreviewOverlay").style.display = "flex";
-}
-
-function showAttendanceCard() {
-    const container = document.getElementById("AttendancePreviewBody");    
-    if (!container) {
-        console.error("Error: Element with ID 'AttendancePreviewBody' was not found in the HTML.");
-        return;
-    }    
-    if (AttendanceCards && AttendanceCards.length > 0) {
-        container.innerHTML = AttendanceCards[CurrentAttendanceCard];        
-        console.log("Rendering Card:", CurrentAttendanceCard + 1, "of", AttendanceCards.length);
-        console.log("Current Motto Applied:", AttendanceMotto);
+    currentClass = className;
+    
+    try {
+        // First get the ClassID from ClassTable
+        const { data: classData, error: classError } = await supabaseClient
+            .from('ClassTable')
+            .select('id')
+            .eq('ClassName', className)
+            .maybeSingle();
+            
+        if (classError) {
+            console.error('Error fetching class ID:', classError);
+            document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading class. Please try again.</div>';
+            return;
+        }
+        
+        if (!classData) {
+            console.error('Class not found:', className);
+            document.getElementById('AttendanceBox').innerHTML = `<div style="text-align: center; padding: 20px; color: #dc3545;">Class "${className}" not found.</div>`;
+            currentClass = '';
+            return;
+        }
+        
+        // Then get students from StudentDataTable including id
+        const { data: students, error: studentError } = await supabaseClient
+            .from('StudentDataTable')
+            .select('id, RollNo, StudentName')
+            .eq('ClassID', classData.id)
+            .order('RollNo');
+            
+        if (studentError) {
+            console.error('Error fetching students:', studentError);
+            document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading students. Please try again.</div>';
+            return;
+        }
+        
+        currentStudents = students || [];
+        renderAttendanceMode();
+        
+    } catch (error) {
+        console.error('Error loading students:', error);
+        document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading data. Please refresh and try again.</div>';
+        currentClass = '';
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {    
-    // Line 921 was crashing here because it ran too early. Now it waits safely:
-    document.getElementById("btnAttendanceCancel").onclick = function() {
-        document.getElementById("AttendancePopupOverlay").style.display = "none";
-    };
-    document.getElementById("btnAttendanceCreate").onclick = createAttendanceCards;
-    document.getElementById("btnCloseAttendancePreview").onclick = function() {
-        document.getElementById("AttendancePreviewOverlay").style.display = "none";
-    };
-    document.getElementById("btnPrevAttendanceCard").onclick = function() {
-        if (CurrentAttendanceCard > 0) {
-            CurrentAttendanceCard--;
-            showAttendanceCard();
-        }
-    };
-    document.getElementById("btnNextAttendanceCard").onclick = function() {
-        if (CurrentAttendanceCard < AttendanceCards.length - 1) {
-            CurrentAttendanceCard++;
-            showAttendanceCard();
-        }
-    };
-    document.getElementById("btnExportAttendanceCards").onclick = exportAttendanceCards;
-});
+// Make all functions globally available
+window.toggleAllPresent = toggleAllPresent;
+window.toggleAllLeave = toggleAllLeave;
+window.toggleAllStudents = toggleAllStudents;
+window.toggleAllPresentRolls = toggleAllPresentRolls;
+window.toggleAllLeaveRolls = toggleAllLeaveRolls;
+window.takeAttendanceByName = takeAttendanceByName;
+window.takeAttendanceByRollNumber = takeAttendanceByRollNumber;
+window.submitAttendance = submitAttendance;
+window.handlePresentCheck = handlePresentCheck;
+window.handleLeaveCheck = handleLeaveCheck;
+window.handleRollClick = handleRollClick;
+window.handleRollDoubleClick = handleRollDoubleClick;
+window.addRollToPresent = addRollToPresent;
+window.addRollToLeave = addRollToLeave;
+window.removeFromPresent = removeFromPresent;
+window.removeFromLeave = removeFromLeave;
+window.removeFromAvailable = removeFromAvailable;
 
-async function exportAttendanceCards(){
-    const exportBox = document.getElementById("AttendanceExportBox");
-    const zip = new JSZip();    
-    exportBox.style.visibility = "visible";     
-    for(let i=0; i<SelectedAttendanceStudents.length; i++){
-        const student = JSON.parse(SelectedAttendanceStudents[i].dataset.student);
-        exportBox.innerHTML = buildAttendanceCard(student, AttendanceSchoolInfo, AttendanceYear, AttendanceMotto, AttendanceClassName);        
-        const card = exportBox.firstElementChild;
-        await new Promise(r => setTimeout(r, 150));         
-        const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.95));
-        zip.file(`${student.RollNo}-${student.StudentName}.jpg`, blob);
-    }    
-    exportBox.innerHTML = "";
-    exportBox.style.visibility = "hidden";    
-    const content = await zip.generateAsync({ type: "blob" });
-    saveAs(content, "AttendanceCards.zip");
-    alert("Attendance cards exported successfully.");
+// Global variables for attendance view
+let attendanceViewMode = 'day'; // 'day' or 'month'
+let attendanceViewDate = new Date(); // Current date for viewing
+let attendanceViewMonth = new Date(); // Current month for viewing
+
+// Show Attendance function
+function showAttendance() {
+    // Check if a class is selected
+    if (!currentClass || currentClass === '' || currentClass === 'Select Class' || currentClass === 'No Classes Found') {
+        alert('Please select a class first before viewing attendance.');
+        return;
+    }
+    
+    // Create popup overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'attendancePopupOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    // Create popup container
+    const popup = document.createElement('div');
+    popup.id = 'attendancePopup';
+    popup.style.cssText = `
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 95%;
+        max-height: 90%;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        min-width: 700px;
+        min-height: 400px;
+        position: relative;
+    `;
+    
+    // Close button
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '✕';
+    closeBtn.style.cssText = `
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #333;
+        padding: 5px 10px;
+        border-radius: 5px;
+        z-index: 100;
+    `;
+    closeBtn.onmouseover = function() { this.style.background = '#f0f0f0'; };
+    closeBtn.onmouseout = function() { this.style.background = 'none'; };
+    closeBtn.onclick = function() { closeAttendancePopup(); };
+    
+    // Popup content
+    let popupHTML = `
+        <div style="margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px;">
+            <h2 style="margin: 0; color: #333; font-size: 24px;">Attendance Report - ${currentClass}</h2>
+        </div>
+        <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
+            <div style="display: flex; gap: 10px;">
+                <button id="btnDayAttendance" class="attendance-view-btn active" onclick="switchAttendanceView('day')" 
+                        style="padding: 10px 25px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                    Day Attendance
+                </button>
+                <button id="btnMonthAttendance" class="attendance-view-btn" onclick="switchAttendanceView('month')" 
+                        style="padding: 10px 25px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                    Month Attendance
+                </button>
+            </div>
+            <div id="downloadButtonContainer" style="margin-left: auto;">
+                <button onclick="downloadAttendanceImage()" style="padding: 10px 25px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                    📥 Download as JPG
+                </button>
+            </div>
+        </div>
+        <div id="attendanceViewContainer">
+    `;
+    
+    popupHTML += `</div>`;
+    popup.innerHTML = popupHTML;
+    popup.appendChild(closeBtn);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+    
+    // Initialize with day view
+    attendanceViewDate = new Date();
+    attendanceViewMode = 'day';
+    renderDayAttendance();
 }
+
+// Switch attendance view
+function switchAttendanceView(mode) {
+    attendanceViewMode = mode;
+    
+    // Update button styles
+    const dayBtn = document.getElementById('btnDayAttendance');
+    const monthBtn = document.getElementById('btnMonthAttendance');
+    
+    if (mode === 'day') {
+        dayBtn.style.background = '#007bff';
+        dayBtn.style.color = 'white';
+        monthBtn.style.background = '#6c757d';
+        monthBtn.style.color = 'white';
+        renderDayAttendance();
+    } else {
+        monthBtn.style.background = '#007bff';
+        monthBtn.style.color = 'white';
+        dayBtn.style.background = '#6c757d';
+        dayBtn.style.color = 'white';
+        renderMonthAttendance();
+    }
+}
+
+// Render Day Attendance
+function renderDayAttendance() {
+    const container = document.getElementById('attendanceViewContainer');
+    if (!container) return;
+    
+    // Check if class is selected
+    if (!currentClass || currentClass === '' || currentClass === 'Select Class' || currentClass === 'No Classes Found') {
+        container.innerHTML = '<div style="text-align: center; padding: 40px; color: #dc3545;">Please select a class first.</div>';
+        return;
+    }
+    
+    const bsComponents = getBSDateComponents(attendanceViewDate);
+    const bsDateString = `${bsComponents.year}-${String(bsComponents.month).padStart(2, '0')}-${String(bsComponents.day).padStart(2, '0')}`;
+    const adDateString = formatADDate(attendanceViewDate);
+    
+    // Get calendar data for this date
+    getCalendarData(bsComponents.year, bsComponents.month, bsComponents.day).then(calendarInfo => {
+        let holidayHTML = '';
+        if (calendarInfo) {
+            let holidayText = '';
+            if (calendarInfo.day_type) {
+                holidayText += `<span style="color: #856404; font-weight: bold;">${calendarInfo.day_type}</span>`;
+            }
+            if (calendarInfo.national_event) {
+                holidayText += holidayText ? ` - ${calendarInfo.national_event}` : calendarInfo.national_event;
+            }
+            if (holidayText) {
+                holidayHTML = `
+                    <div style="text-align: center; padding: 5px 10px; background: #fff3cd; border-radius: 5px; margin-top: 5px; font-size: 14px; color: #856404;">
+                        🎉 ${holidayText}
+                    </div>
+                `;
+            }
+        }
+        
+        let html = `
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <button onclick="changeAttendanceDay(-1)" style="padding: 8px 20px; font-size: 18px; cursor: pointer; border: 1px solid #ccc; border-radius: 5px; background: #f8f9fa;">
+                    ◀
+                </button>
+                <div style="text-align: center;">
+                    <div style="font-size: 20px; font-weight: bold; color: #333;">BS: ${bsDateString}</div>
+                    <div style="font-size: 14px; color: #666;">AD: ${adDateString}</div>
+                    ${holidayHTML}
+                </div>
+                <button onclick="changeAttendanceDay(1)" style="padding: 8px 20px; font-size: 18px; cursor: pointer; border: 1px solid #ccc; border-radius: 5px; background: #f8f9fa;">
+                    ▶
+                </button>
+            </div>
+            <div id="dayAttendanceContent">
+                <div style="text-align: center; padding: 20px; color: #666;">Loading attendance data...</div>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+        loadDayAttendance(bsDateString);
+    });
+}
+
+// Get calendar data for a specific date
+async function getCalendarData(bsYear, bsMonth, bsDay) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('CalendarDataTable')
+            .select('*')
+            .eq('n_year', bsYear)
+            .eq('n_month', bsMonth)
+            .eq('n_day', bsDay)
+            .maybeSingle();
+            
+        if (error) {
+            console.error('Error fetching calendar data:', error);
+            return null;
+        }
+        
+        return data || null;
+    } catch (error) {
+        console.error('Error in getCalendarData:', error);
+        return null;
+    }
+}
+
+// Load Day Attendance data
+async function loadDayAttendance(bsDate) {
+    const content = document.getElementById('dayAttendanceContent');
+    if (!content) return;
+    
+    // Check if class is selected
+    if (!currentClass || currentClass === '' || currentClass === 'Select Class' || currentClass === 'No Classes Found') {
+        content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Please select a class first.</div>';
+        return;
+    }
+    
+    try {
+        // Get class ID for current class
+        const classID = await getClassID(currentClass);
+        if (!classID) {
+            content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Class not found. Please select a valid class.</div>';
+            return;
+        }
+        
+        // Query attendance for this date and class
+        const { data, error } = await supabaseClient
+            .from('StudentAttendanceTable')
+            .select('*')
+            .eq('ClassID', classID)
+            .eq('BSDate', bsDate);
+            
+        if (error) {
+            console.error('Error loading attendance:', error);
+            content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading attendance data.</div>';
+            return;
+        }
+        
+        if (!data || data.length === 0) {
+            content.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">📋</div>
+                    <div style="font-size: 18px; color: #666;">No attendance recorded for this date.</div>
+                    <div style="font-size: 14px; color: #999; margin-top: 5px;">BS Date: ${bsDate}</div>
+                </div>
+            `;
+            return;
+        }
+        
+        // Build attendance table
+        let tableHTML = `
+            <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
+                <table id="attendanceTable" style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <thead style="position: sticky; top: 0; z-index: 10;">
+                        <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                            <th style="padding: 10px; text-align: left;">S.No.</th>
+                            <th style="padding: 10px; text-align: left;">Roll No.</th>
+                            <th style="padding: 10px; text-align: left;">Student Name</th>
+                            <th style="padding: 10px; text-align: center;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        
+        data.forEach((record, index) => {
+            const statusColor = record.AttendanceStatus === 'present' ? '#28a745' : 
+                               record.AttendanceStatus === 'leave' ? '#dc3545' : '#ffc107';
+            const statusText = record.AttendanceStatus.charAt(0).toUpperCase() + record.AttendanceStatus.slice(1);
+            
+            tableHTML += `
+                <tr style="border-bottom: 1px solid #eee; ${index % 2 === 0 ? 'background: #f9f9f9;' : ''}">
+                    <td style="padding: 10px;">${index + 1}</td>
+                    <td style="padding: 10px;">${record.RollNumber}</td>
+                    <td style="padding: 10px;">${record.StudentName}</td>
+                    <td style="padding: 10px; text-align: center;">
+                        <span style="display: inline-block; padding: 3px 12px; border-radius: 12px; color: white; background: ${statusColor}; font-size: 12px; font-weight: bold;">
+                            ${statusText}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        tableHTML += `
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center; font-size: 14px; color: #666;">
+                <span>Total: ${data.length}</span>
+                <span style="color: #28a745;">Present: ${data.filter(r => r.AttendanceStatus === 'present').length}</span>
+                <span style="color: #dc3545;">Leave: ${data.filter(r => r.AttendanceStatus === 'leave').length}</span>
+                <span style="color: #ffc107;">Absent: ${data.filter(r => r.AttendanceStatus === 'absent').length}</span>
+            </div>
+        `;
+        
+        content.innerHTML = tableHTML;
+        
+    } catch (error) {
+        console.error('Error in loadDayAttendance:', error);
+        content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading attendance data.</div>';
+    }
+}
+
+// Change attendance day
+function changeAttendanceDay(delta) {
+    attendanceViewDate.setDate(attendanceViewDate.getDate() + delta);
+    renderDayAttendance();
+}
+
+// Render Month Attendance
+function renderMonthAttendance() {
+    const container = document.getElementById('attendanceViewContainer');
+    if (!container) return;
+    
+    const year = attendanceViewMonth.getFullYear();
+    const month = attendanceViewMonth.getMonth();
+    const bsComponents = getBSDateComponents(attendanceViewMonth);
+    const bsYear = bsComponents.year;
+    const bsMonth = bsComponents.month;
+    
+    // Get the AD month range for this BS month
+    const bsMonthStart = `${bsYear}-${String(bsMonth).padStart(2, '0')}-01`;
+    const daysInMonth = getDaysInBSMonth(bsYear, bsMonth);
+    const bsMonthEnd = `${bsYear}-${String(bsMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`;
+    
+    // Get AD dates for first and last day of BS month
+    let adStart = '';
+    let adEnd = '';
+    try {
+        const adStartDate = BS2AD_YMD(bsMonthStart);
+        const adEndDate = BS2AD_YMD(bsMonthEnd);
+        const startParts = adStartDate.split('-').map(Number);
+        const endParts = adEndDate.split('-').map(Number);
+        const startDate = new Date(startParts[0], startParts[1] - 1, startParts[2]);
+        const endDate = new Date(endParts[0], endParts[1] - 1, endParts[2]);
+        
+        const startMonth = ENGLISH_MONTHS[startDate.getMonth()];
+        const endMonth = ENGLISH_MONTHS[endDate.getMonth()];
+        const startYear = startDate.getFullYear();
+        const endYear = endDate.getFullYear();
+        
+        if (startMonth === endMonth && startYear === endYear) {
+            adStart = `${startMonth} ${startYear}`;
+            adEnd = '';
+        } else {
+            adStart = `${startMonth} ${startYear}`;
+            adEnd = ` - ${endMonth} ${endYear}`;
+        }
+    } catch (e) {
+        console.error('Error getting AD dates:', e);
+    }
+    
+    let html = `
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+            <button onclick="changeAttendanceMonth(-1)" style="padding: 8px 20px; font-size: 18px; cursor: pointer; border: 1px solid #ccc; border-radius: 5px; background: #f8f9fa;">
+                ◀
+            </button>
+            <div style="text-align: center;">
+                <div style="font-size: 20px; font-weight: bold; color: #333;">${NEPALI_MONTHS[bsMonth - 1]} ${bsYear}</div>
+                <div style="font-size: 14px; color: #666;">AD: ${adStart}${adEnd}</div>
+            </div>
+            <button onclick="changeAttendanceMonth(1)" style="padding: 8px 20px; font-size: 18px; cursor: pointer; border: 1px solid #ccc; border-radius: 5px; background: #f8f9fa;">
+                ▶
+            </button>
+        </div>
+        <div id="monthAttendanceContent">
+            <div style="text-align: center; padding: 20px; color: #666;">Loading attendance data...</div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    loadMonthAttendance(bsYear, bsMonth);
+}
+
+async function loadMonthAttendance(bsYear, bsMonth) {
+    const content = document.getElementById('monthAttendanceContent');
+    if (!content) return;
+    
+    // Check if class is selected
+    if (!currentClass || currentClass === '' || currentClass === 'Select Class' || currentClass === 'No Classes Found') {
+        content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Please select a class first.</div>';
+        return;
+    }
+    
+    try {
+        // Get class ID for current class
+        const classID = await getClassID(currentClass);
+        if (!classID) {
+            content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Class not found. Please select a valid class.</div>';
+            return;
+        }
+        
+        // Get all days in the BS month
+        const daysInMonth = getDaysInBSMonth(bsYear, bsMonth);
+        const bsMonthStart = `${bsYear}-${String(bsMonth).padStart(2, '0')}-01`;
+        const bsMonthEnd = `${bsYear}-${String(bsMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`;
+        
+        // Fetch calendar data for this month
+        let calendarData = [];
+        try {
+            const { data, error } = await supabaseClient
+                .from('CalendarDataTable')
+                .select('*')
+                .eq('n_year', bsYear)
+                .eq('n_month', bsMonth);
+                
+            if (error) {
+                console.error('Error loading calendar data:', error);
+            } else {
+                calendarData = data || [];
+            }
+        } catch (error) {
+            console.error('Error in calendar fetch:', error);
+        }
+        
+        // Query attendance for this month and class
+        let attendanceData = [];
+        try {
+            const { data, error } = await supabaseClient
+                .from('StudentAttendanceTable')
+                .select('*')
+                .eq('ClassID', classID)
+                .filter('BSDate', 'gte', bsMonthStart)
+                .filter('BSDate', 'lte', bsMonthEnd);
+                
+            if (error) {
+                console.error('Error loading attendance:', error);
+                content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading attendance data. Please try again.</div>';
+                return;
+            }
+            attendanceData = data || [];
+        } catch (error) {
+            console.error('Error in attendance fetch:', error);
+            content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading attendance data. Please try again.</div>';
+            return;
+        }
+        
+        // Get all unique students from attendance data
+        const students = [];
+        if (attendanceData && attendanceData.length > 0) {
+            const studentMap = new Map();
+            attendanceData.forEach(r => {
+                if (!studentMap.has(r.RollNumber)) {
+                    studentMap.set(r.RollNumber, {
+                        RollNumber: r.RollNumber,
+                        StudentName: r.StudentName
+                    });
+                }
+            });
+            students.push(...studentMap.values());
+            students.sort((a, b) => a.RollNumber - b.RollNumber);
+        } else {
+            // If no attendance data, show message
+            content.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">📋</div>
+                    <div style="font-size: 18px; color: #666;">No attendance recorded for this month.</div>
+                    <div style="font-size: 14px; color: #999; margin-top: 5px;">${NEPALI_MONTHS[bsMonth - 1]} ${bsYear}</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">Please mark attendance first.</div>
+                </div>
+            `;
+            return;
+        }
+        
+        // Build calendar for the month with all days
+        let calendar = {};
+        let attendanceDays = new Set();
+        if (attendanceData) {
+            attendanceData.forEach(r => {
+                attendanceDays.add(r.BSDate);
+            });
+        }
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${bsYear}-${String(bsMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayOfWeek = getBSDayOfWeek(bsYear, bsMonth, day);
+            const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+            
+            // Check if it's a holiday from calendar data
+            let holidayInfo = null;
+            let holidayName = '';
+            if (calendarData && calendarData.length > 0) {
+                const dayData = calendarData.find(d => d.n_day === day);
+                if (dayData) {
+                    if (dayData.day_type === 'Public Holiday' || 
+                        dayData.day_type === 'Summer Vacation' || 
+                        dayData.day_type === 'Winter Vacation') {
+                        holidayInfo = dayData;
+                        holidayName = dayData.day_type;
+                        if (dayData.national_event) {
+                            holidayName = `${holidayName}: ${dayData.national_event}`;
+                        }
+                    } else if (dayData.national_event && 
+                              (dayData.national_event.includes('Holiday') || 
+                               dayData.national_event.includes('holiday'))) {
+                        holidayInfo = dayData;
+                        holidayName = dayData.national_event;
+                    }
+                }
+            }
+            
+            // If weekend and no holiday info, mark as weekend
+            if (isWeekend && !holidayInfo) {
+                holidayName = 'Saturday/Sunday';
+                holidayInfo = { day_type: 'Weekend', national_event: 'Saturday/Sunday' };
+            }
+            
+            calendar[dateStr] = {
+                day: day,
+                dayOfWeek: dayOfWeek,
+                isWeekend: isWeekend,
+                holiday: holidayInfo,
+                holidayName: holidayName
+            };
+        }
+        
+        // Build attendance matrix table
+        let tableHTML = `
+            <div style="overflow-x: auto; max-height: 500px; overflow-y: auto; position: relative; border: 1px solid #dee2e6; border-radius: 5px;">
+                <table id="attendanceTable" style="width: 100%; border-collapse: collapse; font-size: 11px; min-width: 850px; table-layout: auto;">
+                    <thead style="position: sticky; top: 0; z-index: 20;">
+                        <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                            <th style="padding: 6px; text-align: center; min-width: 70px; border: 1px solid #dee2e6; background: #f8f9fa;">Roll No.</th>
+                            <th style="padding: 6px; text-align: left; min-width: 120px; border: 1px solid #dee2e6; background: #f8f9fa;">Student Name</th>
+        `;
+        
+        // Add all days of the month as headers
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${bsYear}-${String(bsMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayInfo = calendar[dateStr];
+            const hasAttendance = attendanceDays.has(dateStr);
+            
+            // Only treat as holiday if there is NO attendance
+            const isHoliday = dayInfo.holiday !== null && !hasAttendance;
+            const bgColor = isHoliday ? '#fff3cd' : '#f8f9fa';
+            const textColor = isHoliday ? '#dc3545' : '#333';
+            
+            tableHTML += `
+                <th style="padding: 4px; text-align: center; min-width: 28px; background: ${bgColor}; color: ${textColor}; font-weight: ${isHoliday ? 'bold' : 'normal'}; font-size: 10px; border: 1px solid #dee2e6;" 
+                    title="${isHoliday ? dayInfo.holidayName || 'Holiday' : ''}">
+                    ${day}
+                    <div style="font-size: 7px; color: ${isHoliday ? '#dc3545' : '#999'};">${getDayNameShort(dayInfo.dayOfWeek)}</div>
+                    ${isHoliday ? '<div style="font-size: 7px; color: #dc3545;">H</div>' : ''}
+                </th>
+            `;
+        }
+        
+        tableHTML += `
+                            <th style="padding: 6px; text-align: center; background: #28a745; color: white; min-width: 50px; border: 1px solid #dee2e6;">This Month<br>Present</th>
+                            <th style="padding: 6px; text-align: center; background: #dc3545; color: white; min-width: 50px; border: 1px solid #dee2e6;">This Month<br>Leave</th>
+                            <th style="padding: 6px; text-align: center; background: #ffc107; color: #333; min-width: 50px; border: 1px solid #dee2e6;">This Month<br>Absent</th>
+                            <th style="padding: 6px; text-align: center; background: #17a2b8; color: white; min-width: 60px; border: 1px solid #dee2e6;">Total Present<br>Up to This Month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        
+        // For each student, show attendance for all days
+        students.forEach((student, index) => {
+            const studentData = attendanceData ? attendanceData.filter(r => r.RollNumber === student.RollNumber) : [];
+            let presentCount = 0, leaveCount = 0, absentCount = 0, holidayCount = 0;
+            
+            // Calculate total present days from Baisakh 1 to end of this month for this student
+            let totalPresentFromStart = 0;
+            
+            // Get all attendance for this student from Baisakh 1 to current month end
+            const allStudentData = attendanceData ? attendanceData.filter(r => r.RollNumber === student.RollNumber) : [];
+            
+            // For each month from Baisakh (month 1) to current month
+            for (let m = 1; m <= bsMonth; m++) {
+                const monthData = allStudentData.filter(r => {
+                    const parts = r.BSDate.split('-').map(Number);
+                    return parts[1] === m;
+                });
+                // Count presents for this month
+                const monthPresents = monthData.filter(r => r.AttendanceStatus === 'present').length;
+                totalPresentFromStart += monthPresents;
+            }
+            
+            tableHTML += `
+                <tr style="border-bottom: 1px solid #eee; ${index % 2 === 0 ? 'background: #f9f9f9;' : ''}">
+                    <td style="padding: 6px; text-align: center; font-weight: bold; border: 1px solid #dee2e6; background: ${index % 2 === 0 ? '#f9f9f9' : 'white'};">
+                        ${student.RollNumber}
+                    </td>
+                    <td style="padding: 6px; text-align: left; border: 1px solid #dee2e6; background: ${index % 2 === 0 ? '#f9f9f9' : 'white'};">
+                        ${student.StudentName}
+                    </td>
+            `;
+            
+            // Show attendance for each day
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${bsYear}-${String(bsMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayInfo = calendar[dateStr];
+                const hasAttendance = attendanceDays.has(dateStr);
+                const record = studentData.find(r => r.BSDate === dateStr);
+                
+                // Only treat as holiday if there is NO attendance
+                const isHoliday = dayInfo.holiday !== null && !hasAttendance;
+                
+                let status = 'absent';
+                let color = '#ffc107';
+                let symbol = '•';
+                let title = 'Absent';
+                let bgColor = '';
+                let textColor = '#333';
+                
+                if (isHoliday) {
+                    // This is a holiday with no attendance
+                    status = 'holiday';
+                    color = '#dc3545';
+                    symbol = 'H';
+                    title = dayInfo.holidayName || 'Holiday';
+                    bgColor = '#fff3cd';
+                    holidayCount++;
+                } else if (record) {
+                    status = record.AttendanceStatus;
+                    if (status === 'present') {
+                        color = '#28a745';
+                        symbol = '✓';
+                        title = 'Present';
+                        presentCount++;
+                    } else if (status === 'leave') {
+                        color = '#dc3545';
+                        symbol = '✕';
+                        title = 'Leave';
+                        leaveCount++;
+                    } else {
+                        color = '#ffc107';
+                        symbol = '•';
+                        title = 'Absent';
+                        absentCount++;
+                    }
+                } else {
+                    // No record and not holiday - absent
+                    absentCount++;
+                }
+                
+                tableHTML += `
+                    <td style="padding: 4px; text-align: center; color: ${color}; font-weight: ${isHoliday ? 'bold' : 'bold'}; font-size: 12px; background: ${bgColor || ''}; border: 1px solid #dee2e6;">
+                        <span title="${title}">${symbol}</span>
+                    </td>
+                `;
+            }
+            
+            // Summary columns - This Month's Present, Leave, Absent, and Total Present Up to This Month
+            tableHTML += `
+                    <td style="padding: 6px; text-align: center; color: #28a745; font-weight: bold; border: 1px solid #dee2e6;">${presentCount}</td>
+                    <td style="padding: 6px; text-align: center; color: #dc3545; font-weight: bold; border: 1px solid #dee2e6;">${leaveCount}</td>
+                    <td style="padding: 6px; text-align: center; color: #ffc107; font-weight: bold; border: 1px solid #dee2e6;">${absentCount}</td>
+                    <td style="padding: 6px; text-align: center; color: #17a2b8; font-weight: bold; border: 1px solid #dee2e6;">${totalPresentFromStart}</td>
+                </tr>
+            `;
+        });
+        
+        tableHTML += `
+                    </tbody>
+                </table>
+            </div>
+        `;
+        
+        // Summary footer with legend and holiday list
+        const totalStudents = students.length;
+        const totalDays = daysInMonth;
+        
+        // Get unique holiday names for holidays with NO attendance
+        const holidayNames = new Set();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${bsYear}-${String(bsMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayInfo = calendar[dateStr];
+            const hasAttendance = attendanceDays.has(dateStr);
+            const isHoliday = dayInfo.holiday !== null && !hasAttendance;
+            if (isHoliday && dayInfo.holidayName) {
+                holidayNames.add(dayInfo.holidayName);
+            }
+        }
+        
+        const totalHolidays = holidayNames.size;
+        
+        let holidayListHTML = '';
+        if (holidayNames.size > 0) {
+            holidayListHTML = `
+                <div style="margin-top: 10px; font-size: 12px; color: #dc3545; text-align: center; background: #fff3cd; padding: 8px; border-radius: 5px; border: 1px solid #dc3545;">
+                    <strong style="color: #dc3545;">Holidays:</strong> 
+                    <span style="color: #dc3545;">${Array.from(holidayNames).join(' | ')}</span>
+                </div>
+            `;
+        }
+        
+        tableHTML += `
+            <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center; font-size: 13px; color: #666; flex-wrap: wrap; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                <span>Total Students: <strong>${totalStudents}</strong></span>
+                <span>Total Days: <strong>${totalDays}</strong></span>
+                <span>Holidays: <strong style="color: #dc3545;">${totalHolidays}</strong></span>
+                <span style="color: #28a745;">✓ Present</span>
+                <span style="color: #dc3545;">✕ Leave</span>
+                <span style="color: #ffc107;">• Absent</span>
+                <span style="color: #dc3545;">H Holiday</span>
+            </div>
+            ${holidayListHTML}
+        `;
+        
+        content.innerHTML = tableHTML;
+        
+    } catch (error) {
+        console.error('Error in loadMonthAttendance:', error);
+        content.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading attendance data. Please try again.</div>';
+    }
+}
+
+// Helper function to get BS day of week
+function getBSDayOfWeek(bsYear, bsMonth, bsDay) {
+    try {
+        const bsDateString = `${bsYear}-${String(bsMonth).padStart(2, '0')}-${String(bsDay).padStart(2, '0')}`;
+        const adDateString = BS2AD_YMD(bsDateString);
+        const parts = adDateString.split('-').map(Number);
+        const adDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        return adDate.getDay(); // 0=Sunday, 6=Saturday
+    } catch (e) {
+        return 0;
+    }
+}
+
+// Helper function to get short day name
+function getDayNameShort(dayOfWeek) {
+    const names = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return names[dayOfWeek] || '';
+}
+
+// Helper function to get days in BS month
+function getDaysInBSMonth(bsYear, bsMonth) {
+    const yearData = NEPALI_CALENDAR_DATA.find(data => data[0] === bsYear);
+    return yearData ? yearData[bsMonth] : 30;
+}
+
+// Change attendance month
+function changeAttendanceMonth(delta) {
+    attendanceViewMonth.setMonth(attendanceViewMonth.getMonth() + delta);
+    renderMonthAttendance();
+}
+
+// Close attendance popup
+function closeAttendancePopup() {
+    const overlay = document.getElementById('attendancePopupOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+// Download attendance as JPG - captures entire content including scrollable area
+function downloadAttendanceImage() {
+    // Check if class is selected
+    if (!currentClass || currentClass === '' || currentClass === 'Select Class' || currentClass === 'No Classes Found') {
+        alert('Please select a class first.');
+        return;
+    }
+    
+    const container = document.getElementById('attendanceViewContainer');
+    if (!container) {
+        alert('No attendance data to download.');
+        return;
+    }
+    
+    // Get the table content
+    const table = document.getElementById('attendanceTable');
+    if (!table) {
+        alert('No attendance data to download.');
+        return;
+    }
+    
+    // Show loading message
+    const downloadBtn = document.querySelector('#downloadButtonContainer button');
+    if (downloadBtn) {
+        downloadBtn.textContent = '⏳ Generating...';
+        downloadBtn.disabled = true;
+    }
+    
+    // Create a clone of the table with proper styling
+    const tableClone = table.cloneNode(true);
+    tableClone.style.width = '100%';
+    tableClone.style.minWidth = '800px';
+    tableClone.style.borderCollapse = 'collapse';
+    
+    // Fix the clone - ensure all cells have proper backgrounds
+    const rows = tableClone.querySelectorAll('tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td, th');
+        cells.forEach(cell => {
+            // Preserve background colors
+            const bgColor = cell.style.backgroundColor;
+            if (bgColor) {
+                cell.style.backgroundColor = bgColor;
+            }
+        });
+    });
+    
+    // Get the header and summary
+    const header = container.querySelector('div[style*="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;"]');
+    const summary = container.querySelector('div[style*="margin-top: 15px; display: flex; gap: 20px; justify-content: center; font-size: 13px;"]');
+    const holidayList = container.querySelector('div[style*="margin-top: 10px; font-size: 12px; color: #dc3545;"]');
+    
+    // Create a wrapper for the entire content
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `
+        padding: 20px;
+        background: white;
+        width: ${Math.max(table.scrollWidth || 1000, 900)}px;
+        font-family: Arial, sans-serif;
+        box-sizing: border-box;
+    `;
+    
+    // Add title
+    const title = document.createElement('div');
+    title.style.cssText = `
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+    `;
+    const viewMode = attendanceViewMode === 'day' ? 'Day' : 'Month';
+    const bsComponents = getBSDateComponents(attendanceViewDate);
+    const bsMonthName = NEPALI_MONTHS[bsComponents.month - 1];
+    title.textContent = `Attendance Report - ${currentClass} (${viewMode})`;
+    wrapper.appendChild(title);
+    
+    // Add header
+    if (header) {
+        const headerClone = header.cloneNode(true);
+        // Remove buttons from header clone
+        const buttons = headerClone.querySelectorAll('button');
+        buttons.forEach(btn => btn.remove());
+        wrapper.appendChild(headerClone);
+    }
+    
+    // Add table with full content
+    const tableContainer = document.createElement('div');
+    tableContainer.style.cssText = `
+        overflow: visible;
+        width: 100%;
+        margin: 10px 0;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+    `;
+    tableContainer.appendChild(tableClone);
+    wrapper.appendChild(tableContainer);
+    
+    // Add summary
+    if (summary) {
+        const summaryClone = summary.cloneNode(true);
+        wrapper.appendChild(summaryClone);
+    }
+    
+    // Add holiday list
+    if (holidayList) {
+        const holidayClone = holidayList.cloneNode(true);
+        wrapper.appendChild(holidayClone);
+    }
+    
+    // Add legend if not in summary
+    const hasLegend = summary && summary.innerHTML.includes('✓ Present');
+    if (!hasLegend) {
+        const legend = document.createElement('div');
+        legend.style.cssText = `
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            font-size: 13px;
+            color: #666;
+            flex-wrap: wrap;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        `;
+        legend.innerHTML = `
+            <span style="color: #28a745;">✓ Present</span>
+            <span style="color: #dc3545;">✕ Leave</span>
+            <span style="color: #ffc107;">• Absent</span>
+            <span style="color: #dc3545;">H Holiday</span>
+        `;
+        wrapper.appendChild(legend);
+    }
+    
+    // Append wrapper to body temporarily for rendering
+    wrapper.style.position = 'fixed';
+    wrapper.style.left = '-9999px';
+    wrapper.style.top = '0';
+    wrapper.style.zIndex = '-1';
+    document.body.appendChild(wrapper);
+    
+    // Wait a moment for rendering
+    setTimeout(() => {
+        html2canvas(wrapper, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            logging: false,
+            width: wrapper.scrollWidth,
+            height: wrapper.scrollHeight,
+            windowWidth: wrapper.scrollWidth,
+            windowHeight: wrapper.scrollHeight,
+            onclone: function(doc) {
+                const cloneWrapper = doc.querySelector('div[style*="position: fixed"]');
+                if (cloneWrapper) {
+                    cloneWrapper.style.overflow = 'visible';
+                }
+            }
+        }).then(canvas => {
+            if (wrapper.parentNode) {
+                document.body.removeChild(wrapper);
+            }
+            
+            const bsComponents2 = getBSDateComponents(attendanceViewDate);
+            const bsMonthName2 = NEPALI_MONTHS[bsComponents2.month - 1];
+            const bsYear2 = bsComponents2.year;
+            
+            const viewMode2 = attendanceViewMode === 'day' ? 'Day' : 'Month';
+            const dateStr = viewMode2 === 'Day' ? 
+                `${bsYear2}-${String(bsComponents2.month).padStart(2, '0')}-${String(bsComponents2.day).padStart(2, '0')}` :
+                `${bsMonthName2}_${bsYear2}`;
+            
+            const link = document.createElement('a');
+            link.download = `Attendance_${currentClass}_${viewMode2}_${dateStr}.jpg`;
+            link.href = canvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+            
+            if (downloadBtn) {
+                downloadBtn.textContent = '📥 Download as JPG';
+                downloadBtn.disabled = false;
+            }
+        }).catch(error => {
+            console.error('Error generating image:', error);
+            alert('Error generating image. Please try again.');
+            
+            if (wrapper.parentNode) {
+                document.body.removeChild(wrapper);
+            }
+            
+            if (downloadBtn) {
+                downloadBtn.textContent = '📥 Download as JPG';
+                downloadBtn.disabled = false;
+            }
+        });
+    }, 100);
+}
+
+// Make sure to add these to window exports
+window.showAttendance = showAttendance;
+window.switchAttendanceView = switchAttendanceView;
+window.changeAttendanceDay = changeAttendanceDay;
+window.changeAttendanceMonth = changeAttendanceMonth;
+window.closeAttendancePopup = closeAttendancePopup;
+window.downloadAttendanceImage = downloadAttendanceImage;
+
 
     </script> 
 </body>

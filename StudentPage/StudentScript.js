@@ -58,6 +58,7 @@ async function loadDynamicLogoAndFavicon() {
     }
 }
 
+// **************** Codes for Student Filter System *****************************
 let allRawStudents = [];       
 let filteredStudentsList = []; 
 let classIdToNameMap = {};
@@ -207,7 +208,6 @@ function renderDataGrid() {
         window.excelGridInstance = null;
     }
     box.innerHTML = '';
-
     if (filteredStudentsList.length === 0) {
         box.innerHTML = "<p style='padding:20px; font-weight:bold; color:#cc0000;'>No records match your selected filter criteria combinations.</p>";
         return;

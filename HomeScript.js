@@ -1,4 +1,3 @@
-
 // -------------------- NAVIGATE PAGES --------------------
 const PageNavigationDripDown = document.getElementById("PageNavigationSelect");
 PageNavigationDripDown.addEventListener("change", function () {
@@ -16,94 +15,103 @@ PageNavigationDripDown.addEventListener("change", function () {
         "HelpingHandPage": "HelpingHandPage/HelpingHandIndex.html",
         "HomePage": "index.html"
     };
-
     const selectedPage = pageMap[this.value];
     if (selectedPage) {
         window.location.href = selectedPage;
     }
 });
 
-// SUPABASE CONFIGURATION
-// ========================
-// 🔧 REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
-const SUPABASE_URL = 'https://wrjivuysumgpoqmabwpw.supabase.co';      
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indyaml2dXlzdW1ncG9xbWFid3B3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzczMTEsImV4cCI6MjA5NjY1MzMxMX0.Cfi1IwCFDEHGq1f4g_1amRduxeEiWvoZy4BwxNAtv8A';                  // <-- REPLACE with your anon key
-const TABLE_NAME = 'AboutSchoolTable';                         
+// -------------------- DYNAMICALLY LOADING HEADER AND FAVICON --------------------
+async function loadDynamicLogoAndFavicon() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('AboutSchoolTable')
+            .select('Name, Value')
+            .in('Name', ['SchoolLogo', 'SchoolName', 'SchoolAddress']);
+        if (error) {
+            console.error("Supabase query error loading branding:", error.message);
+            return;
+        }
+        if (data && data.length > 0) {
+            const brandingData = {};
+            data.forEach(item => {
+                brandingData[item.Name] = item.Value;
+            });
+            const freshLogoUrl = brandingData.SchoolLogo;
+            const faviconElement = document.getElementById('dynamicFavicon');
+            const logoElement = document.getElementById('SchoolLogo'); 
+            if (faviconElement && freshLogoUrl) {
+                faviconElement.href = freshLogoUrl;            
+            }
+            if (logoElement && freshLogoUrl) {
+                logoElement.src = freshLogoUrl;
+            }
+            const logoImgElement = document.querySelector('#LogoBox img');
+            if (logoImgElement && freshLogoUrl) {
+                logoImgElement.src = freshLogoUrl;
+            }
+            const schoolNameElement = document.getElementById('SchoolName');
+            if (schoolNameElement && brandingData.SchoolName) {
+                schoolNameElement.textContent = brandingData.SchoolName;
+            }
+            const schoolAddressElement = document.getElementById('SchoolAddress');
+            if (schoolAddressElement && brandingData.SchoolAddress) {
+                schoolAddressElement.textContent = brandingData.SchoolAddress;
+            }            
+            console.log("Logo, Name, and Address synced dynamically via supabaseClient!");
+        }
+    } catch (error) {
+        console.error("Unexpected error setting up branding layout:", error);
+    }
+}
 
 // ============================================================
-// FETCH IMAGES FROM SUPABASE (including Credentials column)
+// FETCH IMAGES FROM SUPABASE (Updated to utilize supabaseClient)
 // ============================================================
+const TABLE_NAME = 'AdminImageTable';
 async function fetchSliderImagesFromSupabase() {
-    console.log("Fetching from Supabase table:", TABLE_NAME);
-    
-    if (SUPABASE_URL.includes('your-project') || SUPABASE_ANON_KEY.includes('your-anon-key')) {
-        console.warn("⚠️ Please configure your Supabase credentials");
-        return null;
-    }
-    
+    console.log("Fetching from Supabase table via client:", TABLE_NAME);    
     try {
-        const allRecordsUrl = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*&limit=50`;        
-        const allResponse = await fetch(allRecordsUrl, {
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!allResponse.ok) {
-            throw new Error(`HTTP ${allResponse.status}: ${allResponse.statusText}`);
-        }
-        
-        const allRecords = await allResponse.json();
-        console.log(`Found ${allRecords.length} total records`);
-        
+        const { data: allRecords, error } = await supabaseClient
+            .from(TABLE_NAME)
+            .select('*')
+            .limit(50);        
+        if (error) {
+            throw new Error(error.message);
+        }        
+        console.log(`Found ${allRecords.length} total records`);        
         if (allRecords.length === 0) {
             throw new Error("No records found in the table");
-        }
-        
-        // FIXED: Filter using your real column name 'Name'
+        }        
         const sliderRecords = allRecords.filter(record => {            
-            const dbName = record.Name || '';
+            const dbName = record.ImageName || '';
             return dbName.toLowerCase().includes('sliderpicture');            
-        });
-        
-        console.log(`Found ${sliderRecords.length} slider pictures`);
-        
+        });        
+        console.log(`Found ${sliderRecords.length} slider pictures`);        
         if (sliderRecords.length === 0) {
-            const allNames = allRecords.map(r => r.Name).filter(n => n);
+            const allNames = allRecords.map(r => r.ImageName).filter(n => n);
             throw new Error(`No SliderPicture records. Found: ${allNames.join(', ')}`);
-        }
-        
-        // FIXED: Sort using your real column name 'Name'
+        }        
         const sortedRecords = sliderRecords.sort((a, b) => {
             const getNumber = (name) => {
                 const match = String(name || '').match(/SliderPicture(\d+)/i);
                 return match ? parseInt(match[1], 10) : 999;
             };
-            return getNumber(a.Name) - getNumber(b.Name);
-        });
-        
-        // FIXED: Filter out rows that don't have a valid Cloudinary URL in 'Value'
-        const validRecords = sortedRecords.filter(r => r.Value && r.Value.trim() !== '');
-        
-        // FIXED: Map DB records to what your front-end slider properties expect
+            return getNumber(a.ImageName) - getNumber(b.ImageName);
+        });        
+        const validRecords = sortedRecords.filter(r => r.ImageUrl && r.ImageUrl.trim() !== '');        
         return validRecords.map(record => {
-            // Find the matching credential value for this specific slider number
-            const sliderNumber = record.Name.replace('SliderPicture', '');
-            const matchingCredentialRow = allRecords.find(r => r.Name === `SliderCredential${sliderNumber}`);
-
+            const sliderNumber = record.ImageName.replace('SliderPicture', '');
+            const matchingCredentialRow = allRecords.find(r => r.ImageName === `SliderCredential${sliderNumber}`);
             return {
-                name: record.FileName || record.Name, // Shows actual file name or key string
-                url: record.Value,                   // Points to Cloudinary URL in 'Value' column
+                name: record.FileName || record.ImageName, 
+                url: record.ImageUrl || record.Value || record.value,                   
                 id: record.id,
-                // Automatically grabs credential string from its paired row, or defaults cleanly
-                credentials: matchingCredentialRow ? matchingCredentialRow.value || matchingCredentialRow.Value : "No credentials provided"
+                credentials: matchingCredentialRow ? matchingCredentialRow.Value || matchingCredentialRow.value : "No credentials provided"
             };
-        });
-        
+        });        
     } catch (err) {
-        console.error("Supabase error:", err);
+        console.error("Supabase slider loading error:", err);
         return null;
     }
 }
@@ -123,8 +131,7 @@ function generateDemoImages() {
         "https://images.unsplash.com/photo-1682695794947-17061dc284dd?w=800&h=450&fit=crop",
         "https://images.unsplash.com/photo-1682695795552-aeec1f8a8f36?w=800&h=450&fit=crop",
         "https://images.unsplash.com/photo-1682686580391-615b1d28e5ee?w=800&h=450&fit=crop"
-    ];
-    
+    ];    
     const demoCredentials = [
         "📷 Photographer: John Anderson | Location: Swiss Alps",
         "🎨 Artist: Maria Garcia | Exhibition: Modern Horizons",
@@ -136,8 +143,7 @@ function generateDemoImages() {
         "🏯 Cultural Heritage | Documented by Lisa Park",
         "✨ Starry Nights | Astrophotography by Robert Kumar",
         "🍃 Zen Garden | Creator: Olivia Martinez"
-    ];
-    
+    ];    
     return demoSources.map((url, i) => ({
         name: `SliderPicture${i+1} (Demo)`,
         url: url,
@@ -155,15 +161,12 @@ let autoPlayInterval = null;
 const AUTO_DELAY = 5000;
 let isTransitioning = false;
 let totalSlides = 0;
-
 const slidesArea = document.getElementById('slidesArea');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const dotsContainer = document.getElementById('dotsContainer');
 const loaderOverlay = document.getElementById('loaderOverlay');
-
 let slidesTrack = null;
-
 function createSliderTrack() {
     while (slidesArea.firstChild) {
         slidesArea.removeChild(slidesArea.firstChild);
@@ -175,8 +178,7 @@ function createSliderTrack() {
 
 function updateCredentialOverlay(index) {
     const existingOverlays = document.querySelectorAll('.credential-overlay');
-    existingOverlays.forEach(overlay => overlay.remove());
-    
+    existingOverlays.forEach(overlay => overlay.remove());    
     const slides = document.querySelectorAll('.slide');
     if (slides[index] && slidesData[index % slidesData.length]) {
         const realIndex = index % slidesData.length;
@@ -197,20 +199,14 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Build slider with cloned items for infinite seamless loop
 function buildSlider(images) {
     if (!images || images.length === 0) {
         throw new Error("No images to display");
-    }
-    
+    }    
     slidesData = images;
     totalSlides = slidesData.length;
-    createSliderTrack();
-    
-    // Create 3 sets of slides: previous, current, next for seamless infinite loop
-    // We'll clone the array to create a long track that allows smooth wrapping
-    const extendedSlides = [...slidesData, ...slidesData, ...slidesData];
-    
+    createSliderTrack();    
+    const extendedSlides = [...slidesData, ...slidesData, ...slidesData];    
     extendedSlides.forEach((item, idx) => {
         const slideDiv = document.createElement('div');
         slideDiv.className = 'slide';
@@ -222,25 +218,20 @@ function buildSlider(images) {
         };
         slideDiv.appendChild(img);
         slidesTrack.appendChild(slideDiv);
-    });
-    
-    // Create dots (only for real slides, not clones)
+    });    
     for (let i = 0; i < totalSlides; i++) {
         const dot = document.createElement('div');
         dot.classList.add('dot');
         if (i === 0) dot.classList.add('active-dot');
         dot.addEventListener('click', () => goToSlide(i));
         dotsContainer.appendChild(dot);
-    }
-    
-    // Start at the middle set (first slide of the middle set)
+    }    
     const startPosition = totalSlides;
     slidesTrack.style.transition = 'none';
     const translateX = -startPosition * 100;
     slidesTrack.style.transform = `translateX(${translateX}%)`;
-    slidesTrack.offsetHeight; // force reflow
-    slidesTrack.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-    
+    slidesTrack.offsetHeight; 
+    slidesTrack.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';    
     currentIndex = startPosition;
     updateActiveStates(0);
     updateCredentialOverlay(currentIndex);
@@ -248,7 +239,6 @@ function buildSlider(images) {
 }
 
 function updateActiveStates(realIndex) {
-    // Update dots based on real index
     const dots = document.querySelectorAll('.dot');
     dots.forEach((dot, i) => {
         if (i === realIndex) {
@@ -261,29 +251,21 @@ function updateActiveStates(realIndex) {
 
 function goToSlide(targetRealIndex, shouldAnimate = true) {
     if (isTransitioning) return;
-    if (!slidesData.length) return;
-    
-    // Target real index between 0 and totalSlides-1
+    if (!slidesData.length) return;    
     let targetReal = targetRealIndex;
     if (targetReal < 0) targetReal = totalSlides - 1;
-    if (targetReal >= totalSlides) targetReal = 0;
-    
-    // Calculate target position in the track
+    if (targetReal >= totalSlides) targetReal = 0;    
     let targetTrackIndex = currentIndex;
-    let targetDelta = targetReal - (currentIndex % totalSlides);
-    
+    let targetDelta = targetReal - (currentIndex % totalSlides);    
     if (Math.abs(targetDelta) > totalSlides / 2) {
         if (targetDelta > 0) {
             targetDelta = targetDelta - totalSlides;
         } else {
             targetDelta = targetDelta + totalSlides;
         }
-    }
-    
+    }    
     targetTrackIndex = currentIndex + targetDelta;
-    
-    isTransitioning = true;
-    
+    isTransitioning = true;    
     if (shouldAnimate) {
         slidesTrack.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
         const translateX = -targetTrackIndex * 100;
@@ -294,17 +276,12 @@ function goToSlide(targetRealIndex, shouldAnimate = true) {
         slidesTrack.style.transform = `translateX(${translateX}%)`;
         slidesTrack.offsetHeight;
         slidesTrack.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-    }
-    
-    // Update after animation
+    }    
     setTimeout(() => {
         currentIndex = targetTrackIndex;
         updateActiveStates(currentIndex % totalSlides);
-        updateCredentialOverlay(currentIndex);
-        
-        // Reset position if we're near the edges to maintain infinite loop
+        updateCredentialOverlay(currentIndex);        
         if (currentIndex <= totalSlides - 1) {
-            // Moved to beginning of track - jump to middle set
             slidesTrack.style.transition = 'none';
             const newPosition = currentIndex + totalSlides;
             const newTranslate = -newPosition * 100;
@@ -314,7 +291,6 @@ function goToSlide(targetRealIndex, shouldAnimate = true) {
             currentIndex = newPosition;
             updateCredentialOverlay(currentIndex);
         } else if (currentIndex >= totalSlides * 2 - 1) {
-            // Moved to end of track - jump to middle set
             slidesTrack.style.transition = 'none';
             const newPosition = currentIndex - totalSlides;
             const newTranslate = -newPosition * 100;
@@ -323,11 +299,9 @@ function goToSlide(targetRealIndex, shouldAnimate = true) {
             slidesTrack.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
             currentIndex = newPosition;
             updateCredentialOverlay(currentIndex);
-        }
-        
+        }        
         isTransitioning = false;
-    }, 500);
-    
+    }, 500);    
     resetAutoPlay();
 }
 
@@ -353,8 +327,8 @@ function startAutoPlay() {
 function resetAutoPlay() {
     if (autoPlayInterval) {
         clearInterval(autoPlayInterval);
-        startAutoPlay();
     }
+    startAutoPlay();
 }
 
 function attachEvents() {
@@ -382,20 +356,16 @@ function attachEvents() {
             resetAutoPlay();
             e.preventDefault();
         }
-    });
-    
+    });    
     let touchStartX = 0;
-    const wrapper = document.querySelector('.slider-wrapper');
-    
+    const wrapper = document.querySelector('.slider-wrapper');    
     if (wrapper) {
         wrapper.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
-        });
-        
+        });        
         wrapper.addEventListener('touchend', (e) => {
             const touchEndX = e.changedTouches[0].screenX;
-            const diffX = touchEndX - touchStartX;
-            
+            const diffX = touchEndX - touchStartX;            
             if (Math.abs(diffX) > 50) {
                 if (diffX > 0) {
                     prevSlide();
@@ -405,6 +375,27 @@ function attachEvents() {
                 resetAutoPlay();
             }
         });
+    }
+}
+
+// ============================================================
+// FETCH VIDEOS FROM SUPABASE (Updated to utilize supabaseClient)
+// ============================================================
+async function fetchVideosFromSupabase() {
+    const VIDEO_TABLE = 'VideoLinkTable';
+    console.log("Fetching videos from Supabase table:", VIDEO_TABLE);    
+    try {
+        const { data, error } = await supabaseClient
+            .from(VIDEO_TABLE)
+            .select('*');            
+        if (error) {
+            throw new Error(error.message);
+        }        
+        console.log(`Successfully retrieved ${data ? data.length : 0} video records.`);
+        return data || [];        
+    } catch (err) {
+        console.error("Error fetching videos from backend:", err.message);
+        return [];
     }
 }
 
@@ -440,72 +431,28 @@ function showError(message) {
 async function initSlider() {
     try {
         console.log("Initializing infinite smooth slider...");
-        let imagesData = await fetchSliderImagesFromSupabase();
-        
+        let imagesData = await fetchSliderImagesFromSupabase();        
         if (!imagesData || imagesData.length === 0) {
             console.log("Using demo fallback images");
             imagesData = generateDemoImages();
         } else {
             console.log(`Loaded ${imagesData.length} images from Supabase`);
-        }
-        
+        }        
         buildSlider(imagesData);
-        finalizeAndShow();
-        
+        finalizeAndShow();        
     } catch (err) {
         console.error("Fatal error:", err);
         showError(err.message || "Failed to initialize slider");
     }
 }
 
-initSlider();
-
-
-async function loadDynamicLogoAndFavicon() {
-    try {
-        // Query the table natively using your pre-configured supabaseClient
-        const { data, error } = await supabaseClient
-            .from('AboutSchoolTable')
-            .select('Value')
-            .eq('Name', 'SchoolLogo')
-            .single(); // Accesses the single matching record directly
-
-        if (error) {
-            console.error("Supabase query error loading branding:", error.message);
-            return;
-        }
-
-        if (data && data.Value) {
-            const freshLogoUrl = data.Value;
-
-            // 1. Update the Favicon inside the Document Head
-            const faviconElement = document.getElementById('dynamicFavicon');
-            if (faviconElement) {
-                faviconElement.href = freshLogoUrl;
-            }
-
-            // 2. Update the Logo Image Source inside #LogoBox
-            const logoImgElement = document.querySelector('#LogoBox img');
-            if (logoImgElement) {
-                logoImgElement.src = freshLogoUrl;
-            }
-            
-            console.log("Logo and Favicon synced dynamically via supabaseClient!");
-        }
-    } catch (error) {
-        console.error("Unexpected error setting up branding layout:", error);
-    }
-}
-
-// Run as soon as the page DOM is ready
-document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
-
-document.addEventListener('DOMContentLoaded', function() {
-    // The video gallery will be initialized by VideoScript.js
-    console.log("Home page fully loaded - Video gallery ready");
+// -------------------- INITIALIZATION TRIGGERS --------------------
+document.addEventListener('DOMContentLoaded', () => {
+    loadDynamicLogoAndFavicon();
+    initSlider();
+    console.index = "Home page components successfully fully initialized";
 });
 
-// Add a function to refresh videos if needed
 function refreshVideoGallery() {
     const videoGrid = document.getElementById('videoGrid');
     if (videoGrid) {
@@ -515,6 +462,8 @@ function refreshVideoGallery() {
                 <p>Refreshing videos...</p>
             </div>
         `;
-        initVideoGallery();
+        if (typeof initVideoGallery === "function") {
+            initVideoGallery();
+        }
     }
 }

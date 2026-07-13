@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
-    <title>Admin Page</title>
+    <title>Edit Bal Pratibha Page</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <style>
         @font-face {
@@ -113,8 +113,156 @@
             padding: clamp(0.3rem, 1rem, 1.6rem) 0;
             border: 4px solid #000000;
         }
-        
-
+        #PratibhaEditBox{
+            width: 100%;
+            height: auto;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #cceecc, #bbeebb);
+        }
+        .PratibhaItems{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 10px 0;
+            margin: 10px 0;
+            box-shadow: 2px 2px 5px #111111;
+        }
+        .PratibhaItems h3{
+            width: 25%;
+            text-align: left;
+            font-size: 24px;
+        }
+        .PratibhaCreators{
+            width: 25%;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px 0;
+        }
+        .btnOpenPratibha{
+            width: 15%;
+            padding: 10px 0;
+            background: linear-gradient(180deg, #007700, #009900, #007700);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .btnOpenPratibha:hover{
+            background: linear-gradient(180deg, #005500, #007700, #005500);
+            color: #ffff00;
+        }
+        .btnDownloadPratibha{
+            width: 15%;
+            padding: 10px 0;
+            background: linear-gradient(180deg, #000077, #000099, #000077);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 20px;
+        }
+        .btnDownloadPratibha:hover{
+            background: linear-gradient(180deg, #000066, #000099, #000066);
+            color: #ffff00;
+        }
+        .btnDeletePratibha{
+            width: 15%;
+            padding: 10px 0;
+            background: linear-gradient(180deg, #770000, #990000, #770000);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 20px;
+        }
+        .btnDeletePratibha:hover{
+            background: linear-gradient(180deg, #550000, #770000, #550000);
+            color: #ffff00;
+        }
+        #AddPratibhaContainer{
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #000;
+            background: linear-gradient(135deg, #aaaaaa, #bbbbbb);
+            border-radius: 20px;
+        }
+        #AddPratibhaHead{
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #0000aa;
+            text-decoration: underline;
+            text-shadow: 1px 1px 2px #fff;
+        }
+        #AddCreatorBox{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 10px;            
+        }
+        #PratibhaCreatorName{
+            width: 60%;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #PratibhaCreatorClass{
+            width: 30%;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #AddPratibhaBox{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 10px;            
+        }
+        #PratibhaFile{display: none;}
+        #btnChoosePratibhaFile{
+            width: 20%;
+            padding: 1vw 0 1vw 0;
+            background: linear-gradient(180deg, #009900, #00cc00, #009900);
+            color: #ffffff;
+            font-size: 2vw;
+            font-weight: bold;
+            border-radius: 4vw 0 0 4vw;
+            cursor: pointer;
+        }
+        #btnChoosePratibhaFile:hover{
+            background: linear-gradient(180deg, #006600, #009900, #006600);
+            color: #ffff00;
+        }
+        #PratibhaTitle{
+            width: 50%;
+            text-align: left;
+            font-size: 2vw;
+            font-weight: bold;
+            padding: 2vh;    
+        }
+        #btnUploadPratibha{
+            width: 20%;
+            font-size: 2vw;
+            font-weight: bold;
+            background: linear-gradient(180deg, #009900, #00aa00, #009900);
+            color: #ffffff;
+            padding: 1vw 0 1vw 0;
+            border-radius: 0 4vw 4vw 0;
+            cursor: pointer;
+        }
+        #btnUploadPratibha:hover{
+            background: linear-gradient(180deg, #006600, #009900, #006600);
+            color: #ffff00;    
+        }
     </style>
 </head>
 <body>
@@ -147,13 +295,13 @@
                 <option value="ResultEditBox">Edit Result</option>
                 <option value="RoutineEditBox">Edit Routine</option>
                 <option value="StudentAttendanceEditBox">Edit Student Attendance</option>
-                <option value="LibraryEditBox">Edit Library</option>
+                <option value="AboutUsEditBox">Edit About Us</option>
                 <option value="NoticeEditBox">Edit Notice</option>
                 <option value="QuestionBankEditBox">Edit Question Bank</option>
                 <option value="StudentEditBox">Edit Student Data</option>
                 <option value="HumanResourceEditBox">Edit Human Resource Data</option>
                 <option value="CalendarEditBox">Edit Calendar</option>
-                <option value="AboutUsEditBox">Edit About Us</option>
+                <option value="LibraryEditBox">Edit Library</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
                 <option value="HelpingHandEditBox">Edit Helping Hand</option>
                 <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
@@ -167,10 +315,27 @@
                 <option value="AddAdminTool">Add/Delete Admin</option>
             </select>            
         </div>      
-              
+        <div id="PratibhaEditBox" class="EditBoxes">
+            <div id="AdminPratibhaList"></div>
+            <div id="AddPratibhaContainer">
+            <div id="AddPratibhaHead">Add New Pratibha</div>
+            <div id="AddCreatorBox">
+                <input id="PratibhaCreatorName" placeholder="Input Creator's Name">
+                <select id="PratibhaCreatorClass"></select>
+            </div>
+            <div id="AddPratibhaBox">
+                <input type="file" id="PratibhaFile" />
+                <button id="btnChoosePratibhaFile" type="button">Choose Pratibha</button>
+                <input id="PratibhaTitle" placeholder="Pratibha Title" />
+                <button id="btnUploadPratibha" onclick="uploadPratibha()">Upload</button>
+            </div>
+            </div>
+        </div> 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
     <script src="../SupabaseConfig.js"></script> 
+    <script src="../CustomDialog.js"></script>
+    <script src="../DocumentReader.js"></script>
     <script src="../DateConverter.js"></script>
     <script src="../SmartCalculator.js"></script>
     <script src="../NepaliCalendar.js"></script>
@@ -229,13 +394,13 @@ EditNavigationDropDown.addEventListener("change", function () {
         "ResultEditBox": "EditResult.html",
         "RoutineEditBox": "EditRoutine.html",
         "StudentAttendanceEditBox": "EditStudentAttendance.html",
-        "LibraryEditBox": "EditLibrary.html",
+        "AboutUsEditBox": "EditAboutUs.html",
         "NoticeEditBox": "EditNotice.html",
         "QuestionBankEditBox": "EditQuestionBank.html",
         "StudentEditBox": "EditStudent.html",
         "HumanResourceEditBox": "EditHumanResource.html",
         "CalendarEditBox": "EditCalendar.html",
-        "AboutUsEditBox": "EditAboutUs.html",
+        "LibraryEditBox": "EditLibrary.html",
         "GalleryEditBox": "EditGallery.html",
         "HelpingHandEditBox": "EditHelpingHand.html",
         "SMC_TGCEditBox": "EditSMC_TGC.html",
@@ -302,32 +467,208 @@ async function loadDynamicLogoAndFavicon() {
             .select('Value')
             .eq('Name', 'SchoolLogo')
             .single();
-
         if (error) {
             console.error("Supabase query error loading branding:", error.message);
             return;
         }
-
         if (data && data.Value) {
             const freshLogoUrl = data.Value;
-
             const faviconElement = document.getElementById('dynamicFavicon');
             if (faviconElement) {
                 faviconElement.href = freshLogoUrl;
             }
-
             const logoImgElement = document.querySelector('#LogoBox img');
             if (logoImgElement) {
                 logoImgElement.src = freshLogoUrl;
-            }
-            
-            console.log("Logo and Favicon synced dynamically via supabaseClient!");
+            }            
         }
     } catch (error) {
         console.error("Unexpected error setting up branding layout:", error);
     }
 }
 document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
+
+// ----------------------- LOAD CLASS DROPDOWN -------------------------------
+async function loadClassDropdown() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('ClassTable')
+            .select('ClassName');
+
+        if (error) throw error;
+
+        const ClassDropdown = document.getElementById("PratibhaCreatorClass");
+        ClassDropdown.innerHTML = '<option value="" disabled selected>Select Class</option>';
+        data.forEach(row => {
+            if (row.ClassName) {
+                const option = document.createElement('option');
+                option.value = row.ClassName;
+                option.textContent = row.ClassName;
+                ClassDropdown.appendChild(option);
+            }
+        });
+    } catch (err) {
+        console.error("Error loading ClassTable:", err.message);
+    }
+}
+    loadClassDropdown();
+
+// -------------------- ADD PRATIBHA --------------------
+const PratibhaInput = document.getElementById("PratibhaFile");
+const ChoosePratibhaBtn = document.getElementById("btnChoosePratibhaFile");
+ChoosePratibhaBtn.addEventListener("click", () => {
+    PratibhaInput.click();
+});
+PratibhaInput.addEventListener("change", () => {
+    if (!PratibhaInput.files.length) return;
+    const file = PratibhaInput.files[0];
+    const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, "");
+    document.getElementById("PratibhaTitle").value = fileNameWithoutExtension;
+});
+// -------------------- UPLOAD PRATIBHA --------------------
+async function uploadPratibha() {
+  const UPLOAD_PRESET = "UploadBalPratibhaPreset";
+  const file = document.getElementById("PratibhaFile").files[0];
+  const title = document.getElementById("PratibhaTitle").value;
+  const CreatorName = document.getElementById("PratibhaCreatorName").value;
+  const CreatorClass = document.getElementById("PratibhaCreatorClass").value;
+  const uploadBtn = document.getElementById("btnUploadPratibha");
+  if (!file || !title || !CreatorName || !CreatorClass) {
+    showCustomDialog1("Missing Data", "Please provide Pratibha title, Creator's Name, Creator's Class and select Pratibha file.", "OK", function(){});
+    return;
+  }
+  try {
+    uploadBtn.innerText = "Uploading...";
+    uploadBtn.disabled = true;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`, {method: "POST", body: formData});
+    const data = await res.json();
+    if (!res.ok || !data.secure_url) {
+      console.error("Cloudinary Error:", data);
+      showCustomDialog3(
+        "File Too Large",
+        `You can't upload files larger than 10 MB.<br><br>
+        You can compress online in:
+        <a href="https://bigpdf.11zon.com/en/compress-pdf/#google_vignette"
+            target="_blank"
+            style="color:blue; font-weight:bold;">
+            SmallPDF
+        </a>
+        or download and install Ghostscript to compress on your computer:<br><br>
+        <a href="https://ghostscript.com/releases/gsdnld.html"
+            target="_blank"
+            style="color:blue; font-weight:bold;">
+            Ghostscript Download
+        </a>`,
+        "OK",
+        () => {}
+      );
+      return;
+    }
+    const displayTitle = `${title}`;
+    const { error } = await supabaseClient
+      .from("BalPratibhaTable")
+      .insert([{PratibhaTopic: displayTitle, PratibhaCreatorName: CreatorName, PratibhaCreatorClass: CreatorClass, PratibhaUrl: data.secure_url, PratibhaPublicId: data.public_id}]);
+    if (error) {
+      showCustomDialog1("Error", error.message, "OK", function(){});
+      return;
+    }
+    showCustomDialog1("Success", "Pratibha is uploaded successfully!", "OK", function(){});
+    document.getElementById("PratibhaFile").value = "";
+    document.getElementById("PratibhaTitle").value = "";
+    document.getElementById("PratibhaCreatorName").value = "";
+    document.getElementById("PratibhaCreatorClass").value = "";
+    document.getElementById("btnChoosePratibhaFile").textContent = "Choose Pratibha";
+    loadPratibha();
+  } finally {
+    uploadBtn.innerText = "Upload";
+    uploadBtn.disabled = false;
+  }
+}
+// -------------------- LOAD PRATIBHA --------------------
+async function loadPratibha() {
+  const { data, error } = await supabaseClient
+    .from("BalPratibhaTable")
+    .select("*")
+    .order("id", { ascending: false });
+  if (error) {
+    console.error(error);
+    return;
+  }
+  const adminList = document.getElementById("AdminPratibhaList");
+  adminList.innerHTML = "";
+  data.forEach(Pratibha => {
+    const div = document.createElement("div");
+    div.className = "PratibhaItems";
+    const safeUrl = encodeURIComponent(Pratibha.PratibhaUrl);
+    const safeTitle = Pratibha.PratibhaTopic.replace(/'/g, "\\'");
+    const safeCreatorName = Pratibha.PratibhaCreatorName.replace(/'/g, "\\'");
+    const safeCreatorClass = Pratibha.PratibhaCreatorClass.replace(/'/g, "\\'");    
+    let openCode = `showPictureViewer('${Pratibha.PratibhaUrl}','${safeTitle}')`;
+    div.innerHTML = `
+      <h3>${Pratibha.PratibhaTopic}</h3>
+      <div class="PratibhaCreators">${Pratibha.PratibhaCreatorName}(${Pratibha.PratibhaCreatorClass})</div>
+      <button class="btnOpenPratibha" onclick="${openCode}">Open</button>
+      <button class="btnDownloadPratibha" onclick="downloadPratibha(this, '${Pratibha.PratibhaUrl}', '${Pratibha.PratibhaTopic}')">Download</button>
+      <button class="btnDeletePratibha" id="delete-${Pratibha.id}" onclick="deletePratibha(${Pratibha.id}, '${Pratibha.PratibhaPublicId}')">Delete</button>
+      <hr>
+    `;
+    adminList.appendChild(div);
+  });
+}
+loadPratibha();
+// -------------------- DELETE PRATIBHA --------------------
+async function deletePratibha(id, publicId) {
+  const btn = document.getElementById(`delete-${id}`);
+  const confirmDelete = confirm("Delete this Pratibha?");
+  if (!confirmDelete) return;
+  try {
+    btn.innerText = "Deleting...";
+    btn.disabled = true;
+    console.log("Deleting publicId:", publicId);
+    const response = await fetch(
+      "https://wrjivuysumgpoqmabwpw.supabase.co/functions/v1/delete-book",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId })
+      }
+    );
+    const result = await response.json();
+    console.log(result);
+    await supabaseClient
+      .from("BalPratibhaTable")
+      .delete()
+      .eq("id", id);
+    loadPratibha();
+  } finally {
+    btn.innerText = "Delete";
+    btn.disabled = false;
+  }
+}
+// -------------------- DOWNLOAD PRATIBHA --------------------
+async function downloadPratibha(btn, url, fileName) {
+  try {
+    btn.innerText = "Downloading...";
+    btn.disabled = true;
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+  } finally {
+    setTimeout(() => {
+      btn.innerText = "Download";
+      btn.disabled = false;
+    }, 1500);
+  }
+}
 
     </script> 
 </body>

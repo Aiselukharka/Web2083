@@ -4,13 +4,11 @@
     font-weight: normal;
     font-style: normal;
 }
-
 * { 
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
 }
-
 html{
     width: 100%;
     height: 100%;
@@ -18,66 +16,108 @@ html{
     flex-direction: column;
     align-items: center;  
 }
-
 body { 
     width: 100%;
     max-width: 1200px;   
+    height: auto;
     font-family: Arial, sans-serif; 
-    min-height: 100%;
     font-family: 'Arial', 'MySanskritFont', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;  
 }
-
 #MainBody{
     width: 96%;
     max-width: 1100px;   
     height: auto;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #ffaaaa;
-    min-height: 100%;
     margin: 0 auto;       
 }
-
+#SchoolNameBox{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(180deg, #000000, #222222);
+    padding: 10px 0;
+    text-align: center;
+}
+#SchoolLogo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;     
+}
+#SchoolName{
+    font-size: 40px;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 1px 1px 3px #ffffff;
+}
+#SchoolAddress{
+    font-size: 28px;
+    color: #ffff00;
+    margin-top: 8px;
+    text-shadow: 1px 1px 3px #00ff00;
+}
 #PageNaviggationBox {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    background: #000000;
-    padding: 1rem;
-    text-align: center;
+    flex-wrap: wrap;
+    background: linear-gradient(180deg, #222222, #444444);
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
 }
-#LogoBox{
-    width: 6%;
-    height: auto;     
-}
-#LogoBox img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-#PageNavigationSelect{
+#PageNavigationSelect {
     width: 40%;
-    font-size: 2vw;
+    min-width: 400px;
+    font-size: 32px;
     font-weight: bold;
-    padding: 2vh;
-    border: 4px solid #000000;
+    padding: 10px;
+    border: 2px solid #000000;
 }
-#PageNaviggationBox button{
+#PageNaviggationBox button {
     width: 20%;
-    padding: 2vh 0 2vh 0;
-    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    min-width: 300px;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #007700, #009900, #007700);
     color: #ffffff;
-    border-radius: 4vw;  
-    font-size: 2vw;  
+    border-radius: 12px;  
+    font-size: 32px;  
     font-weight: bold;
     cursor: pointer;
+    border: none;
 }
-#pageNaviggationBox button:hover{
-    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+#PageNaviggationBox button:hover {
+    background: linear-gradient(180deg, #005500, #007700, #005500);
     color: #ffff00;
+}
+
+
+#FooterBox {
+    width: 100%;
+    background: linear-gradient(180deg, #444444, #000000);
+    padding: 20px 0;
+    margin-top: 20px;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 10px;   
+}
+#FooterBox a {
+    display: inline-block;     
+    width: 30%;
+    color: #00ffff;
+    font-size: 18px;
+    text-align: center;
+}
+#FooterBox a:hover {
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
 }

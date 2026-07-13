@@ -15,47 +15,50 @@ PageNavigationDripDown.addEventListener("change", function () {
         "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
         "AdminPage": "../AdminPage/LogInIndex.html"        
     };
-
     const selectedPage = pageMap[this.value];
     if (selectedPage) {
         window.location.href = selectedPage;
     }
 });
 
-//Dynamically show logo and favicon
+// -------------------- DYNAMICALLY LOADING HEADER AND FAVICON --------------------
 async function loadDynamicLogoAndFavicon() {
     try {
-        // Query the table natively using your pre-configured supabaseClient
         const { data, error } = await supabaseClient
             .from('AboutSchoolTable')
-            .select('Value')
-            .eq('Name', 'SchoolLogo')
-            .single(); // Accesses the single matching record directly
-
+            .select('Name, Value')
+            .in('Name', ['SchoolLogo', 'SchoolName', 'SchoolAddress']);
         if (error) {
-            console.error("Supabase query error loading branding:", error.message);
+            console.error("Supabase query error:", error.message);
             return;
         }
-
-        if (data && data.Value) {
-            const freshLogoUrl = data.Value;
-
-            // 1. Update the Favicon inside the Document Head
+        if (data && data.length > 0) {
+            const brandingData = {};
+            data.forEach(item => {
+                brandingData[item.Name] = item.Value;
+            });
+            const freshLogoUrl = brandingData.SchoolLogo;
             const faviconElement = document.getElementById('dynamicFavicon');
-            if (faviconElement) {
-                faviconElement.href = freshLogoUrl;
+            const logoElement = document.getElementById('SchoolLogo');            
+            if (faviconElement && freshLogoUrl) {
+                faviconElement.href = freshLogoUrl;            
             }
-
-            // 2. Update the Logo Image Source inside #LogoBox
-            const logoImgElement = document.querySelector('#LogoBox img');
-            if (logoImgElement) {
-                logoImgElement.src = freshLogoUrl;
+            if (logoElement && freshLogoUrl) {
+                logoElement.src = freshLogoUrl;
             }
-            
-            console.log("Logo and Favicon synced dynamically via supabaseClient!");
+            const schoolNameElement = document.getElementById('SchoolName');
+            if (schoolNameElement && brandingData.SchoolName) {
+                schoolNameElement.textContent = brandingData.SchoolName;
+            }
+            const schoolAddressElement = document.getElementById('SchoolAddress');
+            if (schoolAddressElement && brandingData.SchoolAddress) {
+                schoolAddressElement.textContent = brandingData.SchoolAddress;
+            }
         }
     } catch (error) {
         console.error("Unexpected error setting up branding layout:", error);
     }
 }
-document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
+document.addEventListener('DOMContentLoaded', () => {
+    loadDynamicLogoAndFavicon();
+});

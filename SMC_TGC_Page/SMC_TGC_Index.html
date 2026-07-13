@@ -9,16 +9,20 @@
 </head>
 <body>
     <div id="MainBody">
+        <div id="SchoolNameBox">
+            <img id="SchoolLogo" src="" alt="Logo">
+            <div id="SchoolName">School Name Loading ........</div>
+            <div id="SchoolAddress">School Address Loading ........</div>
+        </div>
         <div id="PageNaviggationBox">
-            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
             <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
             <select id="PageNavigationSelect">   
-                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option>SMC & TGC</option>
+                <option value="HumanResourcePage">Human Resource</option>
                 <option value="StudentPage">Students</option>
                 <option value="QuestionBankPage">Question Bank</option>
                 <option value="NoticePage">Notice</option>
                 <option value="LibraryPage">Library</option>
-                <option value="HumanResourcePage">Human Resource</option>
                 <option value="HomePage">Home</option>
                 <option value="BalPratibhaPage">Bal Pratibha</option>
                 <option value="AboutUsPage">About Us</option>
@@ -27,8 +31,22 @@
                 <option value="AdminPage">Admin</option>                
             </select>
             <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
-        </div>
+        </div>    
 
+        <div id="CentralBody"></div>
+
+        <div id="FooterBox">
+            <a href="../index.html">Home</a>
+            <a href="../AdminPage/AdminIndex.html">Admin</a>
+            <a href="../BalPratibhaPage/BalPratibhaIndex.html">Bal Pratibha</a>
+            <a href="../HelpingHandPage/HelpingHandIndex.html">Helping Hand</a>
+            <a href="../HumanResourcePage/HumanResourceIndex.html">Human Resources</a>
+            <a href="../LibraryPage/LibraryIndex.html">Library</a>
+            <a href="../NoticePage/NoticeIndex.html">Notice</a>
+            <a href="../QuestionBankPage/QuestionBankIndex.html">Question Bank</a>
+            <a href="../GalleryPage/GalleryIndex.html">Gallery</a>
+            <a href="../StudentPage/StudentIndex.html">Students</a>            
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../SupabaseConfig.js"></script>

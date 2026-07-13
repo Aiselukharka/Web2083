@@ -12,27 +12,30 @@
     <link rel="stylesheet" href="StudentStyle.css">
 </head>
 <body>
-    <div id="MainBody">        
-            <div id="HeaderBox">
-                <img id="SchoolLogo" src="" alt="Logo">
-                <h1 id="SchoolName">Loading School...</h1>
-                <p id="SchoolAddress">Loading Address...</p>
-                <select id="PageNavigationSelect">   
-                    <option value="StudentPage" selected>Students</option>
-                    <option value="QuestionBankPage">Question Bank</option>
-                    <option value="NoticePage">Notice</option>
-                    <option value="LibraryPage">Library</option>
-                    <option value="HumanResourcePage">Human Resource</option>
-                    <option value="HomePage">Home</option>
-                    <option value="BalPratibhaPage">Bal Pratibha</option>
-                    <option value="AboutUsPage">About Us</option>
-                    <option value="GalleryPage">Gallery</option>
-                    <option value="SMC_TGC_Page">SMC & TGC</option>
-                    <option value="HelpingHandPage">Helping Hand</option>
-                    <option value="AdminPage">Admin</option>                
-                </select>  
-            </div>
-
+    <div id="MainBody">     
+        <div id="SchoolNameBox">
+            <img id="SchoolLogo" src="" alt="Logo">
+            <div id="SchoolName">School Name Loading ........</div>
+            <div id="SchoolAddress">School Address Loading ........</div>
+        </div>   
+        <div id="PageNaviggationBox">
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
+            <select id="PageNavigationSelect">   
+                <option>Student</option>
+                <option value="HumanResourcePage">Human Resource</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="NoticePage">Notice</option>
+                <option value="LibraryPage">Library</option>
+                <option value="HomePage">Home</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="AdminPage">Admin</option>                
+            </select>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>
         <div id="FilterControlPanel">
             <div class="filters-inner-row">
                 <div class="filter-group">
@@ -69,8 +72,6 @@
             <button class="btn-export" onclick="exportData('pdf')">PDF Document</button>
             <button class="btn-export" onclick="exportData('jpg')">JPG Image</button>
         </div>
-    </div>
-
     <div id="StudentDetailModal" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close-btn" onclick="closeStudentModal()">&times;</span>
@@ -91,7 +92,19 @@
             </div>
         </div>
     </div>
-
+    <div id="FooterBox">
+        <a href="../index.html">Home</a>
+        <a href="../AdminPage/AdminIndex.html">Admin</a>
+        <a href="../BalPratibhaPage/BalPratibhaIndex.html">Bal Pratibha</a>
+        <a href="../HelpingHandPage/HelpingHandIndex.html">Helping Hand</a>
+        <a href="../HumanResourcePage/HumanResourceIndex.html">Human Resources</a>
+        <a href="../LibraryPage/LibraryIndex.html">Library</a>
+        <a href="../NoticePage/NoticeIndex.html">Notice</a>
+        <a href="../QuestionBankPage/QuestionBankIndex.html">Question Bank</a>
+        <a href="../SMC_TGC_Page/SMC_TGC_Index.html">SMC & TGC</a>
+        <a href="../GalleryPage/GalleryIndex.html">Gallery</a>        
+    </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../SupabaseConfig.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
