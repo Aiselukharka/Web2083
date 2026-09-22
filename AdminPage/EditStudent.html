@@ -576,7 +576,7 @@
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
                 <option value="HelpingHandEditBox">Edit Helping Hand</option>
-                <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
+                <option value="ClassEditBox">Edit Class</option>
                 <option value="AdminEditBox">Admin</option>
             </select>
             <select id="AdminToolsSelect">
@@ -669,7 +669,7 @@ if (EditNavigationDropDown) {
             "BalPratibhaEditBox": "EditBalPratibha.html",
             "GalleryEditBox": "EditGallery.html",
             "HelpingHandEditBox": "EditHelpingHand.html",
-            "SMC_TGCEditBox": "EditSMC_TGC.html",
+            "ClassEditBox": "EditClass.html",
             "AdminEditBox": "AdminIndex.html"
         };   
         const selectedEdit = pageMap[this.value];
@@ -720,20 +720,16 @@ async function loadDynamicLogoAndFavicon() {
             .select('Value')
             .eq('Name', 'SchoolLogo')
             .single();
-
         if (error) {
             console.error("Supabase query error loading branding:", error.message);
             return;
         }
-
         if (data && data.Value) {
             const freshLogoUrl = data.Value;
-
             const faviconElement = document.getElementById('dynamicFavicon');
             if (faviconElement) {
                 faviconElement.href = freshLogoUrl;
             }
-
             const logoImgElement = document.querySelector('#LogoBox img');
             if (logoImgElement) {
                 logoImgElement.src = freshLogoUrl;
@@ -746,206 +742,8 @@ async function loadDynamicLogoAndFavicon() {
 }
 document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
 
-//Add and Edit Classes
 let existingClassIds = {};
-const StudentEditContainer = document.getElementById('StudentEditContainer');
 
-if (StudentEditContainer) {
-    const EditStudentBlockHTML = `
-        <div id="EditStudentHead">Add/Edit Student Data Below</div>
-        <div id="StudentClassBox">
-            <div id="EditStudentClassHead">Add/Edit Classes</div>
-        </div>
-    `;  
-    StudentEditContainer.insertAdjacentHTML('beforeend', EditStudentBlockHTML);      
-    const StudentClassBox = document.getElementById('StudentClassBox');
-    
-    // Fixed: Loop up to 20 to match all your layout slots uniformly
-    for (let i = 1; i <= 20; i++) {
-        const StudentClassesHTML = `
-            <div class="StudentClasses">
-                <div>${i}. Class Name:</div>
-                <input type="text" id="ClassName${i}"></input>
-            </div>
-        `;
-        StudentClassBox.insertAdjacentHTML('beforeend', StudentClassesHTML);
-    }    
-    const btnSaveStudentClassesHTML = `
-        <div id="SaveClassesContainer">
-            <button id="btnSaveStudentClasses" type="button" onClick="saveClassNames()">Save Class Names</button>
-        </div>
-    `;
-    StudentClassBox.insertAdjacentHTML('beforeend', btnSaveStudentClassesHTML);
-}
-
-async function loadExistingClassesIntoInputs() {
-    try {
-        // FIXED: Order by SortOrder instead of created_at
-        const { data: classes, error } = await supabaseClient
-            .from('ClassTable')
-            .select('id, ClassName, SortOrder')
-            .order('SortOrder', { ascending: true });
-            
-        if (error) throw error;
-        
-        existingClassIds = {};
-        
-        // Reset all 20 inputs to prevent visual ghosting
-        for (let i = 1; i <= 20; i++) {
-            const inputElement = document.getElementById(`ClassName${i}`);
-            if (inputElement) inputElement.value = "";
-        }
-
-        // Map the classes directly to their saved input slots
-        classes.forEach((singleClass) => {
-            // If SortOrder exists, use it; otherwise fallback to its array position
-            const inputIndex = singleClass.SortOrder ? singleClass.SortOrder : 20;
-            
-            if (inputIndex <= 20) {
-                const inputElement = document.getElementById(`ClassName${inputIndex}`);
-                if (inputElement) {
-                    inputElement.value = singleClass.ClassName;                    
-                    existingClassIds[inputIndex] = singleClass.id;
-                }
-            }
-        });
-    } catch (error) {
-        console.error("Error loading classes into inputs:", error.message);
-    }
-}
-document.addEventListener('DOMContentLoaded', loadExistingClassesIntoInputs);
-
-async function saveClassNames() {
-    const classesToInsert = []; 
-    const classesToUpdate = []; 
-    const classesToDelete = []; 
-    
-    const btnSaveClassNames = document.getElementById('btnSaveStudentClasses');
-    if (btnSaveClassNames) {
-        btnSaveClassNames.textContent = "Saving .....";
-        btnSaveClassNames.disabled = true;
-    }
-    
-    // Scan all 20 input slots
-    for (let i = 1; i <= 20; i++) {
-        const inputElement = document.getElementById(`ClassName${i}`);        
-        if (inputElement) {
-            const classNameValue = inputElement.value.trim();            
-            
-            if (classNameValue !== "") {
-                if (existingClassIds[i]) {
-                    // Update: Include SortOrder
-                    classesToUpdate.push({ 
-                        id: existingClassIds[i], 
-                        ClassName: classNameValue,
-                        SortOrder: i // FIXED: Explicitly saves the row position sequence
-                    });
-                } else {
-                    // Insert: Include SortOrder
-                    classesToInsert.push({ 
-                        ClassName: classNameValue,
-                        SortOrder: i // FIXED: Explicitly saves the row position sequence
-                    });
-                }
-            } else {
-                if (existingClassIds[i]) {
-                    classesToDelete.push(existingClassIds[i]);
-                }
-            }
-        }
-    }
-    
-    if (classesToInsert.length === 0 && classesToUpdate.length === 0 && classesToDelete.length === 0) {
-        alert("No modifications detected.");
-        if (btnSaveClassNames) {
-            btnSaveClassNames.textContent = "Save Class Names";
-            btnSaveClassNames.disabled = false;
-        }
-        return;
-    }
-    
-    try {
-        // --- STEP 1: CASCADE DELETIONS ---
-        if (classesToDelete.length > 0) {
-            console.log("Processing cascade cleanups for cleared inputs:", classesToDelete);
-            
-            for (let targetClassId of classesToDelete) {
-                const { data: students, error: fetchError } = await supabaseClient
-                    .from('StudentDataTable')
-                    .select('PhotoUrl')
-                    .eq('ClassID', targetClassId);
-
-                if (fetchError) throw fetchError;
-
-                const collectedPublicIds = [];
-                if (students && students.length > 0) {
-                    students.forEach(st => {
-                        if (st.PhotoUrl) {
-                            const pid = getPublicIdFromUrl(st.PhotoUrl);
-                            if (pid) collectedPublicIds.push(pid);
-                        }
-                    });
-                }
-
-                if (collectedPublicIds.length > 0) {
-                    const { error: edgeError } = await supabaseClient.functions.invoke(
-                        'delete-student-photo',
-                        { body: { publicIds: collectedPublicIds } }
-                    );
-                    if (edgeError) console.error("Cloudinary asset cleanup warning:", edgeError.message);
-                }
-
-                const { error: studentDeleteError } = await supabaseClient
-                    .from('StudentDataTable')
-                    .delete()
-                    .eq('ClassID', targetClassId);
-
-                if (studentDeleteError) throw studentDeleteError;
-            }
-
-            const { error: classDeleteError } = await supabaseClient
-                .from('ClassTable')
-                .delete()
-                .in('id', classesToDelete);
-                
-            if (classDeleteError) throw classDeleteError;
-        }
-
-        // --- STEP 2: INSERT BRAND NEW CLASSES ---
-        if (classesToInsert.length > 0) {
-            const { error: insertError } = await supabaseClient
-                .from('ClassTable')
-                .insert(classesToInsert);
-                
-            if (insertError) throw insertError;
-        }
-
-        // --- STEP 3: UPDATE EXISTING CLASSES ---
-        if (classesToUpdate.length > 0) {
-            const { error: updateError } = await supabaseClient
-                .from('ClassTable')
-                .upsert(classesToUpdate, { onConflict: 'id' }); 
-                
-            if (updateError) throw updateError;
-        }
-        
-        alert("Changes synchronized successfully!");        
-        await loadExistingClassesIntoInputs();
-        
-        if (typeof loadClassNameDropdown === "function") await loadClassNameDropdown(); 
-        if (typeof loadClassesInPhotoSelect === "function") await loadClassesInPhotoSelect(); 
-        if (typeof loadClassesInDeleteSelect === "function") await loadClassesInDeleteSelect();
-
-    } catch (error) {
-        console.error("Error updating classes in Supabase:", error.message);
-        alert("Failed to save changes: " + error.message);
-    }
-    
-    if (btnSaveClassNames) {
-        btnSaveClassNames.textContent = "Save Class Names";
-        btnSaveClassNames.disabled = false;    
-    }
-}
     //Add and Edit Student data
     const StudentDataHTML = `
         <div id="StudentDataBox">
@@ -998,6 +796,7 @@ window.excelGrid = null;
 window.deletedStudentIds = []; 
 const EXCEL_COLUMNS = [
     { type: 'hidden', name: 'id' }, 
+    { type: 'hidden', name: 'ClassID' },
     { type: 'text', title: 'Roll. No.', name: 'RollNo', align: 'center', width: 80 },
     { type: 'text', title: 'Regd. No.', name: 'RegdNo', align: 'left', width: 150 },
     { type: 'text', title: 'Symb. No.', name: 'SymbNo', align: 'left', width: 150 },
@@ -1038,6 +837,7 @@ if (classSelectionSelect) {
                 const formattedStudents = students.map(st => ({
                     // Mapping ONLY the exact properties configured in your EXCEL_COLUMNS array
                     id: st.id,
+                    ClassID: st.ClassID || classId,
                     RollNo: parseInt(st.RollNo, 10) || 0,
                     RegdNo: st.RegdNo || '',
                     SymbNo: st.SymbNo || '', 
@@ -1074,7 +874,6 @@ if (classSelectionSelect) {
 function loadClassStudents() {
     const classId = document.getElementById('StudentClassSelectionSelect').value;
     const requestedCount = parseInt(document.getElementById('studentCountInput').value) || 0;
-
     if (!classId) {
         alert("Please select a class first!");
         return;
@@ -1163,7 +962,6 @@ function initializeExcelGrid(dataArray) {
                 }
 
                 try {
-                    // Call the new formatting function here safely
                     const convertedAD = BS2AD_YMD(bsDate); 
                     
                     if (window.excelGrid) {
@@ -1178,45 +976,54 @@ function initializeExcelGrid(dataArray) {
             }
         },
 
+        onselection: function(instance, x1, y1, x2, y2) {
+            if (instance && typeof instance.updateScroll === 'function') {
+                instance.updateScroll();
+            }
+        },
+
         onbeforedeleterow: function(instance, rowNumber, numOfRows) {
-            // ... (rest of your original code remains unchanged)
             return true;
         }
     });
 }
 
 async function saveClassStudentData() {
-    // We grab the ClassID directly from the dropdown selection box here
     const classId = document.getElementById('StudentClassSelectionSelect').value;
     if (!classId || !window.excelGrid) {
         alert("Please load and populate a valid class table before saving.");
         return;
     }
-
+    
+    // Explicitly grab data from the grid instance
     const gridData = window.excelGrid.getJson(); 
     const newStudentsPayload = [];
     const existingStudentsPayload = [];
 
     gridData.forEach(row => {
-        if (row.StudentName && row.StudentName.trim() !== "") {
+        // Safe check for name field regardless of property casing variations
+        const studentName = row.StudentName || row.studentname;
+        
+        if (studentName && studentName.trim() !== "") {
+            // FORCE the active classId from the dropdown to ensure it never gets nullified
             const studentRow = {
-                ClassID: classId, // Injecting the clean dropdown classId into the database payload
-                RollNo: parseInt(row.RollNo, 10) || 0, 
-                RegdNo: row.RegdNo,
-                SymbNo: row.SymbNo, 
-                StudentName: row.StudentName.trim(),
-                StudentAddress: row.StudentAddress,
-                StudentGender: row.StudentGender,
-                DOBBS: row.DOBBS,
-                DOBAD: row.DOBAD,
-                FatherName: row.FatherName,
-                MotherName: row.MotherName,
-                Contact: row.Contact,
-                Email: row.Email,
-                Stream: row.Stream,
-                Race: row.Race,
-                House: row.House,
-                Subjects: row.Subjects
+                ClassID: classId, 
+                RollNo: parseInt(row.RollNo || row.rollno, 10) || 0, 
+                RegdNo: row.RegdNo || row.regdno || '',
+                SymbNo: row.SymbNo || row.symbno || '', 
+                StudentName: studentName.trim(),
+                StudentAddress: row.StudentAddress || row.studentaddress || '',
+                StudentGender: row.StudentGender || row.studentgender || '',
+                DOBBS: row.DOBBS || row.dobbs || '',
+                DOBAD: row.DOBAD || row.dobad || '',
+                FatherName: row.FatherName || row.fathername || '',
+                MotherName: row.MotherName || row.mothername || '',
+                Contact: row.Contact || row.contact || '',
+                Email: row.Email || row.email || '',
+                Stream: row.Stream || row.stream || '',
+                Race: row.Race || row.race || '',
+                House: row.House || row.house || '',
+                Subjects: row.Subjects || row.subjects || ''
             };
 
             const rawId = row.id;
@@ -1236,7 +1043,6 @@ async function saveClassStudentData() {
     });
 
     try {
-        // STEP 1: Process pending deletions in Supabase first
         if (window.deletedStudentIds && window.deletedStudentIds.length > 0) {
             const { error: deleteError } = await supabaseClient
                 .from('StudentDataTable')
@@ -1246,7 +1052,7 @@ async function saveClassStudentData() {
             if (deleteError) throw deleteError;
         }
 
-        // STEP 2: Handle updates for pre-existing students
+        // Upserting will now safely contain the hardcoded string from dropdown classId selection
         if (existingStudentsPayload.length > 0) {
             const { error: updateError } = await supabaseClient
                 .from('StudentDataTable')
@@ -1255,7 +1061,6 @@ async function saveClassStudentData() {
             if (updateError) throw updateError;
         }
 
-        // STEP 3: Handle insertions for completely new students
         if (newStudentsPayload.length > 0) {
             const { error: insertError } = await supabaseClient
                 .from('StudentDataTable')
@@ -1264,7 +1069,7 @@ async function saveClassStudentData() {
             if (insertError) throw insertError;
         }
 
-        alert("All changes, including deletions, saved successfully!");
+        alert("All changes, including corrections, saved successfully!");
         window.deletedStudentIds = [];
         toggleSaveButton(false);
 
@@ -1623,27 +1428,18 @@ async function executeWholeClassDeletion() {
                     body: { publicIds: collectedPublicIds }
                 }
             );
-
             if (edgeError) {
                 throw new Error(`Edge Function Asset Purge Rejected: ${edgeError.message}`);
             }
         }
-
-        // Delete database table student rows from Supabase
         const { error: databaseError } = await supabaseClient
             .from('StudentDataTable')
             .delete()
             .eq('ClassID', classId);
-
         if (databaseError) throw databaseError;
-
         alert("Class wiped successfully! Both remote assets and database records have been scrubbed.");
-
-        // Clean up UI layout states completely
         if (deleteButton) deleteButton.style.display = 'none';
-        if (rosterBox) rosterBox.innerHTML = '';
-        
-        // Refresh structural UI dropdown lists globally
+        if (rosterBox) rosterBox.innerHTML = '';        
         await loadClassesInDeleteSelect(); 
         if (typeof loadClassNameDropdown === "function") await loadClassNameDropdown();
         if (typeof loadClassesInPhotoSelect === "function") await loadClassesInPhotoSelect();

@@ -190,3 +190,89 @@ function showCustomDialog3(title, htmlMessage, btnText = "OK", onClick = functio
         btn.style.transform = "scale(1)";
     };
 }
+
+// DIALOG 4: For structural layout choice actions with 3 options
+function showCustomDialog4(title, message, btnText1, btnText2, btnText3, onClick1, onClick2, onClick3) {
+    const overlay = document.createElement('div');
+    Object.assign(overlay.style, {
+        position: 'fixed', top: '0', left: '0',
+        width: '100vw', height: '100vh',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        display: 'flex', justifyContent: 'center',
+        alignItems: 'center', zIndex: '200000'
+    });
+
+    const dialogBox = document.createElement('div');
+    Object.assign(dialogBox.style, {
+        backgroundColor: '#ffdddd', width: '450px',
+        borderRadius: '15px', textAlign: 'center',
+        boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+        fontFamily: 'sans-serif', overflow: 'hidden'
+    });
+
+    const button1 = document.createElement('button');
+    button1.innerText = btnText1;
+    Object.assign(button1.style, {
+        flex: '1', padding: '12px 8px', cursor: 'pointer',
+        backgroundColor: '#aaaa00', color: 'white',
+        border: 'none', borderRadius: '8px', fontWeight: 'bold', fontVerdana: '13px'
+    });
+
+    const button2 = document.createElement('button');
+    button2.innerText = btnText2;
+    Object.assign(button2.style, {
+        flex: '1', padding: '12px 8px', cursor: 'pointer',
+        backgroundColor: '#0000aa', color: 'white',
+        border: 'none', borderRadius: '8px', fontWeight: 'bold', fontVerdana: '13px'
+    });
+
+    const button3 = document.createElement('button');
+    button3.innerText = btnText3;
+    Object.assign(button3.style, {
+        flex: '1', padding: '12px 8px', cursor: 'pointer',
+        backgroundColor: '#666666', color: 'white',
+        border: 'none', borderRadius: '8px', fontWeight: 'bold', fontVerdana: '13px'
+    });
+
+    dialogBox.innerHTML = `
+        <div style="background-color: #111111; padding: 15px;">
+            <h2 style="margin:0; font-size: 20px; color:#fff;">${title}</h2>
+        </div>
+        <div style="padding: 20px;">
+            <p style="color:#444; font-size: 16px; line-height: 1.5; margin-bottom: 25px;">${message}</p>
+            <div id="tripleButtonContainer" style="display:flex; justify-content:space-between; gap: 10px;"></div>
+        </div>
+    `;
+
+    overlay.appendChild(dialogBox);
+    document.body.appendChild(overlay);
+    
+    const container = dialogBox.querySelector('#tripleButtonContainer');
+    container.appendChild(button1);
+    container.appendChild(button2);
+    container.appendChild(button3);
+
+    button1.onclick = () => {
+        if (onClick1) onClick1();
+        document.body.removeChild(overlay);
+    };
+
+    button2.onclick = () => {
+        if (onClick2) onClick2();
+        document.body.removeChild(overlay);
+    };
+
+    button3.onclick = () => {
+        if (onClick3) onClick3();
+        document.body.removeChild(overlay);
+    };
+
+    button1.onmouseenter = () => { button1.style.backgroundColor = "#00aa00"; };
+    button1.onmouseleave = () => { button1.style.backgroundColor = "#aaaa00"; };
+    
+    button2.onmouseenter = () => { button2.style.backgroundColor = "#00aa00"; };
+    button2.onmouseleave = () => { button2.style.backgroundColor = "#0000aa"; };
+
+    button3.onmouseenter = () => { button3.style.backgroundColor = "#cc3333"; };
+    button3.onmouseleave = () => { button3.style.backgroundColor = "#666666"; };
+}

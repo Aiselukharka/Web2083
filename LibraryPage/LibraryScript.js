@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // -------------------- GLOBAL HELPER FUNCTIONS --------------------
-
 window.changeLanguage = function(lang) {
     if (lang === 'en') {
         console.log('Language switched to English');

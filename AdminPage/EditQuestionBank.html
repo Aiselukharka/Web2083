@@ -273,7 +273,7 @@
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
                 <option value="HelpingHandEditBox">Edit Helping Hand</option>
-                <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
+                <option value="ClassEditBox">Edit Class Data</option>
                 <option value="AdminEditBox">Admin</option>
             </select>
             <select id="AdminToolsSelect">
@@ -297,6 +297,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
     <script src="../SupabaseConfig.js"></script> 
+    <script src="../DocumentReader.js"></script>
     <script src="../DateConverter.js"></script>
     <script src="../SmartCalculator.js"></script>
     <script src="../NepaliCalendar.js"></script>
@@ -364,7 +365,7 @@ EditNavigationDropDown.addEventListener("change", function () {
         "BalPratibhaEditBox": "EditBalPratibha.html",
         "GalleryEditBox": "EditGallery.html",
         "HelpingHandEditBox": "EditHelpingHand.html",
-        "SMC_TGCEditBox": "EditSMC_TGC.html",
+        "ClassEditBox": "EditClass.html",
         "AdminEditBox": "AdminIndex.html"
     };   
     const selectedEdit = pageMap[this.value];

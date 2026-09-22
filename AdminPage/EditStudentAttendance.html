@@ -224,29 +224,6 @@
             min-height: 100px;
         }
 
-        #btnSubmitAttendance {
-            padding: 12px 40px;
-            font-size: 20px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background: #28a745;
-            color: white;
-            transition: all 0.3s ease;
-            margin: 10px 0;
-        }
-
-        #btnSubmitAttendance:hover {
-            background: #218838;
-            transform: scale(1.02);
-        }       
-
-        #btnSubmitAttendance.visible {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
         /* Add to your existing CSS */
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -310,6 +287,49 @@
                 transform: translateY(0);
             }
         }
+        #SubmitButtonBox{
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        #btnSubmitAttendance {
+            width: 40%;
+            padding: 10px 0;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background: linear-gradient(180deg, #007700, #009900, #007700);
+            color: white;            
+        }
+
+        #btnSubmitAttendance:hover {
+            background: linear-gradient(180deg, #005500, #007700, #005500);
+            color: #ffff00;
+        }       
+
+        #btnSubmitAttendance.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        #btnClearAttendanceData{
+            width: 40%;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px 0;
+            background: linear-gradient(180deg, #770000, #990000, #770000);
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+        #btnClearAttendanceData:hover{
+            background: linear-gradient(180deg, #550000, #770000, #550000);
+            color: #ffff00;            
+        }
         
     </style>
 </head>
@@ -352,7 +372,7 @@
                 <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
                 <option value="GalleryEditBox">Edit Gallery</option>
                 <option value="HelpingHandEditBox">Edit Helping Hand</option>
-                <option value="SMC_TGC_EditBox">Edit SMC & TGC</option>
+                <option value="ClassEditBox">Edit Class Data</option>
                 <option value="AdminEditBox">Admin</option>
             </select>
             <select id="AdminToolsSelect">
@@ -378,7 +398,10 @@
                 <button type="button" id="btnShowAttendance" onclick="showAttendance()">Show Attendance</button>
             </div>
             <div id="AttendanceBox"></div>
+            <div id="SubmitButtonBox">
             <button type="button" id="btnSubmitAttendance" onclick="submitAttendance()">Submit</button>
+            <button type="button" id="btnClearAttendanceData" onclick="clearAttendanceData()">Clear Class Attendance</button>
+            </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -388,6 +411,7 @@
     <script src="../SupabaseConfig.js"></script> 
     <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
     <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <script src="../CustomDialog.js"></script>
     <script src="../DateConverter.js"></script>
     <script src="../SmartCalculator.js"></script>
     <script src="../NepaliCalendar.js"></script>
@@ -401,6 +425,13 @@ if (typeof supabaseClient === 'undefined') {
 let currentADDate = new Date(); // This will track the displayed date
 let adCalendarVisible = false;
 let bsCalendarVisible = false;
+let existingAttendance = null;
+let hasAttendanceChanged = false;
+let isLoadingAttendance = false;
+let currentAttendanceMode = 'byName';
+let currentStudents = [];
+let currentClass = '';
+
 
 // -------------------- CLOUDINARY --------------------
 const CLOUD_NAME = "dcdwpdnyp";
@@ -464,7 +495,7 @@ if (EditNavigationDropDown) {
             "BalPratibhaEditBox": "EditBalPratibha.html",
             "GalleryEditBox": "EditGallery.html",
             "HelpingHandEditBox": "EditHelpingHand.html",
-            "SMC_TGCEditBox": "EditSMC_TGC.html",
+            "ClassEditBox": "EditClass.html",
             "AdminEditBox": "AdminIndex.html"
         };   
         const selectedEdit = pageMap[this.value];
@@ -581,18 +612,45 @@ function updateDates() {
 function decreaseDate() {
     currentADDate.setDate(currentADDate.getDate() - 1);
     updateDates();
+    // Refresh attendance status for new date
+    if (currentClass) {
+        getClassID(currentClass).then(async classID => {
+            if (classID) {
+                await checkExistingAttendance(classID);
+                renderAttendanceMode();
+            }
+        });
+    }
 }
 
-// Increase date by one day
+// Update increaseDate to refresh attendance status
 function increaseDate() {
     currentADDate.setDate(currentADDate.getDate() + 1);
     updateDates();
+    // Refresh attendance status for new date
+    if (currentClass) {
+        getClassID(currentClass).then(async classID => {
+            if (classID) {
+                await checkExistingAttendance(classID);
+                renderAttendanceMode();
+            }
+        });
+    }
 }
 
-// Go back to today's date
+// Update goToToday to refresh attendance status
 function goToToday() {
     currentADDate = new Date();
     updateDates();
+    // Refresh attendance status for today
+    if (currentClass) {
+        getClassID(currentClass).then(async classID => {
+            if (classID) {
+                await checkExistingAttendance(classID);
+                renderAttendanceMode();
+            }
+        });
+    }
 }
 
 // Initialize dates
@@ -1054,19 +1112,17 @@ window.selectBSDate = selectBSDate;
 window.closeADCalendar = closeADCalendar;
 window.closeBSCalendar = closeBSCalendar;
 
-// Add these global variables at the top of your script section
-let currentAttendanceMode = 'byName'; 
-let currentStudents = [];
-let currentClass = '';
-let hasAttendanceChanged = false;
-
 function takeAttendanceByName() {
     setActiveButton('btnByName');
+    currentAttendanceMode = 'byName';
+    renderAttendanceMode();
     console.log("Taking attendance by names...");
 }
 
 function takeAttendanceByRollNumber() {
     setActiveButton('btnByRollNumber');
+    currentAttendanceMode = 'byRollNumber';
+    renderAttendanceMode();
     console.log("Taking attendance by roll numbers...");
 }
 
@@ -1097,34 +1153,31 @@ function setActiveButton(activeId) {
 // -------------------- ATTENDANCE FUNCTIONS --------------------
 // Load students when class is selected
 async function loadStudentsForAttendance(className) {
-    if (!className || className === 'Select Class' || className === '') {
+    if (!className || className === '' || className === 'Select Class' || className === 'No Classes Found') {
         document.getElementById('AttendanceBox').innerHTML = '';
+        currentClass = '';
+        existingAttendance = null;
         return;
     }
     
     currentClass = className;
+    isLoadingAttendance = true;
     
     try {
-        // First get the ClassID from ClassTable
+        // Get ClassID
         const { data: classData, error: classError } = await supabaseClient
             .from('ClassTable')
             .select('id')
             .eq('ClassName', className)
             .maybeSingle();
             
-        if (classError) {
-            console.error('Error fetching class ID:', classError);
-            alert('Error loading class. Please try again.');
+        if (classError || !classData) {
+            console.error('Error fetching class:', classError);
+            isLoadingAttendance = false;
             return;
         }
         
-        if (!classData) {
-            console.error('Class not found:', className);
-            alert(`Class "${className}" not found. Please check your class data.`);
-            return;
-        }
-        
-        // Then get students from StudentDataTable including id
+        // Get students
         const { data: students, error: studentError } = await supabaseClient
             .from('StudentDataTable')
             .select('id, RollNo, StudentName')
@@ -1133,22 +1186,28 @@ async function loadStudentsForAttendance(className) {
             
         if (studentError) {
             console.error('Error fetching students:', studentError);
-            alert('Error loading students. Please try again.');
+            isLoadingAttendance = false;
             return;
         }
         
         currentStudents = students || [];
+        
+        // Check existing attendance
+        await checkExistingAttendance(classData.id);
+        
+        isLoadingAttendance = false;
         renderAttendanceMode();
         
     } catch (error) {
         console.error('Error loading students:', error);
-        alert('Error loading data. Please refresh and try again.');
+        isLoadingAttendance = false;
     }
 }
 
 // Render attendance based on current mode
 function renderAttendanceMode() {
     const attendanceBox = document.getElementById('AttendanceBox');
+    if (!attendanceBox) return;
     
     if (currentAttendanceMode === 'byName') {
         renderByName(attendanceBox);
@@ -1163,6 +1222,15 @@ function renderByName(container) {
         container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No students found in this class</div>';
         return;
     }
+    
+    // Create status message div if it doesn't exist
+    let statusDiv = document.getElementById('attendanceStatusMessage');
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'attendanceStatusMessage';
+        container.parentNode.insertBefore(statusDiv, container);
+    }
+    updateStatusMessage();
     
     let html = `
         <div style="display: grid; grid-template-columns: 60px 80px 1fr 80px 80px; gap: 5px; padding: 10px; border-bottom: 2px solid #333; font-weight: bold; background: #f0f0f0; position: sticky; top: 0; z-index: 10;">
@@ -1181,7 +1249,23 @@ function renderByName(container) {
         <div style="max-height: 400px; overflow-y: auto;">
     `;
     
+    console.log('Existing attendance data:', existingAttendance); // Debug log
+    
     currentStudents.forEach((student, index) => {
+        let isPresent = false;
+        let isLeave = false;
+        
+        // Check existing attendance for this student
+        if (existingAttendance && existingAttendance.length > 0) {
+            // FIX: Convert both to string or both to number for comparison
+            const record = existingAttendance.find(r => String(r.RollNumber) === String(student.RollNo));
+            if (record) {
+                isPresent = (record.AttendanceStatus === 'present');
+                isLeave = (record.AttendanceStatus === 'leave');
+                console.log(`Student ${student.RollNo}: ${record.AttendanceStatus}`); // Debug log
+            }
+        }
+        
         html += `
             <div style="display: grid; grid-template-columns: 60px 80px 1fr 80px 80px; gap: 5px; padding: 8px 10px; border-bottom: 1px solid #eee; ${index % 2 === 0 ? 'background: #f9f9f9;' : ''}">
                 <div style="display: flex; align-items: center;">${index + 1}</div>
@@ -1189,10 +1273,12 @@ function renderByName(container) {
                 <div style="display: flex; align-items: center;">${student.StudentName}</div>
                 <div style="display: flex; justify-content: center; align-items: center;">
                     <input type="checkbox" class="present-checkbox" data-roll="${student.RollNo}" 
+                           ${isPresent ? 'checked' : ''}
                            onchange="handlePresentCheck(this)" style="width: 20px; height: 20px; cursor: pointer;">
                 </div>
                 <div style="display: flex; justify-content: center; align-items: center;">
                     <input type="checkbox" class="leave-checkbox" data-roll="${student.RollNo}" 
+                           ${isLeave ? 'checked' : ''}
                            onchange="handleLeaveCheck(this)" style="width: 20px; height: 20px; cursor: pointer;">
                 </div>
             </div>
@@ -1202,9 +1288,165 @@ function renderByName(container) {
     html += `</div>`;
     container.innerHTML = html;
     
-    // Reset change flag when rendering
-    hasAttendanceChanged = false;
-    document.getElementById('btnSubmitAttendance').style.display = 'none';
+    // Show or hide submit button based on whether attendance exists
+    if (existingAttendance && existingAttendance.length > 0) {
+        hasAttendanceChanged = false;
+        document.getElementById('btnSubmitAttendance').style.display = 'none';
+    } else {
+        document.getElementById('btnSubmitAttendance').style.display = 'block';
+    }
+}
+
+// SINGLE Render "By Roll Numbers" mode - FIXED
+function renderByRollNumber(container) {
+    if (!currentStudents || currentStudents.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No students found in this class</div>';
+        return;
+    }
+    
+    // Create status message div if it doesn't exist
+    let statusDiv = document.getElementById('attendanceStatusMessage');
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'attendanceStatusMessage';
+        container.parentNode.insertBefore(statusDiv, container);
+    }
+    updateStatusMessage();
+    
+    console.log('Existing attendance data:', existingAttendance); // Debug log
+    
+    // Get existing attendance - FIX: Use string comparison
+    const presentRolls = [];
+    const leaveRolls = [];
+    const availableRolls = [];
+    
+    // Separate students based on existing attendance
+    currentStudents.forEach(student => {
+        let found = false;
+        if (existingAttendance && existingAttendance.length > 0) {
+            // FIX: Convert both to string or both to number for comparison
+            const record = existingAttendance.find(r => String(r.RollNumber) === String(student.RollNo));
+            if (record) {
+                found = true;
+                if (record.AttendanceStatus === 'present') {
+                    presentRolls.push(student.RollNo);
+                } else if (record.AttendanceStatus === 'leave') {
+                    leaveRolls.push(student.RollNo);
+                } else {
+                    availableRolls.push(student.RollNo);
+                }
+            }
+        }
+        if (!found) {
+            availableRolls.push(student.RollNo);
+        }
+    });
+    
+    console.log('Present Rolls:', presentRolls); // Debug log
+    console.log('Leave Rolls:', leaveRolls); // Debug log
+    
+    let html = `
+        <div style="display: flex; flex-direction: column; gap: 15px; padding: 10px;">
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <input type="checkbox" id="selectAllPresentRolls" onchange="toggleAllPresentRolls()" style="width: 18px; height: 18px; cursor: pointer;">
+                        <div style="font-weight: bold; color: #28a745;">Present Roll Numbers</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 2px solid #28a745; border-radius: 5px; min-height: 60px; background: #f8fff8;" id="presentInputContainer">
+    `;
+    
+    if (presentRolls.length > 0) {
+        presentRolls.forEach(roll => {
+            html += `
+                <span class="present-chip" data-roll="${roll}" 
+                      style="display: inline-block; padding: 5px 15px; background: #28a745; color: white; border-radius: 15px; font-size: 14px; border: 1px solid #1e7e34; cursor: pointer; transition: all 0.2s;"
+                      onclick="removeFromPresent(${roll})"
+                      onmouseover="this.style.background='#1e7e34'"
+                      onmouseout="this.style.background='#28a745'">
+                    ${roll}
+                </span>
+            `;
+        });
+    } else {
+        html += `<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number below to mark as Present</div>`;
+    }
+    
+    html += `
+                    </div>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <input type="checkbox" id="selectAllLeaveRolls" onchange="toggleAllLeaveRolls()" style="width: 18px; height: 18px; cursor: pointer;">
+                        <div style="font-weight: bold; color: #dc3545;">Leave Roll Numbers</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 2px solid #dc3545; border-radius: 5px; min-height: 60px; background: #fff8f8;" id="leaveInputContainer">
+    `;
+    
+    if (leaveRolls.length > 0) {
+        leaveRolls.forEach(roll => {
+            html += `
+                <span class="leave-chip" data-roll="${roll}" 
+                      style="display: inline-block; padding: 5px 15px; background: #dc3545; color: white; border-radius: 15px; font-size: 14px; border: 1px solid #bd2130; cursor: pointer; transition: all 0.2s;"
+                      onclick="removeFromLeave(${roll})"
+                      onmouseover="this.style.background='#bd2130'"
+                      onmouseout="this.style.background='#dc3545'">
+                    ${roll}
+                </span>
+            `;
+        });
+    } else {
+        html += `<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number below to mark as Leave</div>`;
+    }
+    
+    html += `
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: bold; color: #666; margin-bottom: 8px;">Available Roll Numbers</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #f0f0f0; border-radius: 5px; min-height: 40px; border: 1px solid #ccc;" id="availableRollsContainer">
+    `;
+    
+    if (availableRolls.length > 0) {
+        availableRolls.forEach(roll => {
+            html += `
+                <span class="roll-chip" data-roll="${roll}" 
+                      style="display: inline-block; padding: 5px 15px; background: #e9ecef; border-radius: 15px; font-size: 14px; color: #333; border: 1px solid #ccc; cursor: pointer; transition: all 0.2s; position: relative;"
+                      onclick="handleRollClick(${roll})"
+                      oncontextmenu="handleRollRightClick(event, ${roll})"
+                      onmouseover="this.style.background='#d4d8dd'"
+                      onmouseout="this.style.background='#e9ecef'"
+                      title="Left-click: Present | Right-click: Leave">
+                    ${roll}
+                    <span style="font-size: 10px; margin-left: 5px; color: #666;">(L/R)</span>
+                </span>
+            `;
+        });
+    } else {
+        html += `<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">No roll numbers available</div>`;
+    }
+    
+    html += `
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 5px; display: flex; gap: 20px; flex-wrap: wrap;">
+                    <span><span style="color: #28a745; font-weight: bold;">●</span> Left-click = Present</span>
+                    <span><span style="color: #dc3545; font-weight: bold;">●</span> Right-click = Leave</span>
+                    <span><span style="color: #666; font-weight: bold;">●</span> Click on chip in Present/Leave to remove</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Show or hide submit button based on whether attendance exists
+    if (existingAttendance && existingAttendance.length > 0) {
+        hasAttendanceChanged = false;
+        document.getElementById('btnSubmitAttendance').style.display = 'none';
+    } else {
+        document.getElementById('btnSubmitAttendance').style.display = 'block';
+    }
 }
 
 // Toggle all Present checkboxes
@@ -1213,32 +1455,26 @@ function toggleAllPresent() {
     const checkboxes = document.querySelectorAll('.present-checkbox');
     checkboxes.forEach(checkbox => {
         checkbox.checked = selectAll.checked;
-        // Uncheck Leave if Present is checked
         if (selectAll.checked) {
             const rollNo = checkbox.getAttribute('data-roll');
             const leaveCheckbox = document.querySelector(`.leave-checkbox[data-roll="${rollNo}"]`);
-            if (leaveCheckbox) {
-                leaveCheckbox.checked = false;
-            }
+            if (leaveCheckbox) leaveCheckbox.checked = false;
         }
     });
     hasAttendanceChanged = true;
     document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
 
-// Update toggleAllLeave to track changes
+// Toggle all Leave
 function toggleAllLeave() {
     const selectAll = document.getElementById('selectAllLeave');
     const checkboxes = document.querySelectorAll('.leave-checkbox');
     checkboxes.forEach(checkbox => {
         checkbox.checked = selectAll.checked;
-        // Uncheck Present if Leave is checked
         if (selectAll.checked) {
             const rollNo = checkbox.getAttribute('data-roll');
             const presentCheckbox = document.querySelector(`.present-checkbox[data-roll="${rollNo}"]`);
-            if (presentCheckbox) {
-                presentCheckbox.checked = false;
-            }
+            if (presentCheckbox) presentCheckbox.checked = false;
         }
     });
     hasAttendanceChanged = true;
@@ -1252,9 +1488,7 @@ function handlePresentCheck(checkbox) {
     if (checkbox.checked && leaveCheckbox) {
         leaveCheckbox.checked = false;
     }
-    // Update select all state
     updateSelectAllState();
-    // Mark as changed and show submit button
     hasAttendanceChanged = true;
     document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
@@ -1266,9 +1500,7 @@ function handleLeaveCheck(checkbox) {
     if (checkbox.checked && presentCheckbox) {
         presentCheckbox.checked = false;
     }
-    // Update select all state
     updateSelectAllState();
-    // Mark as changed and show submit button
     hasAttendanceChanged = true;
     document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
@@ -1284,82 +1516,10 @@ function updateSelectAllState() {
         const allChecked = Array.from(presentCheckboxes).every(cb => cb.checked);
         selectAllPresent.checked = allChecked;
     }
-    
     if (selectAllLeave && leaveCheckboxes.length > 0) {
         const allChecked = Array.from(leaveCheckboxes).every(cb => cb.checked);
         selectAllLeave.checked = allChecked;
     }
-}
-
-// Render "By Roll Numbers" mode with individual inputs
-function renderByRollNumber(container) {
-    if (!currentStudents || currentStudents.length === 0) {
-        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No students found in this class</div>';
-        return;
-    }
-    
-    // Create a set of all roll numbers
-    const allRolls = new Set(currentStudents.map(s => s.RollNo));
-    
-    let html = `
-        <div style="display: flex; flex-direction: column; gap: 15px; padding: 10px;">
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 300px;">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                        <input type="checkbox" id="selectAllPresentRolls" onchange="toggleAllPresentRolls()" style="width: 18px; height: 18px; cursor: pointer;">
-                        <div style="font-weight: bold; color: #28a745;">Present Roll Numbers</div>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 2px solid #28a745; border-radius: 5px; min-height: 60px; background: #f8fff8;" id="presentInputContainer">
-                        <div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number below to mark as Present</div>
-                    </div>
-                </div>
-                <div style="flex: 1; min-width: 300px;">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                        <input type="checkbox" id="selectAllLeaveRolls" onchange="toggleAllLeaveRolls()" style="width: 18px; height: 18px; cursor: pointer;">
-                        <div style="font-weight: bold; color: #dc3545;">Leave Roll Numbers</div>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 2px solid #dc3545; border-radius: 5px; min-height: 60px; background: #fff8f8;" id="leaveInputContainer">
-                        <div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number in Available with right-click or use the buttons below</div>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div style="font-weight: bold; color: #666; margin-bottom: 8px;">Available Roll Numbers</div>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #f0f0f0; border-radius: 5px; min-height: 40px; border: 1px solid #ccc;" id="availableRollsContainer">
-    `;
-    
-    // Show available roll numbers as clickable chips with both click and right-click
-    allRolls.forEach(roll => {
-        html += `
-            <span class="roll-chip" data-roll="${roll}" 
-                  style="display: inline-block; padding: 5px 15px; background: #e9ecef; border-radius: 15px; font-size: 14px; color: #333; border: 1px solid #ccc; cursor: pointer; transition: all 0.2s; position: relative;"
-                  onclick="handleRollClick(${roll})"
-                  oncontextmenu="handleRollRightClick(event, ${roll})"
-                  onmouseover="this.style.background='#d4d8dd'"
-                  onmouseout="this.style.background='#e9ecef'"
-                  title="Left-click: Present | Right-click: Leave">
-                ${roll}
-                <span style="font-size: 10px; margin-left: 5px; color: #666;">(L/R)</span>
-            </span>
-        `;
-    });
-    
-    html += `
-                </div>
-                <div style="font-size: 12px; color: #666; margin-top: 5px; display: flex; gap: 20px; flex-wrap: wrap;">
-                    <span><span style="color: #28a745; font-weight: bold;">●</span> Left-click = Present</span>
-                    <span><span style="color: #dc3545; font-weight: bold;">●</span> Right-click = Leave</span>
-                    <span><span style="color: #666; font-weight: bold;">●</span> Click on chip in Present/Leave to remove</span>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    container.innerHTML = html;
-    
-    // Reset change flag when rendering
-    hasAttendanceChanged = false;
-    document.getElementById('btnSubmitAttendance').style.display = 'none';
 }
 
 // Handle left click on roll number - add to Present
@@ -1367,9 +1527,9 @@ function handleRollClick(roll) {
     addRollToPresent(roll);
 }
 
-// Handle right click on roll number - add to Leave
+// Handle roll right click - Add to Leave
 function handleRollRightClick(event, roll) {
-    event.preventDefault(); // Prevent context menu
+    event.preventDefault();
     addRollToLeave(roll);
     return false;
 }
@@ -1383,80 +1543,60 @@ function handleRollDoubleClick(roll) {
 function toggleAllPresentRolls() {
     const selectAll = document.getElementById('selectAllPresentRolls');
     if (!selectAll) return;
-    
     const container = document.getElementById('presentInputContainer');
     if (!container) return;
-    
     if (selectAll.checked) {
-        // Get all available roll numbers that are visible
         const availableChips = document.querySelectorAll('.roll-chip:not([style*="display: none"])');
         availableChips.forEach(chip => {
             const roll = parseInt(chip.getAttribute('data-roll'));
             addRollToPresent(roll);
         });
     } else {
-        // Remove all from Present
         const presentChips = container.querySelectorAll('[data-roll]');
         presentChips.forEach(chip => {
             const roll = parseInt(chip.getAttribute('data-roll'));
             removeFromPresent(roll);
         });
     }
-    hasAttendanceChanged = true;
-    document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
 
-// Update toggleAllLeaveRolls to track changes
+// Toggle all Leave Rolls
 function toggleAllLeaveRolls() {
     const selectAll = document.getElementById('selectAllLeaveRolls');
     if (!selectAll) return;
-    
     const container = document.getElementById('leaveInputContainer');
     if (!container) return;
-    
     if (selectAll.checked) {
-        // Get all available roll numbers that are visible
         const availableChips = document.querySelectorAll('.roll-chip:not([style*="display: none"])');
         availableChips.forEach(chip => {
             const roll = parseInt(chip.getAttribute('data-roll'));
             addRollToLeave(roll);
         });
     } else {
-        // Remove all from Leave
         const leaveChips = container.querySelectorAll('[data-roll]');
         leaveChips.forEach(chip => {
             const roll = parseInt(chip.getAttribute('data-roll'));
             removeFromLeave(roll);
         });
     }
-    hasAttendanceChanged = true;
-    document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
 
 // Add roll number to Present
 function addRollToPresent(roll) {
-    // Remove from available list
     removeFromAvailable(roll);
-    // Remove from Leave if present
     removeFromLeave(roll);
-    // Add to Present
     addToPresent(roll);
     updateAvailableRolls();
-    updateSelectAllRollsState();
     hasAttendanceChanged = true;
     document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
 
-// Update addRollToLeave to track changes
+// Add roll to Leave
 function addRollToLeave(roll) {
-    // Remove from available list
     removeFromAvailable(roll);
-    // Remove from Present if present
     removeFromPresent(roll);
-    // Add to Leave
     addToLeave(roll);
     updateAvailableRolls();
-    updateSelectAllRollsState();
     hasAttendanceChanged = true;
     document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
@@ -1465,44 +1605,28 @@ function addRollToLeave(roll) {
 function removeFromPresent(roll) {
     const container = document.getElementById('presentInputContainer');
     if (!container) return;
-    
     const chip = container.querySelector(`[data-roll="${roll}"]`);
-    if (chip) {
-        chip.remove();
-    }
-    
-    // If container is empty, show placeholder
+    if (chip) chip.remove();
     if (container.children.length === 0) {
         container.innerHTML = '<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number below to mark as Present</div>';
     }
-    
-    // Add back to available list
     addToAvailable(roll);
     updateAvailableRolls();
-    updateSelectAllRollsState();
     hasAttendanceChanged = true;
     document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
 
-// Update removeFromLeave to track changes
+// Remove from Leave
 function removeFromLeave(roll) {
     const container = document.getElementById('leaveInputContainer');
     if (!container) return;
-    
     const chip = container.querySelector(`[data-roll="${roll}"]`);
-    if (chip) {
-        chip.remove();
-    }
-    
-    // If container is empty, show placeholder
+    if (chip) chip.remove();
     if (container.children.length === 0) {
-        container.innerHTML = '<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number in Available with right-click or use the buttons below</div>';
+        container.innerHTML = '<div style="width: 100%; font-size: 12px; color: #999; text-align: center;">Click on a roll number below to mark as Leave</div>';
     }
-    
-    // Add back to available list
     addToAvailable(roll);
     updateAvailableRolls();
-    updateSelectAllRollsState();
     hasAttendanceChanged = true;
     document.getElementById('btnSubmitAttendance').style.display = 'block';
 }
@@ -1532,79 +1656,49 @@ function updateSelectAllRollsState() {
 function addToPresent(roll) {
     const container = document.getElementById('presentInputContainer');
     if (!container) return;
-    
-    // Remove the placeholder if it exists
     if (container.children.length === 1) {
         const firstChild = container.children[0];
         if (firstChild && firstChild.textContent && firstChild.textContent.includes('Click on a roll number')) {
             container.innerHTML = '';
         }
     }
-    
-    // Check if roll already exists in Present
     const existing = container.querySelector(`[data-roll="${roll}"]`);
     if (existing) return;
-    
     const chip = document.createElement('span');
     chip.setAttribute('data-roll', roll);
     chip.className = 'present-chip';
     chip.style.cssText = `
-        display: inline-block; 
-        padding: 5px 15px; 
-        background: #28a745; 
-        color: white; 
-        border-radius: 15px; 
-        font-size: 14px; 
-        border: 1px solid #1e7e34; 
-        cursor: pointer; 
-        transition: all 0.2s;
+        display: inline-block; padding: 5px 15px; background: #28a745; color: white; border-radius: 15px; font-size: 14px; border: 1px solid #1e7e34; cursor: pointer; transition: all 0.2s;
     `;
     chip.textContent = roll;
     chip.onclick = function() { removeFromPresent(roll); };
-    chip.onmouseover = function() { this.style.background='#1e7e34'; };
-    chip.onmouseout = function() { this.style.background='#28a745'; };
-    chip.title = 'Click to remove from Present';
-    
+    chip.onmouseover = function() { this.style.background = '#1e7e34'; };
+    chip.onmouseout = function() { this.style.background = '#28a745'; };
     container.appendChild(chip);
 }
 
-// Add roll to Leave container
+// Add to Leave container
 function addToLeave(roll) {
     const container = document.getElementById('leaveInputContainer');
     if (!container) return;
-    
-    // Remove the placeholder if it exists
     if (container.children.length === 1) {
         const firstChild = container.children[0];
-        if (firstChild && firstChild.textContent && firstChild.textContent.includes('Click on a roll number in Available')) {
+        if (firstChild && firstChild.textContent && firstChild.textContent.includes('Click on a roll number')) {
             container.innerHTML = '';
         }
     }
-    
-    // Check if roll already exists in Leave
     const existing = container.querySelector(`[data-roll="${roll}"]`);
     if (existing) return;
-    
     const chip = document.createElement('span');
     chip.setAttribute('data-roll', roll);
     chip.className = 'leave-chip';
     chip.style.cssText = `
-        display: inline-block; 
-        padding: 5px 15px; 
-        background: #dc3545; 
-        color: white; 
-        border-radius: 15px; 
-        font-size: 14px; 
-        border: 1px solid #bd2130; 
-        cursor: pointer; 
-        transition: all 0.2s;
+        display: inline-block; padding: 5px 15px; background: #dc3545; color: white; border-radius: 15px; font-size: 14px; border: 1px solid #bd2130; cursor: pointer; transition: all 0.2s;
     `;
     chip.textContent = roll;
     chip.onclick = function() { removeFromLeave(roll); };
-    chip.onmouseover = function() { this.style.background='#bd2130'; };
-    chip.onmouseout = function() { this.style.background='#dc3545'; };
-    chip.title = 'Click to remove from Leave';
-    
+    chip.onmouseover = function() { this.style.background = '#bd2130'; };
+    chip.onmouseout = function() { this.style.background = '#dc3545'; };
     container.appendChild(chip);
 }
 
@@ -1612,37 +1706,23 @@ function addToLeave(roll) {
 function addToAvailable(roll) {
     const container = document.getElementById('availableRollsContainer');
     if (!container) return;
-    
-    // Check if roll already exists in Available (not hidden)
     const existing = container.querySelector(`.roll-chip[data-roll="${roll}"]`);
     if (existing) {
         existing.style.display = 'inline-block';
         return;
     }
-    
-    // Create new chip if it doesn't exist
     const chip = document.createElement('span');
     chip.setAttribute('data-roll', roll);
     chip.className = 'roll-chip';
     chip.style.cssText = `
-        display: inline-block; 
-        padding: 5px 15px; 
-        background: #e9ecef; 
-        border-radius: 15px; 
-        font-size: 14px; 
-        color: #333; 
-        border: 1px solid #ccc; 
-        cursor: pointer; 
-        transition: all 0.2s;
-        position: relative;
+        display: inline-block; padding: 5px 15px; background: #e9ecef; border-radius: 15px; font-size: 14px; color: #333; border: 1px solid #ccc; cursor: pointer; transition: all 0.2s; position: relative;
     `;
     chip.innerHTML = `${roll} <span style="font-size: 10px; margin-left: 5px; color: #666;">(L/R)</span>`;
     chip.onclick = function() { handleRollClick(roll); };
     chip.oncontextmenu = function(event) { handleRollRightClick(event, roll); };
-    chip.onmouseover = function() { this.style.background='#d4d8dd'; };
-    chip.onmouseout = function() { this.style.background='#e9ecef'; };
+    chip.onmouseover = function() { this.style.background = '#d4d8dd'; };
+    chip.onmouseout = function() { this.style.background = '#e9ecef'; };
     chip.title = 'Left-click: Present | Right-click: Leave';
-    
     container.appendChild(chip);
 }
 
@@ -1650,27 +1730,21 @@ function addToAvailable(roll) {
 function removeFromAvailable(roll) {
     const container = document.getElementById('availableRollsContainer');
     if (!container) return;
-    
     const chip = container.querySelector(`.roll-chip[data-roll="${roll}"]`);
-    if (chip) {
-        chip.style.display = 'none';
-    }
+    if (chip) chip.style.display = 'none';
 }
 
 // Update available rolls visibility
 function updateAvailableRolls() {
     const container = document.getElementById('availableRollsContainer');
     if (!container) return;
-    
     const chips = container.querySelectorAll('.roll-chip');
     chips.forEach(chip => {
         const roll = parseInt(chip.getAttribute('data-roll'));
         const presentContainer = document.getElementById('presentInputContainer');
         const leaveContainer = document.getElementById('leaveInputContainer');
-        
         const inPresent = presentContainer && presentContainer.querySelector(`[data-roll="${roll}"]`);
         const inLeave = leaveContainer && leaveContainer.querySelector(`[data-roll="${roll}"]`);
-        
         if (inPresent || inLeave) {
             chip.style.display = 'none';
         } else {
@@ -1679,108 +1753,103 @@ function updateAvailableRolls() {
     });
 }
 
-// Switch to "By Names" mode
+// Switch to "By Names" mode - FIXED
 function takeAttendanceByName() {
     currentAttendanceMode = 'byName';
-    
-    // Update button styles
     document.getElementById('btnByName').classList.add('SelectedClasses');
     document.getElementById('btnByRollNumber').classList.remove('SelectedClasses');
-    document.getElementById('btnShowAttendance').classList.remove('SelectedClasses');
-    renderAttendanceMode();
+    // Make sure we have the latest attendance data
+    if (currentClass) {
+        getClassID(currentClass).then(async classID => {
+            if (classID) {
+                await checkExistingAttendance(classID);
+                renderAttendanceMode();
+            }
+        });
+    } else {
+        renderAttendanceMode();
+    }
 }
 
-// Switch to "By Roll Numbers" mode
+// Switch to "By Roll Numbers" mode - FIXED
 function takeAttendanceByRollNumber() {
     currentAttendanceMode = 'byRollNumber';
-    
-    // Update button styles
     document.getElementById('btnByRollNumber').classList.add('SelectedClasses');
     document.getElementById('btnByName').classList.remove('SelectedClasses');
-    document.getElementById('btnShowAttendance').classList.remove('SelectedClasses');
-    renderAttendanceMode();
+    // Make sure we have the latest attendance data
+    if (currentClass) {
+        getClassID(currentClass).then(async classID => {
+            if (classID) {
+                await checkExistingAttendance(classID);
+                renderAttendanceMode();
+            }
+        });
+    } else {
+        renderAttendanceMode();
+    }
 }
 
 // Submit attendance
-function submitAttendance() {
+async function submitAttendance() {
     if (!currentClass || currentStudents.length === 0) {
         alert('Please select a class first.');
         return;
     }
     
-    let attendanceData = [];
+    const classID = await getClassID(currentClass);
+    if (!classID) {
+        alert('Error: Could not find class ID.');
+        return;
+    }
+    
     const currentDate = formatADDate(currentADDate);
     const bsComponents = getBSDateComponents(currentADDate);
     const bsDate = `${bsComponents.year}-${String(bsComponents.month).padStart(2, '0')}-${String(bsComponents.day).padStart(2, '0')}`;
     
+    let attendanceData = [];
+    
     if (currentAttendanceMode === 'byName') {
-        // Get all checkboxes
         const presentCheckboxes = document.querySelectorAll('.present-checkbox:checked');
         const leaveCheckboxes = document.querySelectorAll('.leave-checkbox:checked');
-        
         const presentRolls = new Set();
         const leaveRolls = new Set();
         
-        presentCheckboxes.forEach(cb => {
-            presentRolls.add(parseInt(cb.getAttribute('data-roll')));
-        });
+        presentCheckboxes.forEach(cb => presentRolls.add(parseInt(cb.getAttribute('data-roll'))));
+        leaveCheckboxes.forEach(cb => leaveRolls.add(parseInt(cb.getAttribute('data-roll'))));
         
-        leaveCheckboxes.forEach(cb => {
-            leaveRolls.add(parseInt(cb.getAttribute('data-roll')));
-        });
-        
-        // Check for conflicts
+        // Check conflicts
         let hasConflict = false;
         presentRolls.forEach(roll => {
             if (leaveRolls.has(roll)) {
                 hasConflict = true;
-                const student = currentStudents.find(s => s.RollNo === roll);
-                alert(`Conflict: Student "${student ? student.StudentName : roll}" is marked both Present and Leave.`);
+                alert(`Conflict: Student with roll number ${roll} is marked both Present and Leave.`);
             }
         });
-        
         if (hasConflict) return;
         
-        // Build attendance data
         currentStudents.forEach(student => {
             const roll = student.RollNo;
             let status = 'absent';
-            if (presentRolls.has(roll)) {
-                status = 'present';
-            } else if (leaveRolls.has(roll)) {
-                status = 'leave';
-            }
-            
-            attendanceData.push({
-                rollNo: roll,
-                name: student.StudentName,
-                status: status
-            });
+            if (presentRolls.has(roll)) status = 'present';
+            else if (leaveRolls.has(roll)) status = 'leave';
+            attendanceData.push({ rollNo: roll, name: student.StudentName, status: status });
         });
-        
     } else {
-        // By Roll Numbers - get from containers
         const presentContainer = document.getElementById('presentInputContainer');
         const leaveContainer = document.getElementById('leaveInputContainer');
-        
         if (!presentContainer || !leaveContainer) {
-            alert('Please switch to "By Names" mode and try again.');
+            alert('Error loading attendance data.');
             return;
         }
-        
-        // Get roll numbers from chips
         const presentRolls = new Set();
         const leaveRolls = new Set();
-        
         presentContainer.querySelectorAll('[data-roll]').forEach(chip => {
             presentRolls.add(parseInt(chip.getAttribute('data-roll')));
         });
-        
         leaveContainer.querySelectorAll('[data-roll]').forEach(chip => {
             leaveRolls.add(parseInt(chip.getAttribute('data-roll')));
         });
         
-        // Check for conflicts
         let hasConflict = false;
         presentRolls.forEach(roll => {
             if (leaveRolls.has(roll)) {
@@ -1788,90 +1857,96 @@ function submitAttendance() {
                 alert(`Conflict: Roll number ${roll} is marked both Present and Leave.`);
             }
         });
-        
         if (hasConflict) return;
         
-        // Build attendance data
         currentStudents.forEach(student => {
             const roll = student.RollNo;
             let status = 'absent';
-            if (presentRolls.has(roll)) {
-                status = 'present';
-            } else if (leaveRolls.has(roll)) {
-                status = 'leave';
-            }
-            
-            attendanceData.push({
-                rollNo: roll,
-                name: student.StudentName,
-                status: status
-            });
+            if (presentRolls.has(roll)) status = 'present';
+            else if (leaveRolls.has(roll)) status = 'leave';
+            attendanceData.push({ rollNo: roll, name: student.StudentName, status: status });
         });
     }
     
-    // Get ClassID for the current class
-    getClassID(currentClass).then(async (classID) => {
-        if (!classID) {
-            alert('Error: Could not find class ID.');
-            return;
-        }
-        
-        // Prepare data for Supabase
-        const records = [];
-        attendanceData.forEach(item => {
-            // Find student ID from StudentDataTable
-            const student = currentStudents.find(s => s.RollNo === item.rollNo);
-            if (student) {
-                records.push({
-                    ClassID: classID,
-                    StudentID: student.id || null,
-                    ADDate: currentDate,
-                    BSDate: bsDate,
-                    ClassName: currentClass,
-                    RollNumber: item.rollNo,
-                    StudentName: item.name,
-                    AttendanceStatus: item.status
-                });
-            }
-        });
-        
-        if (records.length === 0) {
-            alert('No attendance records to submit.');
-            return;
-        }
-        
-        try {
-            // Submit to Supabase
-            const { data, error } = await supabaseClient
-                .from('StudentAttendanceTable')
-                .insert(records);
-            
-            if (error) {
-                console.error('Error submitting attendance:', error);
-                alert('Error submitting attendance: ' + error.message);
-                return;
-            }
-            
-            // Success
-            const presentCount = attendanceData.filter(a => a.status === 'present').length;
-            const leaveCount = attendanceData.filter(a => a.status === 'leave').length;
-            const absentCount = attendanceData.filter(a => a.status === 'absent').length;
-            const totalCount = attendanceData.length;
-            
-            alert(`✅ Attendance submitted successfully!\n\nClass: ${currentClass}\nDate: ${currentDate}\nBS Date: ${bsDate}\n\nPresent: ${presentCount}\nLeave: ${leaveCount}\nAbsent: ${absentCount}\nTotal: ${totalCount}`);
-            
-            // Hide submit button after successful submission
-            document.getElementById('btnSubmitAttendance').style.display = 'none';
-            hasAttendanceChanged = false;
-            
-            // Refresh the attendance view to reset all selections
-            renderAttendanceMode();
-            
-        } catch (error) {
-            console.error('Error submitting attendance:', error);
-            alert('Error submitting attendance: ' + error.message);
-        }
+    const records = attendanceData.map(item => {
+        const student = currentStudents.find(s => s.RollNo === item.rollNo);
+        return {
+            ClassID: classID,
+            StudentID: student ? student.id : null,
+            ADDate: currentDate,
+            BSDate: bsDate,
+            ClassName: currentClass,
+            RollNumber: item.rollNo,
+            StudentName: item.name,
+            AttendanceStatus: item.status
+        };
     });
+    
+    try {
+        // Delete existing records for this date and class
+        await supabaseClient
+            .from('StudentAttendanceTable')
+            .delete()
+            .eq('ClassID', classID)
+            .eq('BSDate', bsDate);
+        
+        // Insert new records
+        const { error } = await supabaseClient
+            .from('StudentAttendanceTable')
+            .insert(records);
+        
+        if (error) {
+            alert('Error submitting attendance: ' + error.message);
+            return;
+        }
+        
+        // Update existing attendance
+        existingAttendance = records;
+        updateStatusMessage();
+        
+        const presentCount = attendanceData.filter(a => a.status === 'present').length;
+        const leaveCount = attendanceData.filter(a => a.status === 'leave').length;
+        const absentCount = attendanceData.filter(a => a.status === 'absent').length;
+        
+        alert(`✅ Attendance submitted successfully!\n\nClass: ${currentClass}\nDate: ${currentDate}\nBS Date: ${bsDate}\n\nPresent: ${presentCount}\nLeave: ${leaveCount}\nAbsent: ${absentCount}`);
+        
+        document.getElementById('btnSubmitAttendance').style.display = 'none';
+        hasAttendanceChanged = false;
+        
+        // Refresh the view
+        renderAttendanceMode();
+        
+    } catch (error) {
+        console.error('Error submitting attendance:', error);
+        alert('Error submitting attendance: ' + error.message);
+    }
+}
+
+// Update status message after submission
+function updateStatusMessage() {
+    const statusDiv = document.getElementById('attendanceStatusMessage');
+    if (!statusDiv) return;
+    
+    if (existingAttendance && existingAttendance.length > 0) {
+        const presentCount = existingAttendance.filter(r => r.AttendanceStatus === 'present').length;
+        const leaveCount = existingAttendance.filter(r => r.AttendanceStatus === 'leave').length;
+        const absentCount = existingAttendance.filter(r => r.AttendanceStatus === 'absent').length;
+        statusDiv.innerHTML = `
+            <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #c3e6cb;">
+                ✅ Attendance already taken for this date.
+                <span style="margin-left: 20px;">Present: ${presentCount}</span>
+                <span style="margin-left: 10px;">Leave: ${leaveCount}</span>
+                <span style="margin-left: 10px;">Absent: ${absentCount}</span>
+                <span style="margin-left: 10px; font-size: 12px; color: #666;">(You can edit below)</span>
+            </div>
+        `;
+    } else {
+        statusDiv.innerHTML = `
+            <div style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #ffc107;">
+                📝 No attendance recorded for this date. Please mark attendance.
+            </div>
+        `;
+    }
 }
 
 // Helper function to get ClassID from ClassTable
@@ -1912,120 +1987,32 @@ function toggleAllStudents() {
     console.log('toggleAllStudents called - use toggleAllPresent or toggleAllLeave instead');
 }
 
-// Update the loadClasses function to handle class selection
-async function loadClasses() {
-    const select = document.getElementById("AttendanceClassSelec");
-    select.innerHTML = `<option value="" disabled selected>Select Class</option>`;
-    
-    const { data, error } = await supabaseClient
-        .from("ClassTable")
-        .select("ClassName")
-        .order("SortOrder");
-        
-    if (error) {
-        console.error(error);
-        alert(error.message);
-        return;
-    }
-    
-    data.forEach(row => {
-        const option = document.createElement("option");
-        option.value = row.ClassName;
-        option.textContent = row.ClassName;
-        select.appendChild(option);
-    });
-    
-    // Add change event listener
-    select.addEventListener('change', function() {
-        if (this.value) {
-            loadStudentsForAttendance(this.value);
-        } else {
-            document.getElementById('AttendanceBox').innerHTML = '';
-        }
-    });
-}
-
-// Update the DOMContentLoaded event listener
-document.addEventListener("DOMContentLoaded", async () => {
-    loadDynamicLogoAndFavicon();
-    loadClasses();
-    initializeDates();
-    
-    // DateBox - Keep the existing code as is
-    const dateBox = document.getElementById('DateBox');
-    if (dateBox && typeof AD2BS === 'function') {
-        dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
-    }
-    
-    // Add click event listeners to date boxes
-    const adDateBox = document.getElementById('ADDateBox');
-    const bsDateBox = document.getElementById('BSDateBox');
-    
-    if (adDateBox) {
-        adDateBox.style.cursor = 'pointer';
-        adDateBox.addEventListener('click', openADCalendar);
-    }
-    if (bsDateBox) {
-        bsDateBox.style.cursor = 'pointer';
-        bsDateBox.addEventListener('click', openBSCalendar);
-    }
-    
-    // Set default mode
-    document.getElementById('btnByName').classList.add('SelectedClasses');
-    currentAttendanceMode = 'byName';
-});
-
-async function loadStudentsForAttendance(className) {
-    // Validate className
-    if (!className || className === '' || className === 'Select Class' || className === 'No Classes Found') {
-        document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Please select a valid class.</div>';
-        currentClass = '';
-        return;
-    }
-    
-    currentClass = className;
+// Check if attendance already exists for the selected date and class
+async function checkExistingAttendance(classID) {
+    const bsComponents = getBSDateComponents(currentADDate);
+    const bsDate = `${bsComponents.year}-${String(bsComponents.month).padStart(2, '0')}-${String(bsComponents.day).padStart(2, '0')}`;
     
     try {
-        // First get the ClassID from ClassTable
-        const { data: classData, error: classError } = await supabaseClient
-            .from('ClassTable')
-            .select('id')
-            .eq('ClassName', className)
-            .maybeSingle();
+        const { data, error } = await supabaseClient
+            .from('StudentAttendanceTable')
+            .select('*')
+            .eq('ClassID', classID)
+            .eq('BSDate', bsDate);
             
-        if (classError) {
-            console.error('Error fetching class ID:', classError);
-            document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading class. Please try again.</div>';
+        if (error) {
+            console.error('Error checking attendance:', error);
+            existingAttendance = null;
             return;
         }
         
-        if (!classData) {
-            console.error('Class not found:', className);
-            document.getElementById('AttendanceBox').innerHTML = `<div style="text-align: center; padding: 20px; color: #dc3545;">Class "${className}" not found.</div>`;
-            currentClass = '';
-            return;
-        }
+        existingAttendance = data || null;
         
-        // Then get students from StudentDataTable including id
-        const { data: students, error: studentError } = await supabaseClient
-            .from('StudentDataTable')
-            .select('id, RollNo, StudentName')
-            .eq('ClassID', classData.id)
-            .order('RollNo');
-            
-        if (studentError) {
-            console.error('Error fetching students:', studentError);
-            document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading students. Please try again.</div>';
-            return;
-        }
-        
-        currentStudents = students || [];
-        renderAttendanceMode();
+        // Update status message
+        updateStatusMessage();
         
     } catch (error) {
-        console.error('Error loading students:', error);
-        document.getElementById('AttendanceBox').innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error loading data. Please refresh and try again.</div>';
-        currentClass = '';
+        console.error('Error in checkExistingAttendance:', error);
+        existingAttendance = null;
     }
 }
 
@@ -3005,6 +2992,229 @@ window.changeAttendanceMonth = changeAttendanceMonth;
 window.closeAttendancePopup = closeAttendancePopup;
 window.downloadAttendanceImage = downloadAttendanceImage;
 
+// Clear all attendance data for the selected class
+async function clearAttendanceData() {
+    // Check if a class is selected
+    if (!currentClass || currentClass === '' || currentClass === 'Select Class' || currentClass === 'No Classes Found') {
+        showCustomDialog1(
+            "No Class Selected", 
+            "Please select a class first before clearing attendance data.", 
+            "OK", 
+            function() {}
+        );
+        return;
+    }
+    
+    // Check if there are any students in the class
+    if (!currentStudents || currentStudents.length === 0) {
+        showCustomDialog1(
+            "No Students", 
+            `No students found in class "${currentClass}". Cannot clear attendance.`, 
+            "OK", 
+            function() {}
+        );
+        return;
+    }
+    
+    // Get the class ID
+    const classID = await getClassID(currentClass);
+    if (!classID) {
+        showCustomDialog1(
+            "Error", 
+            "Could not find class ID. Please try again.", 
+            "OK", 
+            function() {}
+        );
+        return;
+    }
+    
+    // Count total attendance records for this class
+    let totalRecords = 0;
+    try {
+        const { count, error: countError } = await supabaseClient
+            .from('StudentAttendanceTable')
+            .select('*', { count: 'exact', head: true })
+            .eq('ClassID', classID);
+            
+        if (countError) {
+            console.error('Error counting attendance records:', countError);
+        } else {
+            totalRecords = count || 0;
+        }
+    } catch (error) {
+        console.error('Error counting records:', error);
+    }
+    
+    // Show confirmation dialog with details
+    showCustomDialog2(
+        "⚠️ Confirm Delete",
+        `Are you sure you want to delete ALL attendance records for class "${currentClass}"?\n\n` +
+        `Total attendance records: ${totalRecords}\n` +
+        `Students in class: ${currentStudents.length}\n\n` +
+        `⚠️ This action cannot be undone!`,
+        "Yes, Delete All",
+        "Cancel",
+        async function() {
+            // User confirmed - proceed with deletion
+            await performClearAttendance(classID);
+        },
+        function() {
+            // User cancelled
+            console.log("Clear attendance cancelled");
+        }
+    );
+}
+
+// Perform the actual deletion
+async function performClearAttendance(classID) {
+    try {
+        // Show loading state
+        const clearBtn = document.getElementById('btnClearAttendanceData');
+        if (clearBtn) {
+            clearBtn.textContent = '⏳ Deleting...';
+            clearBtn.disabled = true;
+        }
+        
+        // Delete all attendance records for this class
+        const { data, error } = await supabaseClient
+            .from('StudentAttendanceTable')
+            .delete()
+            .eq('ClassID', classID);
+            
+        if (error) {
+            console.error('Error clearing attendance:', error);
+            showCustomDialog1(
+                "Error", 
+                `Failed to delete attendance records: ${error.message}`, 
+                "OK", 
+                function() {}
+            );
+            return;
+        }
+        
+        // Clear the existing attendance data from memory
+        existingAttendance = null;
+        hasAttendanceChanged = false;
+        
+        // Update status message
+        updateStatusMessage();
+        
+        // Refresh the attendance display
+        renderAttendanceMode();
+        
+        // Hide submit button since there's no attendance now
+        document.getElementById('btnSubmitAttendance').style.display = 'block';
+        
+        // Show success message
+        showCustomDialog1(
+            "✅ Success", 
+            `All attendance records for class "${currentClass}" have been successfully deleted.\n\n` +
+            `You can now mark new attendance for this class.`, 
+            "OK", 
+            function() {}
+        );
+        
+        console.log(`All attendance records deleted for class ID: ${classID}`);
+        
+    } catch (error) {
+        console.error('Error in performClearAttendance:', error);
+        showCustomDialog1(
+            "Error", 
+            `An unexpected error occurred: ${error.message}`, 
+            "OK", 
+            function() {}
+        );
+    } finally {
+        // Reset button state
+        const clearBtn = document.getElementById('btnClearAttendanceData');
+        if (clearBtn) {
+            clearBtn.textContent = '🗑️ Clear Class Attendance';
+            clearBtn.disabled = false;
+        }
+    }
+}
+
+// Optional: Clear attendance for a specific date (not all records)
+async function clearAttendanceForDate() {
+    // Check if a class is selected
+    if (!currentClass || currentClass === '' || currentClass === 'Select Class' || currentClass === 'No Classes Found') {
+        showCustomDialog1(
+            "No Class Selected", 
+            "Please select a class first.", 
+            "OK", 
+            function() {}
+        );
+        return;
+    }
+    
+    const classID = await getClassID(currentClass);
+    if (!classID) {
+        showCustomDialog1(
+            "Error", 
+            "Could not find class ID.", 
+            "OK", 
+            function() {}
+        );
+        return;
+    }
+    
+    const bsComponents = getBSDateComponents(currentADDate);
+    const bsDate = `${bsComponents.year}-${String(bsComponents.month).padStart(2, '0')}-${String(bsComponents.day).padStart(2, '0')}`;
+    
+    // Check if attendance exists for this date
+    if (!existingAttendance || existingAttendance.length === 0) {
+        showCustomDialog1(
+            "No Attendance", 
+            `No attendance records found for ${currentClass} on ${bsDate}`, 
+            "OK", 
+            function() {}
+        );
+        return;
+    }
+    
+    showCustomDialog2(
+        "⚠️ Confirm Delete",
+        `Delete attendance for ${currentClass} on ${bsDate}?\n\n` +
+        `Records to delete: ${existingAttendance.length}\n\n` +
+        `⚠️ This action cannot be undone!`,
+        "Yes, Delete",
+        "Cancel",
+        async function() {
+            try {
+                const { error } = await supabaseClient
+                    .from('StudentAttendanceTable')
+                    .delete()
+                    .eq('ClassID', classID)
+                    .eq('BSDate', bsDate);
+                    
+                if (error) {
+                    showCustomDialog1("Error", error.message, "OK", function() {});
+                    return;
+                }
+                
+                existingAttendance = null;
+                updateStatusMessage();
+                renderAttendanceMode();
+                document.getElementById('btnSubmitAttendance').style.display = 'block';
+                
+                showCustomDialog1(
+                    "✅ Success", 
+                    `Attendance for ${bsDate} has been deleted.`, 
+                    "OK", 
+                    function() {}
+                );
+            } catch (error) {
+                console.error('Error:', error);
+                showCustomDialog1("Error", error.message, "OK", function() {});
+            }
+        },
+        function() {}
+    );
+}
+
+// Make functions globally available
+window.clearAttendanceData = clearAttendanceData;
+window.clearAttendanceForDate = clearAttendanceForDate;
 
     </script> 
 </body>
