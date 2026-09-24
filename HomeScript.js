@@ -2,7 +2,7 @@
 const PageNavigationDripDown = document.getElementById("PageNavigationSelect");
 PageNavigationDripDown.addEventListener("change", function () {
     const pageMap = {
-        "AdminPage": "AdminPage/AdminIndex.html",
+        "AdminPage": "AdminPage/Loginpage/LoginIndex.html",
         "LibraryPage": "LibraryPage/LibraryIndex.html",
         "NoticePage": "NoticePage/NoticeIndex.html",
         "QuestionBankPage": "QuestionBankPage/QuestionBankIndex.html",

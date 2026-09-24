@@ -13,7 +13,7 @@ if (PageNavDropdown) {
             "GalleryPage": "../GalleryPage/GalleryIndex.html",
             "SMC_TGC_Page": "../SMC_TGC_Page/SMC_TGC_Index.html",
             "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
-            "AdminPage": "../AdminPage/LogInIndex.html"        
+            "AdminPage": "../AdminPage/LoginPage/LoginIndex.html"        
         };
         if (pageMap[this.value]) window.location.href = pageMap[this.value];
     });

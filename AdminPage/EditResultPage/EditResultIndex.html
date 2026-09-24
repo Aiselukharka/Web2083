@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <title>Edit Result</title>
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+    <link rel="stylesheet" href="EditResultStyle.css"/>
+</head>
+<body>
+    <div id="MainBody">
+        <div id="PageNaviggationBox">
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
+            <select id="PageNavigationSelect">   
+                <option value="AdminPage">Admin</option>
+                <option value="LibraryPage">Library</option>
+                <option value="NoticePage">Notice</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="StudentPage">Students</option>
+                <option value="HumanResourcePage">Human Resource</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="HomePage">Home</option>
+            </select>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>  
+        <div id="DateBox"></div>
+        <div id="UtilityBox">
+            <select id="EditNavigationSelect">
+                <option>Edit Result</option>
+                <option value="AttendanceCardEditBox">Edit Attendance Cards</option>
+                <option value="IDCardEditBox">Edit ID Cards</option>
+                <option value="RoutineEditBox">Edit Routine</option>
+                <option value="StudentAttendanceEditBox">Edit Student Attendance</option>
+                <option value="StudentEditBox">Edit Student Data</option>
+                <option value="LibraryEditBox">Edit Library</option>
+                <option value="NoticeEditBox">Edit Notice</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
+                <option value="AboutUsEditBox">Edit About Us</option>
+                <option value="HumanResourceEditBox">Edit Human Resource Data</option>
+                <option value="CalendarEditBox">Edit Calendar</option>
+                <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
+                <option value="GalleryEditBox">Edit Gallery</option>
+                <option value="HelpingHandEditBox">Edit Helping Hand</option>
+                <option value="ClassEditBox">Edit Class Data</option>
+                <option value="AdminEditBox">Admin</option>
+            </select>
+            <select id="AdminToolsSelect">
+                <option disabled selected>Admin Tools</option>
+                <option value="ChangePasswordTool">Change Password</option>
+                <option value="LogoutThisDeviceTool">Logout This Device</option>
+                <option value="LogoutAllDevicesTool">Logout All Devices</option>
+                <option value="AddAdminTool">Add/Delete Admin</option>
+            </select>            
+        </div>   
+        <div id="ResultContainer">
+            <div id="ResultHead">Create Student Result</div>
+            <div id="EditExamSelectBox">
+                <select id="ResultClassSelect"></select>
+                <select id="ResultYearSelect">
+                    <option selected disabled>Select Year</option>
+                    <option value="2083">2083</option>
+                    <option value="2084">2084</option>
+                    <option value="2085">2085</option>
+                    <option value="2086">2086</option>
+                    <option value="2087">2087</option>
+                    <option value="2088">2088</option>
+                    <option value="2089">2089</option>
+                    <option value="2090">2090</option>                    
+                </select> 
+                <select id="ExamTypeSelect">
+                    <option selected disabled>Select Exam Type</option>
+                    <option value="Terminal_External_Exam">Terminal/External Exam</option>
+                    <option value="Internal_Exam">Internal Exam</option>
+                    <option value="Final_Exam">Final Exam</option>
+                </select>
+                <div id="ExamNameContainer">
+                    <input type="text" id="ExamNameSelect" list="ExamNames" placeholder="Select/Write Exam..."/>
+                    <datalist id="ExamNames">
+                        <option value="First Term Exam"></option>
+                        <option value="Second Term Exam"></option>
+                        <option value="Third Term Exam"></option>
+                        <option value="Half Yearly Exam"></option>
+                        <option value="Yearly Exam"></option>
+                        <option value="Final Exam"></option>
+                        <option value="Basic Level Exam"></option>
+                        <option value="SEE Preparation Exam"></option>
+                        <option value="Unit Test"></option>
+                        <option value="Weekly Test"></option>                        
+                    </datalist>                    
+                </div> 
+                <input type="text" id="schoolRunningDays" placeholder="School Run Days"/>
+            </div>              
+            <div id="ResultBox"></div>
+            <div id="ResultButtonBox">
+                <button type="button" id="btnSaveResults" onclick="saveResults()">Save Result</button>
+                <button type="button" id="btnViewLedger" onclick="viewLedger()">View Ledger</button>
+                <button type="button" id="btnViewGradeSheets" onclick="viewGradeSheets()">View Grade Sheets</button>
+            </div>
+        </div>   
+        <div id="FooterPlace">
+            <div id="FooterPublicHead">Public Pages</div>
+            <div id="PublicFooterBox">
+                <a href="../../index.html">Home Page</a>
+                <a href="../../StudentPage/StudentIndex.html">Student Page</a>
+                <a href="../../SMC_TGC_Page/SMC_TGC_Index.html">SMC_TGC Page</a>
+                <a href="../../QuestionBankPage/QuestionBankIndex.html">Question Bank Page</a>
+                <a href="../../NoticePage/NoticeIndex.html">Notice Page</a>
+                <a href="../../LibraryPage/LibraryIndex.html">Library Page</a>
+                <a href="../../HumanResourcePage/HumanResourceIndex.html">Human Resource Page</a>
+                <a href="../../HelpingHandPage/HelpingHandIndex.html">Helping Hand Page</a>
+                <a href="../../GalleryPage/GalleryIndex.html">Gallery Page</a>
+                <a href="../../BalPratibhaPage/BalPratibhaIndex.html">Bal Pratibha Page</a>
+                <a href="../../AboutUsPage/AboutUsIndex.html">About Us Page</a>
+            </div>
+            <div id="FooterPrivateHead">Private Pages</div>
+            <div id="PrivateFooterBox">
+                <a href="../AdminDashboardPage/AdminDashboardIndex.html">Admin Dashboard Page</a>
+                <a href="../ChangePasswordPage/ChangePasswordIndex.html">Change Password Page</a>
+                <a href="../EditAboutUsPage/EditAboutUsIndex.html">Edit About Us Page</a>
+                <a href="../EditAttendanceCardPage/EditAttendanceCardIndex.html">Edit Attendance Card Page</a>
+                <a href="../EditBalPratibhaPage/EditBalPratibhaIndex.html">Edit Bal Pratibha Page</a>
+                <a href="../EditCalendarPage/EditCalendarIndex.html">Edit Calendar Page</a>
+                <a href="../EditClassPage/EditClassIndex.html">Edit Class Page</a>
+                <a href="../EditGalleryPage/EditGalleryIndex.html">Edit Gallery Page</a>
+                <a href="../EditHelpingHandPage/EditHelpingHandIndex.html">Edit Helping Hand Page</a>
+                <a href="../EditHumanResourcePage/EditHumanResourceIndex.html">Edit Human Resource Page</a>
+                <a href="../EditIDCardPage/EditIDCardIndex.html">Edit ID Card Page</a>
+                <a href="../EditLibraryPage/EditLibraryIndex.html">Edit Library Page</a>
+                <a href="../EditNoticePage/EditNoticeIndex.html">Edit Notice Page</a>
+                <a href="../EditQuestionBankPage/EditQuestionBankIndex.html">Edit Question Bank Page</a>
+                <a href="../EditRoutinePage/EditRoutineIndex.html">Edit Routine Page</a>
+                <a href="../EditStudentAttendancePage/EditStudentAttendanceIndex.html">Edit Student Attendance Page</a>
+                <a href="../EditStudentPage/EditStudentIndex.html">Edit Student Page</a>
+                <a href="../EditVideoLinkPage/EditVideoLinkIndex.html">Edit Video Link Page</a>                
+            </div>
+        </div>         
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
+    <script src="../../SupabaseConfig.js"></script> 
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <script src="../../CustomDialog.js"></script>
+    <script src="../../DateConverter.js"></script>
+    <script src="../../SmartCalculator.js"></script>
+    <script src="../../NepaliCalendar.js"></script>
+    <script src="EditResultScript.js"></script> 
+</body>
+</html>

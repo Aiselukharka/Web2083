@@ -1,0 +1,243 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+body { 
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+
+#MainBody{
+    width: 96%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 10px;   
+}
+
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: 10px;
+    text-align: center;
+}
+#LogoBox{
+    width: 40px;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #007700, #009900, #007700);
+    color: #ffffff;
+    border-radius: 20px;  
+    font-size: 20px;  
+    font-weight: bold;
+    cursor: pointer;
+}
+#PageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #005500, #007700, #005500);
+    color: #ffff00;
+}
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffff00;
+    padding: 10px;   
+    background: linear-gradient(180deg, #111111, #333333); 
+    text-shadow: 1px 1px 2px #f00;
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 10px 0;
+}
+#EditNavigationSelect, #AdminToolsSelect{
+    width: 48%;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 0;
+    border: 2px solid #000000;
+}
+#ClassDataContainer{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#EditClassHead{
+    width: 100%;
+    padding: 10px;
+    color: #0000aa;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000000;
+    text-align: center;
+}
+#ClassDataBox{
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    overflow-x: auto;
+    background: #ffffff;
+}
+
+#ClassButtonBox{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#btnSaveClasses{
+    width: 40%;
+    padding: 10px 0;
+    color: #ffffff;
+    background: linear-gradient(180deg, #007700, #009900, #007700);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    display: none; /* Controlled dynamically now */
+}
+#btnSaveClasses:hover{
+    color: #ffff00;
+    background: linear-gradient(180deg, #005500, #007700, #005500);            
+}
+#btnSaveClasses:disabled {
+    background: linear-gradient(180deg, #777777, #999999, #777777);
+    cursor: not-allowed;
+}
+#btnDeleteClasses{
+    width: 40%;
+    padding: 10px 0;
+    color: #ffffff;
+    background: linear-gradient(180deg, #770000, #990000, #770000);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    display: none; /* Controlled dynamically now */
+}
+#btnDeleteClasses:hover{
+    color: #ffff00;
+    background: linear-gradient(180deg, #550000, #770000, #550000);            
+}
+
+#FooterPlace{
+    width: 100%;
+    background: linear-gradient(135deg, #333, #555);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#PublicFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPublicHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #00ffff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #00ffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PublicFooterBox a{
+    color: #ff0;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PublicFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}
+#PrivateFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPrivateHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #ff00ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PrivateFooterBox a{
+    color: #0ff;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PrivateFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}

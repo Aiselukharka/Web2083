@@ -13,7 +13,7 @@ PageNavigationDripDown.addEventListener("change", function () {
         "GalleryPage": "../GalleryPage/GalleryIndex.html",
         "SMC_TGC_Page": "../SMC_TGCPage/SMC_TGCIndex.html",
         "HelpingHandPage": "../HelpingHandPage/HelpingHandIndex.html",
-        "AdminPage": "../AdminPage/LogInIndex.html"        
+        "AdminPage": "../AdminPage/LoginPage/LoginIndex.html"        
     };
     const selectedPage = pageMap[this.value];
     if (selectedPage) {

@@ -1,0 +1,463 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    font-size: 62.5%;
+}
+body { 
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+
+#MainBody{
+    width: 96%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+}
+
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
+    text-align: center;
+}
+#LogoBox{
+    width: 6%;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 50%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    border: 4px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: clamp(1rem, 2vw, 3rem);  
+    font-weight: bold;
+    cursor: pointer;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: #ffff00;
+    padding: clamp(0.3rem, 1rem, 1.6rem);   
+    background: linear-gradient(180deg, #111111, #333333); 
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+}
+#EditNavigationSelect, #AdminToolsSelect{
+    width: 48%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    border: 4px solid #000000;
+}
+
+#EditHumanResourceContainer{
+    width: 100%;
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);     
+    display: flex;
+    flex-direction: column;
+    align-items: center;       
+}
+#EditHumanResourceHead{
+    width: 100%;
+    font-size: clamp(2.6rem, 4vw, 5rem);
+    font-weight: bold;
+    text-align: center;
+    color: #875400;
+    text-shadow: 1px 1px 3px #ffff00;
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#EditTopicSelect{
+    width: 80%;
+    font-size: clamp(1.6rem, 2vw, 3rem);
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    margin: clamp(0.4rem, 1vw, 2rem) 0;
+}
+.EditContainers {
+    display: none !important;
+}
+.EditContainers.visible {
+    display: flex !important;
+}
+/* Teacher Container Style */
+#EditTeacherContainer{
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    border: 2px solid #000000;
+    background: linear-gradient(135deg, #ddffdd, #bbddbb);
+}
+#EditTeacherHead{
+    width: 100%;
+    font-size: clamp(2rem, 3vw, 4rem);
+    font-weight: bold;
+    text-align: center;
+    color: #0000aa;
+    text-shadow: 1px 1px 3px #fff;
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#TeacherBox{
+    width: 100%;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    font-size: clamp(1.2rem, 1.6vw, 3rem);
+    font-weight: bold;
+}
+/* Button wrapper for centering */
+.button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+/* Common button styles */
+.btn-action {
+    width: 30%;
+    min-width: 150px;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    background: linear-gradient(180deg, #005500, #007700, #005500);
+    color: #fff;
+    border: none;
+    border-radius: 2vw;
+    font-size: clamp(1.6rem, 2vw, 3.2rem);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+.btn-action:hover {
+    background: linear-gradient(180deg, #003300, #005500, #003300);
+    color: #f0f;
+    transform: scale(1.02);
+}
+/* SMC Container Style */
+#EditSMCContainer{
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    border: 2px solid #000000;
+    background: linear-gradient(135deg, #ddffdd, #bbddbb);
+}
+#EditSMCHead{
+    width: 100%;
+    font-size: clamp(2rem, 3vw, 4rem);
+    font-weight: bold;
+    text-align: center;
+    color: #0000aa;
+    text-shadow: 1px 1px 3px #fff;
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#SMCBox{
+    width: 100%;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    font-size: clamp(1.2rem, 1.6vw, 3rem);
+    font-weight: bold;
+}
+/* PTA Container Style */
+#EditPTAContainer{
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    border: 2px solid #000000;
+    background: linear-gradient(135deg, #ddffdd, #bbddbb);
+}
+#EditPTAHead{
+    width: 100%;
+    font-size: clamp(2rem, 3vw, 4rem);
+    font-weight: bold;
+    text-align: center;
+    color: #0000aa;
+    text-shadow: 1px 1px 3px #fff;
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#PTABox{
+    width: 100%;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    font-size: clamp(1.2rem, 1.6vw, 3rem);
+    font-weight: bold;
+}
+/* Photo Container Style */
+#EditPhotoContainer{
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    border: 2px solid #000000;
+    background: linear-gradient(135deg, #ddffdd, #bbddbb);
+}
+#EditPhotoHead{
+    width: 100%;
+    font-size: clamp(2rem, 3vw, 4rem);
+    font-weight: bold;
+    text-align: center;
+    color: #0000aa;
+    text-shadow: 1px 1px 3px #fff;
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#PhotoBox{
+    width: 100%;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    font-size: clamp(1.2rem, 1.6vw, 3rem);
+    font-weight: bold;
+}
+/* Fix for jspreadsheet dropdown styles */
+.jspreadsheet .jdropdown {
+    z-index: 9999 !important;
+}
+.jspreadsheet .jdropdown-content {
+    z-index: 9999 !important;
+}
+/* Ensure jspreadsheet renders properly inside hidden containers */
+.EditContainers.visible #TeacherBox,
+.EditContainers.visible #SMCBox,
+.EditContainers.visible #PTABox,
+.EditContainers.visible #PhotoBox {
+    display: block !important;
+}
+/* Responsive adjustments for buttons */
+@media (max-width: 768px) {
+    .btn-action {
+        width: 50%;
+        min-width: 120px;
+        font-size: clamp(1.2rem, 2vw, 1.8rem);
+    }    
+    .button-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+@media (max-width: 480px) {
+    .btn-action {
+        width: 80%;
+        min-width: 100px;
+        font-size: clamp(1rem, 1.8vw, 1.4rem);
+    }
+}
+/* Photo Container Styles */
+#PhotoListContainer {
+    width: 100%;
+    overflow-x: auto;
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#PhotoTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(1.2rem, 1.6vw, 2rem);
+}
+#PhotoTable th {
+    background: #005500;
+    color: white;
+    padding: 10px;
+    border: 1px solid #000;
+    text-align: left;
+    font-weight: bold;
+}
+#PhotoTable td {
+    padding: 10px;
+    border: 1px solid #000;
+    vertical-align: middle;
+}
+#PhotoTable tr:nth-child(even) {
+    background: #f2f2f2;
+}
+#PhotoTable tr:hover {
+    background: #e6f3e6;
+}
+.photo-preview {
+    width: 80px;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.photo-upload-btn {
+    padding: 6px 12px;
+    background: #007700;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: clamp(0.8rem, 1.2vw, 1.4rem);
+    transition: all 0.3s ease;
+}
+.photo-upload-btn:hover {
+    background: #005500;
+    transform: scale(1.05);
+}
+.photo-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: clamp(0.8rem, 1.2vw, 1.4rem);
+    font-weight: bold;
+}
+.photo-status.pending {
+    background: #ffaa00;
+    color: #000;
+}
+.photo-status.uploaded {
+    background: #00aa00;
+    color: #fff;
+}
+.photo-status.error {
+    background: #ff0000;
+    color: #fff;
+}
+.photo-file-input {
+    display: none;
+}
+.no-photo {
+    color: #999;
+    font-style: italic;
+}
+/* Delete button styles */
+.delete-btn {
+    padding: 6px 12px;
+    background: #cc0000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: clamp(0.8rem, 1.2vw, 1.4rem);
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: #990000;
+    transform: scale(1.05);
+}
+
+.delete-btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+#FooterPlace{
+    width: 100%;
+    background: linear-gradient(135deg, #333, #555);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#PublicFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPublicHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #00ffff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #00ffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PublicFooterBox a{
+    color: #ff0;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PublicFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}
+#PrivateFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPrivateHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #ff00ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PrivateFooterBox a{
+    color: #0ff;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PrivateFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}

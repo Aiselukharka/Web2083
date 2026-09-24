@@ -1,0 +1,525 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    font-size: 62.5%;
+}
+body { 
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+#MainBody{
+    width: 96%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+}
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
+    text-align: center;
+}
+#LogoBox{
+    width: 6%;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 50%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    border: 4px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: clamp(1rem, 2vw, 3rem);  
+    font-weight: bold;
+    cursor: pointer;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: #ffff00;
+    padding: clamp(0.3rem, 1rem, 1.6rem);   
+    background: linear-gradient(180deg, #111111, #333333); 
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+}
+#EditNavigationSelect, #AdminToolsSelect{
+    width: 48%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    border: 4px solid #000000;
+}
+#AttendanceCardContainer{
+    width: 100%;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
+    margin: clamp(0.3rem, 1rem, 1.6rem) 0;
+    border: 2px solid #000000;
+    background: linear-gradient(45deg, #77aa77, #99aa99);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#AttendanceCardHead{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.6rem, 3vw, 4rem);
+    font-weight: bold;
+    color: #0000aa;
+    padding: clamp(0.4rem, 1vw, 2.6rem);
+}
+#AttendanceCardClassSelectionSelect{
+    width: 100%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.4rem, 1vw, 2.6rem);
+}
+#AttendanceCardStudentListBox{
+    width: 100%;
+    font-size: clamp(0.7rem, 1.2vw, 2rem);
+    padding: clamp(0.4rem, 1vw, 2.6rem) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#AttendanceTableBox{
+    width:100%;
+    margin-top:1rem;
+    background:#eeeeee;
+    padding:1.5rem;
+    border-radius:8px;
+}
+#btnCreateAttendanceCard{
+    width: 50%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.4rem, 1vw, 2.6rem) 0;
+    border-radius: 2vw;
+    background: linear-gradient(180deg, #007700, #009900, #007700);
+    color: #ffffff;
+}
+#btnCreateAttendanceCard:hover{
+    background: linear-gradient(180deg, #005500, #007700, #005500);
+    color: #ffff00;
+}
+#AttendancePopupOverlay, #AttendancePreviewOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+#AttendancePopup {
+    width: min(92%, 500px);
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,0,0,.35);
+}
+#AttendancePopupTitle {
+    background: #000066;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1.2rem;
+}
+.AttendancePopupRow {
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem 1.6rem;
+}
+.AttendancePopupRow label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: .6rem;
+}
+.AttendancePopupRow input {
+    font-size: 1.6rem;
+    padding: .8rem;
+}
+.AttendancePopupButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+.AttendancePopupButtons button {
+    min-width: 130px;
+    padding: .9rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+#AttendancePreviewWindow {
+    width: 95%;
+    height: 92%;
+    background: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#AttendancePreviewHeader {
+    height: 6rem;
+    background: #003366;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+#AttendancePreviewHeader button {
+    padding: 0.5rem 1.5rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+#AttendancePreviewTitle {
+    font-size: 2rem;
+    font-weight: bold;
+}
+#AttendancePreviewBody {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #ddd;
+    overflow: auto;
+    padding: 40px;
+}
+#AttendancePreviewFooter {
+    height: 6rem;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2rem;
+}
+#btnPrevAttendanceCard {
+    width: 20%;
+    padding: clamp(0.4rem, 1vw, 2rem) 0;
+    margin: clamp(0.4rem, 1vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(180deg, #000077, #000099, #000077);
+    color: #ffffff;
+    border-radius: 2vw;
+}
+#btnPrevAttendanceCard:hover {
+    background: linear-gradient(180deg, #000055, #000077, #000055);
+    color: #ffff00;
+}
+#btnNextAttendanceCard {
+    width: 20%;
+    padding: clamp(0.4rem, 1vw, 2rem) 0;
+    margin: clamp(0.4rem, 1vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(180deg, #777700, #999900, #777700);
+    color: #ffffff;
+    border-radius: 2vw;
+}
+#btnNextAttendanceCard:hover {
+    background: linear-gradient(180deg, #555500, #777700, #555500);
+    color: #ffff00;
+}
+#btnExportAttendanceCards {
+    width: 20%;
+    padding: clamp(0.4rem, 1vw, 2rem) 0;
+    margin: clamp(0.4rem, 1vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(180deg, #770077, #990099, #770077);
+    color: #ffffff;
+    border-radius: 2vw;
+}
+#btnExportAttendanceCards:hover {
+    background: linear-gradient(180deg, #550055, #770077, #550055);
+    color: #ffff00;
+}
+.AttendanceCard {
+    width: 1000px;
+    height: 620px;
+    background: white;
+    border: 10px solid #004080;
+    border-radius: 20px;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.CardWatermark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1000px;
+    height: 620px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0.09;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    user-select: none;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #007700, #009900);
+}
+.WatermarkRow {
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+    gap: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #000;
+}
+.CardHeader {
+    position: relative;
+    z-index: 2;
+    height: 14rem;
+    display: flex;
+    align-items: center;
+    background: #004080;
+    color: #ffeeee;
+    padding: 0 3rem;
+    box-sizing: border-box;
+}
+.CardLogo {
+    width: 9rem;
+    height: 9rem;
+    object-fit: contain;
+}
+.CardSchool {
+    flex: 1;
+    text-align: center;
+    padding-right: 9rem;
+}
+.CardSchoolName {
+    font-size: 3.6rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px #ff0000;
+}
+.CardSchoolAddress {
+    font-size: 2rem;
+    color: #338811;
+    font-weight: bold;
+    font-style: italic;
+}
+.CardTitle {
+    display: inline-block;
+    background: linear-gradient(135deg, #eeeeee, #cccccc); 
+    color: #aa0033;
+    font-size: 4rem;
+    font-weight: bold;
+    padding: 0.6rem;
+    border-radius: 0.8rem;
+    margin-top: 0.6rem;
+    text-shadow: 1px 1px 4px #000;
+    box-shadow: 2px 2px 10px #000;
+}
+.CardBody {
+    position: relative;
+    z-index: 2;
+    height: 410px;
+    display: flex;
+    background: transparent;
+    box-sizing: border-box;
+}
+.CardLeft {
+    width: 70%;
+    padding: 2.5rem;
+    font-size: 2.4rem;
+    line-height: 2.3;
+}
+.CardRight {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem;
+    box-sizing: border-box;
+}
+.RollBox {
+    width: 100%;
+    height: 19rem;
+    border: 4px solid #004080;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;            
+}
+.RollNo {
+    font-size: 13rem;
+    font-weight: bold;
+    color: #a00000;
+    text-shadow: 1px 1px 4px #000;
+}
+.SignatureBox {
+    text-align: center;
+    width: 100%;
+}
+.SignatureDottedLine {
+    border-bottom: 2px dashed #333;
+    width: 100%;
+    margin-bottom: 6px;
+    height: 25px;
+}
+.PrincipalName {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000080;
+    white-space: nowrap;
+}
+.PrincipalTitle {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #333;
+}
+.CardFooter {
+    position: relative;
+    z-index: 3;
+    height: 50px;
+    background: #144d18;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+#FooterPlace{
+    width: 100%;
+    background: linear-gradient(135deg, #333, #555);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#PublicFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPublicHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #00ffff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #00ffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PublicFooterBox a{
+    color: #ff0;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PublicFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}
+#PrivateFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPrivateHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #ff00ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PrivateFooterBox a{
+    color: #0ff;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PrivateFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}

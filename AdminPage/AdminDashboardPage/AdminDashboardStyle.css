@@ -1,0 +1,219 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    font-size: 62.5%;
+}
+body { 
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+
+#MainBody{
+    width: 96%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+}
+
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
+    text-align: center;
+}
+#LogoBox{
+    width: 6%;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 50%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    border: 4px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: clamp(1rem, 2vw, 3rem);  
+    font-weight: bold;
+    cursor: pointer;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: #ffff00;
+    padding: clamp(0.3rem, 1rem, 1.6rem);   
+    background: linear-gradient(180deg, #111111, #333333); 
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+}
+#EditNavigationSelect, #AdminToolsSelect{
+    width: 48%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    border: 4px solid #000000;
+}
+
+#PrivateLinkBox{
+    width: 100%;
+    display: block;
+    padding: 10px;
+    text-align: center;
+    background: linear-gradient(135deg, #ffc, #ffa);
+    border: 2px solid #aa7;
+    margin: 12px;
+}
+#PrivateLinkHead{
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 32px;
+    font-weight: bold;
+    color: #00a;
+    text-shadow: 1px 1px 2px #000;
+}
+.PrivateActionButtons{
+    width: 300px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    background: #ccddff;
+    padding: 10px;
+    margin: 10px 20px;
+    cursor: pointer;
+    box-shadow: 4px 6px 10px #000 ;
+}
+.ActionLabelE{
+    font-size: 20px;
+    font-weight: bold;
+    color: #009900;
+    text-shadow: 1px 1px 2px #000;
+    padding: 6px 0;
+}
+.ActionLabelN{
+    font-size: 16px;
+    color: #995500;
+    padding: 6px 0;
+}
+.PrivateActionButtons:hover{
+    background: #ccffdd;
+    transform: scale(1.02);
+}
+
+#PublicLinkBox{
+    width: 100%;
+    display: block;
+    padding: 10px;
+    text-align: center;
+    background: linear-gradient(135deg, #cff, #aff);
+    border: 2px solid #7aa;
+    margin: 12px;
+}
+#PublicLinkHead{
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 32px;
+    font-weight: bold;
+    color: #0a0;
+    text-shadow: 1px 1px 2px #000;
+}
+.PublicActionButtons{
+    width: 300px;
+    border: 2px solid #a00;
+    border-radius: 4px;
+    background: #ddffcc;
+    padding: 10px;
+    margin: 10px 20px;
+    cursor: pointer;
+    box-shadow: 4px 6px 10px #000 ;
+}
+.PublicActionButtons:hover{
+    background: #ffddcc;
+    transform: scale(1.02);
+}
+
+#ActionLinkBox{
+    width: 100%;
+    display: block;
+    padding: 10px;
+    text-align: center;
+    background: linear-gradient(135deg, #fcf, #faf);
+    border: 2px solid #a7a;
+    margin: 12px;
+}
+#ActionLinkHead{
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 32px;
+    font-weight: bold;
+    color: #753054;
+    text-shadow: 1px 1px 2px #000;
+}
+.ActionButtons{
+    width: 300px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    background: #ffdac9;
+    padding: 10px;
+    margin: 10px 20px;
+    cursor: pointer;
+    box-shadow: 4px 6px 10px #000 ;
+}
+.ActionButtons:hover{
+    background: #ccffdd;
+    transform: scale(1.02);
+}

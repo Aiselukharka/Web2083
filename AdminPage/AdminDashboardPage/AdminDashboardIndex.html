@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <title>Admin Page</title>
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+    <link rel="stylesheet" href="AdminDashboardStyle.css">
+</head>
+<body>
+    <div id="MainBody">
+        <div id="PageNaviggationBox">
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
+            <select id="PageNavigationSelect">   
+                <option value="AdminPage">Admin</option>
+                <option value="LibraryPage">Library</option>
+                <option value="NoticePage">Notice</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="StudentPage">Students</option>
+                <option value="HumanResourcePage">Teachers</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="HomePage">Home</option>
+            </select>
+            <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
+        </div>
+        <div id="DateBox"></div>
+        <div id="UtilityBox">
+            <select id="EditNavigationSelect">
+                <option selected disabled>Admin</option>
+                <option value="AttendanceCardEditBox">Edit Attendance Cards</option>
+                <option value="IDCardEditBox">Edit ID Cards</option>
+                <option value="ResultEditBox">Edit Result</option>
+                <option value="RoutineEditBox">Edit Routine</option>
+                <option value="StudentAttendanceEditBox">Edit Student Attendance</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
+                <option value="LibraryEditBox">Edit Library</option>
+                <option value="NoticeEditBox">Edit Notice</option>
+                <option value="AboutUsEditBox">Edit About Us</option>
+                <option value="StudentEditBox">Edit Student Data</option>
+                <option value="HumanResourceEditBox">Edit Human Resource Data</option>
+                <option value="CalendarEditBox">Edit Calendar</option>
+                <option value="BalPratibhaEditBox">Edit Bal Pratibha</option>
+                <option value="GalleryEditBox">Edit Gallery</option>
+                <option value="HelpingHandEditBox">Edit Helping Hand</option>
+                <option value="ClassEditBox">Edit Class Data</option>
+                <option value="VideoLinkEditBox">Edit Video Links</option>
+                <option value="QuestionBankEditBox">Edit Question Bank</option>
+            </select>
+            <select id="AdminToolsSelect">
+                <option disabled selected>Admin Tools</option>
+                <option value="ChangePasswordTool">Change Password</option>
+                <option value="LogoutThisDeviceTool">Logout This Device</option>
+                <option value="LogoutAllDevicesTool">Logout All Devices</option>
+                <option value="AddAdminTool">Add/Delete Admin</option>
+            </select>            
+        </div>
+        <div id="PrivateLinkBox">
+            <div id="PrivateLinkHead">Private Pages</div>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditAboutUsPage/EditAboutUsIndex.html'">
+                <div class="ActionLabelE">Edit About Us</div>
+                <div class="ActionLabelN">हाम्रो बारेमा सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditClassPage/EditClassIndex.html'">
+                <div class="ActionLabelE">Edit Classes</div>
+                <div class="ActionLabelN">कक्षाहरू सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditStudentPage/EditStudentIndex.html'">
+                <div class="ActionLabelE">Edit Students</div>
+                <div class="ActionLabelN">विद्यार्थी विवरण सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditHumanResourcePage/EditHumanResourceIndex.html'">
+                <div class="ActionLabelE">Edit Human Resource</div>
+                <div class="ActionLabelN">मानव श्रोत सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditCalendarPage/EditCalendarIndex.html'">
+                <div class="ActionLabelE">Edit Calendar</div>
+                <div class="ActionLabelN">पात्रो सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditHelpingHandPage/EditHelpingHandIndex.html'">
+                <div class="ActionLabelE">Edit Helping Hands</div>
+                <div class="ActionLabelN">सहयोगी हातहरू सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditBalPratibhaPage/EditBalPratibhaIndex.html'">
+                <div class="ActionLabelE">Edit Bal Pratibha</div>
+                <div class="ActionLabelN">बाल प्रतिभा सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditGalleryPage/EditGalleryIndex.html'">
+                <div class="ActionLabelE">Edit Gallery</div>
+                <div class="ActionLabelN">ग्यालरी सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditIDCardPage/EditIDCardIndex.html'">
+                <div class="ActionLabelE">Create ID Cards</div>
+                <div class="ActionLabelN">परिचय पत्र बनाउनुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditQuestionBankPage/EditQuestionBankIndex.html'">
+                <div class="ActionLabelE">Edit Question Bank</div>
+                <div class="ActionLabelN">प्रश्न भण्डार सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditStudentAttendancePage/EditStudentAttendanceIndex.html'">
+                <div class="ActionLabelE">Take Student Attendance</div>
+                <div class="ActionLabelN">विद्यार्थी हाजिरी लिनुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditLibraryPage/EditLibraryIndex.html'">
+                <div class="ActionLabelE">Edit Library</div>
+                <div class="ActionLabelN">पुस्तकालय सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditResultPage/EditResultIndex.html'">
+                <div class="ActionLabelE">Prepare Results</div>
+                <div class="ActionLabelN">परीक्षाफल तयार गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditAttendanceCardPage/EditAttendanceCardIndex.html'">
+                <div class="ActionLabelE">Create Attendance Cards</div>
+                <div class="ActionLabelN">उपस्थिति कार्ड बनाउनुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditNoticePage/EditNoticeIndex.html'">
+                <div class="ActionLabelE">Edit Notices</div>
+                <div class="ActionLabelN">सुचना सम्पादन गर्नुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditRoutinePage/EditRoutineIndex.html'">
+                <div class="ActionLabelE">Create Routine</div>
+                <div class="ActionLabelN">कार्यतालिका बनाउनुहोस्</div>
+            </button>
+            <button class="PrivateActionButtons" onclick="window.location.href='../EditVideoLinkPage/EditVideoLinkIndex.html'">
+                <div class="ActionLabelE">Edit Video Links</div>
+                <div class="ActionLabelN">भिडियो लिङ्क सम्पादन गर्नुहोस्</div>
+            </button>                      
+        </div>
+
+        <div id="PublicLinkBox">
+            <div id="PublicLinkHead">Public Pages</div>
+            <button class="PublicActionButtons" onclick="window.location.href='../../index.html'">
+                <div class="ActionLabelE">Home Page</div>
+                <div class="ActionLabelN">गृह पृष्ठ</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../QuestionBankPage/QuestionBankIndex.html'">
+                <div class="ActionLabelE">Question Bank</div>
+                <div class="ActionLabelN">प्रश्न भण्डार</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../HumanResourcePage/HumanResourceIndex.html'">
+                <div class="ActionLabelE">Human Resource</div>
+                <div class="ActionLabelN">मानव श्रोत</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../BalPratibhaPage/BalPratibhaIndex.html'">
+                <div class="ActionLabelE">Bal Pratibha</div>
+                <div class="ActionLabelN">बाल प्रतिभा</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../StudentPage/StudentIndex.html'">
+                <div class="ActionLabelE">Student Page</div>
+                <div class="ActionLabelN">विद्यार्थी विवरण</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../NoticePage/NoticeIndex.html'">
+                <div class="ActionLabelE">Notice Page</div>
+                <div class="ActionLabelN">सुचना पृष्ठ</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../HelpingHandPage/HelpingHandIndex.html'">
+                <div class="ActionLabelE">Helping Hands</div>
+                <div class="ActionLabelN">सहयोगी हातहरू</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../AboutUsPage/AboutUsIndex.html'">
+                <div class="ActionLabelE">About Us</div>
+                <div class="ActionLabelN">विद्यालयको बारेमा</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../SMC_TGC_Page/SMC_TGC_Index.html'">
+                <div class="ActionLabelE">SMC & TGC</div>
+                <div class="ActionLabelN">वि.ब्य.स. तथा शि.अ.सं.</div>
+            </button>
+            <button class="PublicActionButtons" onclick="window.location.href='../../LibraryPage/LibraryIndex.html'">
+                <div class="ActionLabelE">Library Page</div>
+                <div class="ActionLabelN">पुस्तकालय पृष्ठ</div>
+            </button>  
+            <button class="PublicActionButtons" onclick="window.location.href='../../GalleryPage/GalleryIndex.html'">
+                <div class="ActionLabelE">Gallery Page</div>
+                <div class="ActionLabelN">ग्यालरी पृष्ठ</div>
+            </button>                       
+        </div>
+
+        <div id="ActionLinkBox">
+            <div id="ActionLinkHead">Action Pages</div>
+            <button class="ActionButtons" onclick="window.location.href='../AddAdminPage/AddAdminIndex.html'">
+                <div class="ActionLabelE">Add/Delete Admin</div>
+                <div class="ActionLabelN">सम्पादक थप्नुहोस् वा हटाउनुहोस्</div>
+            </button>
+            <button class="ActionButtons" onclick="window.location.href='../ChangePasswordPage/ChangePasswordIndex.html'">
+                <div class="ActionLabelE">Change Password</div>
+                <div class="ActionLabelN">पासवर्ड परिवर्तन गर्नुहोस्</div>
+            </button>
+            <button class="ActionButtons" onclick="logoutFromThisDevice()">
+                <div class="ActionLabelE">Logout From This Device</div>
+                <div class="ActionLabelN">यस डिभाइसबाट बाहिरिनुहोस्</div>
+            </button>
+            <button class="ActionButtons" onclick="logoutFromAllDevices()">
+                <div class="ActionLabelE">Logout From All Devices</div>
+                <div class="ActionLabelN">सबै डिभाइसबाट बाहिरिनुहोस्</div>
+            </button>                   
+        </div>        
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <script src="../../SupabaseConfig.js"></script>
+    <script src="../../DateConverter.js"></script>
+    <script src="../../CustomDialog.js"></script>
+    <script src="../../SmartCalculator.js"></script>
+    <script src="../../NepaliCalendar.js"></script>
+    <script src="AdminDashboardScript.js"></script>
+</body>
+</html>

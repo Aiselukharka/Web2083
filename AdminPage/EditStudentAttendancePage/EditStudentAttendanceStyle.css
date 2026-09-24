@@ -1,0 +1,390 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    font-size: 62.5%;
+}
+body { 
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+#MainBody{
+    width: 96%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+}
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
+    text-align: center;
+}
+#LogoBox{
+    width: 6%;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 50%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    border: 4px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: clamp(1rem, 2vw, 3rem);  
+    font-weight: bold;
+    cursor: pointer;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: #ffff00;
+    padding: clamp(0.3rem, 1rem, 1.6rem);   
+    background: linear-gradient(180deg, #111111, #333333); 
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+}
+#EditNavigationSelect, #AdminToolsSelect{
+    width: 48%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    border: 4px solid #000000;
+}
+#AttendanceContainer{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+    border: 2px solid #000000;
+    background: linear-gradient(135deg, #ffc, #ffa );
+}
+#AttendanceSelectionBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+}
+#AttendanceClassSelec{
+    width: 20%;
+    padding: 10px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+#btnDecreaseDate, #btnIncreaseDate{
+    width: 10%;
+    padding: 10px 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #a0a;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+#btnDecreaseDate:hover, #btnIncreaseDate:hover{
+    color: #00aa00;
+    font-size: 26px;
+}
+#ADDateBox, #BSDateBox{
+    width: 20%;
+    padding: 10px 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #00cc00aa;
+}
+#btnToday{
+    width: 20%;
+    background: linear-gradient(180deg, #070, #090, #070);
+    padding: 10px;
+    color: #ffffff;
+    cursor: pointer;
+    border: 2px solid #000000;
+    border-radius: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+#btnToday:hover{
+    background: linear-gradient(180deg, #050, #070, #050);
+    color: #ffff00;            
+}
+#ADDateBox, #BSDateBox {
+    width: 20%;
+    padding: 10px 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #00cc00aa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#ADDateBox:hover, #BSDateBox:hover {
+    color: #00ff00;
+    transform: scale(1.05);
+}
+#AttendanceListBox{
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#btnByName, #btnByRollNumber, #btnShowAttendance{
+    width: 30%;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #777, #999, #777);
+    color: #ffffff;
+    border-radius: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    border: none; 
+    cursor: pointer;
+}
+.SelectedClasses {
+    background: linear-gradient(180deg, #050, #070, #050);
+    color: #ffff00;
+}
+#AttendanceListBox button.SelectedClasses {
+    background: linear-gradient(180deg, #050, #070, #050);
+    color: #ffff00;
+}
+#AttendanceBox {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background: white;
+    min-height: 100px;
+}
+
+/* Add to your existing CSS */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#attendancePopupOverlay {
+    animation: fadeIn 0.3s ease;
+}
+
+#attendancePopup table {
+    border-collapse: collapse;
+}
+
+#attendancePopup th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#attendancePopup .attendance-view-btn.active {
+    background: #007bff;
+    color: white;
+}
+
+#attendancePopup .attendance-view-btn:not(.active) {
+    background: #6c757d;
+    color: white;
+}
+
+#attendancePopup .attendance-view-btn {
+    transition: all 0.3s ease;
+}
+
+#attendancePopup .attendance-view-btn:hover {
+    opacity: 0.8;
+    transform: scale(1.02);
+}
+
+#attendancePopup table th {
+    border: 1px solid #dee2e6;
+}
+
+#attendancePopup table td {
+    border: 1px solid #dee2e6;
+}
+
+/* Sticky header for table */
+#monthAttendanceTable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#SubmitButtonBox{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#btnSubmitAttendance {
+    width: 40%;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: linear-gradient(180deg, #007700, #009900, #007700);
+    color: white;            
+}
+
+#btnSubmitAttendance:hover {
+    background: linear-gradient(180deg, #005500, #007700, #005500);
+    color: #ffff00;
+}       
+
+#btnSubmitAttendance.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+#btnClearAttendanceData{
+    width: 40%;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #770000, #990000, #770000);
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 20px;
+}
+#btnClearAttendanceData:hover{
+    background: linear-gradient(180deg, #550000, #770000, #550000);
+    color: #ffff00;            
+}
+
+#FooterPlace{
+    width: 100%;
+    background: linear-gradient(135deg, #333, #555);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#PublicFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPublicHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #00ffff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #00ffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PublicFooterBox a{
+    color: #ff0;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PublicFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}
+#PrivateFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPrivateHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #ff00ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PrivateFooterBox a{
+    color: #0ff;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PrivateFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}

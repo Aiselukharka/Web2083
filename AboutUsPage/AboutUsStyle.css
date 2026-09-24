@@ -237,3 +237,26 @@ body {
 .contact-info-line strong {
     color: #000000;
 }
+
+#FooterBox {
+    width: 100%;
+    background: linear-gradient(180deg, #444444, #000000);
+    padding: 20px 0;
+    margin-top: 20px;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 10px;   
+}
+#FooterBox a {
+    display: inline-block;     
+    width: 30%;
+    color: #00ffff;
+    font-size: 18px;
+    text-align: center;
+}
+#FooterBox a:hover {
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+}

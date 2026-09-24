@@ -1,0 +1,594 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    font-size: 62.5%;
+}
+body { 
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+
+#MainBody{
+    width: 96%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+}
+
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
+    text-align: center;
+}
+#LogoBox{
+    width: 6%;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 50%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    border: 4px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: clamp(1rem, 2vw, 3rem);  
+    font-weight: bold;
+    cursor: pointer;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: #ffff00;
+    padding: clamp(0.3rem, 1rem, 1.6rem);   
+    background: linear-gradient(180deg, #111111, #333333); 
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+}
+#EditNavigationSelect, #AdminToolsSelect{
+    width: 48%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    border: 4px solid #000000;
+}
+#StudentEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #cceeee, #bbeeee);
+}
+#EditStudentHead{
+    width: 100%;
+    text-align: center;
+    color: #0000aa;
+    font-size: clamp(2rem, 4vw, 6rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1vw, 2rem);
+    text-shadow: 1px 1px 2px #ff0000;
+}
+#StudentEditContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#EditStudentClassHead{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    color: #0000aa;
+    padding: clamp(0.4rem, 1vw, 2rem);
+    text-decoration: underline;
+}
+#StudentClassBox{
+    width: 96%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #111111;
+    padding: clamp(0.4rem, 1.6vw, 2.5rem);
+    background: linear-gradient(135deg, #99ffff, #bbffff);
+}
+.StudentClasses{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: clamp(0.4rem, 1.5vw, 3rem);
+}
+.StudentClasses div{
+    width: 30%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1vw, 2rem);
+
+}
+.StudentClasses input{
+    width: 70%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#SaveClassesContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#btnSaveStudentClasses{
+    width: 50%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    color: #ffffff;
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    padding: clamp(0.4rem, 1vw, 2rem);
+    border-radius: 2vw;
+}
+#btnSaveStudentClasses:hover{
+    color: #ffff00;
+    background: linear-gradient(180deg, #003300, #006600, #003300);
+}
+#StudentDataBox{
+    width: 96%;
+    border: 2px solid #000000;
+    padding: clamp(1rem, 2vw, 3rem);
+    margin: clamp(1rem, 2vw, 3rem) 0; 
+    background: linear-gradient(135deg, #ffdddd, #ffeeee);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#AddEditStudentHead{
+    width: 100%;
+    padding: clamp(1rem, 2vw, 3rem);
+    font-size: clamp(1.5rem, 3vw, 4rem);
+    font-weight: bold;
+    color: #0000aa;
+    text-shadow: 1px 1px 3px #333333;
+    text-align: center;
+}
+#StudentDropdownBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+#StudentDataDiv1{
+    width: 10%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#StudentDataDiv2{
+    width: 30%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#StudentClassSelectionSelect{
+    width: 20%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#studentCountInput{
+    width: 20%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1vw, 2rem);
+}
+#btnLoadClassStudents{
+    width: 50%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    color: #ffffff;
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    padding: clamp(0.4rem, 1vw, 2rem);
+    margin: clamp(0.4rem, 1vw, 2rem) 0;
+    border-radius: 2vw;
+}
+#btnLoadClassStudents:hover{
+    color: #ffff00;
+    background: linear-gradient(180deg, #003300, #006600, #003300);
+}
+
+/* Container that handles scrolling */
+#ClassStudentDataTableBox {
+    width: 100%;
+    margin-top: clamp(1rem, 2vw, 3rem);
+    background-color: #ffffff;    
+    font-size: clamp(0.8rem, 1.5vw, 2.2rem);        
+}
+
+/* Force the internal library grid container to respect constraints */
+#ClassStudentDataTableBox .jexcel_container {
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: auto !important;
+}
+#btnSaveClassStudentData{
+    width: 30%;
+    padding: clamp(0.4rem, 1.2vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffffff;
+    border-radius: 2vw;
+    display: none;
+}
+#btnSaveClassStudentData:hover{
+    background: linear-gradient(180deg, #003300, #006600, #003300);
+    color: #ffff00;
+}
+#StudentPhotoEditContainer{
+    width: 96%;
+    background: linear-gradient(135deg, #55aa55, #88aa88);
+    border: 2px solid #000000;
+    padding: clamp(0.4rem, 1.4vw, 2.6rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: clamp(2rem, 3vw, 4rem);
+}
+#StudentPhotoEditHead{
+    width: 100%;
+    padding: clamp(1.4rem, 1.2vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    text-align: center;
+    color: #0000aa;
+}
+#StudentPhotoEditBox{
+    width: 100%;
+    padding: clamp(0.4rem, 1.2vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#StudentPhotoDropdownBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#StudentPhotoDropdownBox div{
+    width: 30%;
+    padding: clamp(0.4rem, 1.2vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;            
+}
+#StudentPhotoDropdownBox select{
+    width: 70%;
+    padding: clamp(0.4rem, 1.2vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;            
+}
+#btnSaveStudentPhoto{
+    width: 50%;
+    padding: clamp(0.4rem, 1.2vw, 2rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    font-weight: bold;
+    border-radius: 2vw;
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffffff;
+}
+#btnSaveStudentPhoto:hover{
+    background: linear-gradient(180deg, #003300, #006600, #003300);
+    color: #ffff00;
+}
+#StudentPhotoListContainer{
+    width: 100%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);
+    background: linear-gradient(135deg, #dddddd, #bbbbbb);
+    margin: clamp(1rem, 2vw, 3rem) 0;            
+}
+#StudentPhotoListHead{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #ffffff;
+    background: #333333;  
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);     
+}
+#StudentPhotoListHead_1{
+    width: 10%;
+}
+#StudentPhotoListHead_2{
+    width: 40%;
+}
+#StudentPhotoListHead_3{
+    width: 20%;
+}
+#StudentPhotoListHead_4{
+    width: 30%;
+}
+.SingleStudentPhotoBoxes{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin: clamp(0.4rem, 1.2vw, 2.6rem);
+}        
+.SingleStudentRoll{
+    width: 10%;
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+}
+.SingleStudentName{
+    width: 40%;
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+}
+.SingleStudentSelectPhoto{
+    width: 20%;
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+    border-radius: 2vw;
+    background: linear-gradient(180deg, #000066, #000099, #000066);
+    color: #ffffff;
+}
+.SingleStudentSelectPhoto:hover{
+    background: linear-gradient(180deg, #000033, #000066, #000033);
+    color: #ffff00;
+}
+.SingleStudentPhotoName{
+    width: 30%;
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);
+    font-size: clamp(1rem, 2vw, 3rem);
+}
+#DeleteClassDataContainer{
+    width: 100%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);
+    background: linear-gradient(135deg, #dddd00, #bbbb00);
+    margin: clamp(1rem, 2vw, 3rem) 0;
+}
+#DeleteClassDataHead{
+    width: 100%;
+    color: #0000aa;
+    text-align: center;
+    font-weight: bold;
+}
+#DeleteClassDataBox{
+    width: 100%;
+    padding: clamp(0.4rem, 1.2vw, 2.6rem);
+    margin: clamp(1rem, 2vw, 3rem) 0;
+}
+.delete-dropdown-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.delete-dropdown-wrapper label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #444c56;
+}
+
+#DeleteClassSelect {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    background-color: #fafbfc;
+    color: #24292e;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#DeleteClassSelect:focus {
+    border-color: #ea4aaa;
+    box-shadow: 0 0 0 3px rgba(234, 74, 170, 0.15);
+}
+
+.delete-action-wrapper {
+    display: flex;
+    justify-content: flex-start;
+}
+
+#btnDeleteWholeClass {
+    display: none; /* Controlled dynamically by JavaScript listener state */
+    width: 100%;
+    background-color: #d73a49; /* High contrast destructive alert red */
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04);
+    transition: background-color 0.15s ease, transform 0.1s active;
+}
+
+#btnDeleteWholeClass:hover {
+    background-color: #cb2431;
+}
+
+#btnDeleteWholeClass:active {
+    background-color: #b91c1c;
+    transform: scale(0.98);
+}
+
+#btnDeleteWholeClass:disabled {
+    background-color: #f8a6ad;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: not-allowed;
+}
+.delete-roster-container {
+    margin: 15px 0;
+    max-height: 250px;
+    overflow-y: auto;
+    border-radius: 6px;
+}
+
+.roster-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444c56;
+    margin-bottom: 8px;
+}
+
+.roster-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    background-color: #fafbfc;
+}
+
+.roster-list li {
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #24292e;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.roster-list li:last-child {
+    border-bottom: none;
+}
+
+.roster-status-text {
+    font-size: 13px;
+    color: #6a737d;
+    font-style: italic;
+    margin: 10px 0;
+}
+
+.roster-empty-text {
+    font-size: 13px;
+    color: #6a737d;
+    background-color: #f6f8fa;
+    padding: 10px;
+    border: 1px dashed #d1d5da;
+    border-radius: 6px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.roster-error-text {
+    font-size: 13px;
+    color: #cb2431;
+    font-weight: 500;
+    margin: 10px 0;
+}
+
+#FooterPlace{
+    width: 100%;
+    background: linear-gradient(135deg, #333, #555);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#PublicFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPublicHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #00ffff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #00ffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PublicFooterBox a{
+    color: #ff0;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PublicFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}
+#PrivateFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPrivateHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #ff00ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PrivateFooterBox a{
+    color: #0ff;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PrivateFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}

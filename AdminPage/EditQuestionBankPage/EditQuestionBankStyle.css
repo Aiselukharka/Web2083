@@ -1,0 +1,292 @@
+@font-face {
+    font-family: 'MySanskritFont';
+    src: url('../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+html{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    font-size: 62.5%;
+}
+body { 
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif; 
+    min-height: 100%;
+    font-family: 'Arial', 'MySanskritFont', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+}
+
+#MainBody{
+    width: 96%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffaaaa;
+    min-height: 100%;
+    margin: 0 auto;    
+    padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+}
+
+#PageNaviggationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background: #000000;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
+    text-align: center;
+}
+#LogoBox{
+    width: 6%;
+    height: auto;     
+}
+#LogoBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#PageNavigationSelect{
+    width: 50%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    border: 4px solid #000000;
+}
+#PageNaviggationBox button{
+    width: 20%;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
+    color: #ffffff;
+    border-radius: 4vw;  
+    font-size: clamp(1rem, 2vw, 3rem);  
+    font-weight: bold;
+    cursor: pointer;
+}
+#pageNaviggationBox button:hover{
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffff00;
+}
+#DateBox{
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: #ffff00;
+    padding: clamp(0.3rem, 1rem, 1.6rem);   
+    background: linear-gradient(180deg, #111111, #333333); 
+}
+#UtilityBox{
+    width: 100%;
+    height: auto;
+    background: linear-gradient(180deg, #333333, #555555);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+}
+#EditNavigationSelect, #AdminToolsSelect{
+    width: 48%;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-weight: bold;
+    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    border: 4px solid #000000;
+}
+#QuestionBankEditBox{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eeccee, #eebbee);
+}
+.QuestionItems{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    margin: 0 0 2vh 0;
+    box-shadow: 2px 2px 5px #111111;
+}
+.QuestionItems h3{
+    width: 40%;
+    text-align: left;
+    font-size: 2vw;
+}
+.btnOpenQuestion{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #009900, #00cc00, #009900);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+    cursor: pointer;
+}
+.btnOpenQuestion:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+.btnDownloadQuestion{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #000099, #0000cc, #000099);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDownloadQuestion:hover{
+    background: linear-gradient(180deg, #000066, #000099, #000066);
+    color: #ffff00;
+}
+.btnDeleteQuestion{
+    width: 15%;
+    padding: 1vh 0 1vh 0;
+    background: linear-gradient(180deg, #990000, #cc0000, #990000);
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 4vw;
+}
+.btnDeleteQuestion:hover{
+    background: linear-gradient(180deg, #660000, #990000, #660000);
+    color: #ffff00;
+}
+#AddQuestionHead{
+    width: 100%;
+    text-align: center;
+    font-size: 3vw;
+    font-weight: bold;
+    color: #0000aa;
+    margin: 8vh 0 0 0;
+}
+#AddQuestionBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2vh 0 2vh 0;
+    border: 2px solid #aaaaaa;
+    background: linear-gradient(135deg, #aaaaaa, #bbbbbb);
+    border-radius: 4vw;
+    margin: 0 0 4vh 0;
+}
+#QuestionFile{display: none;}
+#btnChooseQuestionFile{
+    width: 20%;
+    font-size: 2vw;
+    font-weight: bold;
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffffff;
+    padding: 1vw 0 1vw 0;
+    border-radius: 4vw 0 0 4vw;
+    cursor: pointer;
+}
+#btnChooseQuestionFile:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+#QuestionTitle{
+    width: 50%;
+    text-align: left;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 2vh;
+}
+#btnUploadQuestion{
+    width: 20%;
+    font-size: 2vw;
+    font-weight: bold;
+    background: linear-gradient(180deg, #009900, #00aa00, #009900);
+    color: #ffffff;
+    padding: 1vw 0 1vw 0;
+    border-radius: 0 4vw 4vw 0;
+    cursor: pointer;
+}
+#btnUploadQuestion:hover{
+    background: linear-gradient(180deg, #006600, #009900, #006600);
+    color: #ffff00;
+}
+
+#FooterPlace{
+    width: 100%;
+    background: linear-gradient(135deg, #333, #555);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#PublicFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPublicHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #00ffff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #00ffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PublicFooterBox a{
+    color: #ff0;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PublicFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}
+#PrivateFooterBox{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+#FooterPrivateHead{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    color: #ff00ff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #ff00ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#PrivateFooterBox a{
+    color: #0ff;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+#PrivateFooterBox a:hover{
+    color: #0f0;
+    text-decoration: underline;
+}

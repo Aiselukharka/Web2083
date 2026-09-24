@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Add Admin</title>
+<link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+<link rel="stylesheet" href="AddAdminStyle.css">
+</head>
+
+<body>
+    <div id="MainBody">
+        <div id="PageNaviggationBox">
+            <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
+            <select id="PageNavigationSelect">   
+                <option value="AddAdminPage">Add Admin</option>
+                <option value="AdminPage">Admin</option>
+                <option value="LibraryPage">Library</option>
+                <option value="NoticePage">Notice</option>
+                <option value="QuestionBankPage">Question Bank</option>
+                <option value="StudentPage">Students</option>
+                <option value="TeacherPage">Teachers</option>
+                <option value="BalPratibhaPage">Bal Pratibha</option>
+                <option value="AboutUsPage">About Us</option>
+                <option value="GalleryPage">Gallery</option>
+                <option value="SMC_TGC_Page">SMC & TGC</option>
+                <option value="HelpingHandPage">Helping Hand</option>
+                <option value="HomePage">Home</option>
+            </select>            
+        </div>
+        <div id="AdminList"></div>
+        <div id="AddAdminBox">
+            <h2>Add New Admin</h2>
+            <div class="AdminRows"><label>New Email</label><input type="email" id="newAdminEmail"><button type="button" style="visibility: hidden;">👁</button></div>
+            <div class="AdminRows"><label>New Password</label><input type="password" id="newAdminPassword"><button type="button" onclick="togglePass('newAdminPassword')">👁</button></div>
+            <div id="passwordStrength"></div>
+            <div class="AdminRows"><label>Confirm New Password</label><input type="password" id="confirmNewAdminPassword"><button type="button" onclick="togglePass('confirmNewAdminPassword')">👁</button></div>
+            <button id="btnAddAdmin" type="button">Add Admin</button>
+        </div>
+        <div id="FooterPlace">
+            <div id="FooterPublicHead">Public Pages</div>
+            <div id="PublicFooterBox">
+                <a href="../../index.html">Home Page</a>
+                <a href="../../StudentPage/StudentIndex.html">Student Page</a>
+                <a href="../../SMC_TGC_Page/SMC_TGC_Index.html">SMC_TGC Page</a>
+                <a href="../../QuestionBankPage/QuestionBankIndex.html">Question Bank Page</a>
+                <a href="../../NoticePage/NoticeIndex.html">Notice Page</a>
+                <a href="../../LibraryPage/LibraryIndex.html">Library Page</a>
+                <a href="../../HumanResourcePage/HumanResourceIndex.html">Human Resource Page</a>
+                <a href="../../HelpingHandPage/HelpingHandIndex.html">Helping Hand Page</a>
+                <a href="../../GalleryPage/GalleryIndex.html">Gallery Page</a>
+                <a href="../../BalPratibhaPage/BalPratibhaIndex.html">Bal Pratibha Page</a>
+                <a href="../../AboutUsPage/AboutUsIndex.html">About Us Page</a>
+            </div>
+            <div id="FooterPrivateHead">Private Pages</div>
+            <div id="PrivateFooterBox">
+                <a href="../AdminDashboardPage/AdminDashboardIndex.html">Admin Dashboard Page</a>
+                <a href="../ChangePasswordPage/ChangePasswordIndex.html">Change Password Page</a>
+                <a href="../EditAboutUsPage/EditAboutUsIndex.html">Edit About Us Page</a>
+                <a href="../EditAttendanceCardPage/EditAttendanceCardIndex.html">Edit Attendance Card Page</a>
+                <a href="../EditBalPratibhaPage/EditBalPratibhaIndex.html">Edit Bal Pratibha Page</a>
+                <a href="../EditCalendarPage/EditCalendarIndex.html">Edit Calendar Page</a>
+                <a href="../EditClassPage/EditClassIndex.html">Edit Class Page</a>
+                <a href="../EditGalleryPage/EditGalleryIndex.html">Edit Gallery Page</a>
+                <a href="../EditHelpingHandPage/EditHelpingHandIndex.html">Edit Helping Hand Page</a>
+                <a href="../EditHumanResourcePage/EditHumanResourceIndex.html">Edit Human Resource Page</a>
+                <a href="../EditIDCardPage/EditIDCardIndex.html">Edit ID Card Page</a>
+                <a href="../EditLibraryPage/EditLibraryIndex.html">Edit Library Page</a>
+                <a href="../EditNoticePage/EditNoticeIndex.html">Edit Notice Page</a>
+                <a href="../EditQuestionBankPage/EditQuestionBankIndex.html">Edit Question Bank Page</a>
+                <a href="../EditResultPage/EditResultIndex.html">Edit Result Page</a>
+                <a href="../EditRoutinePage/EditRoutineIndex.html">Edit Routine Page</a>
+                <a href="../EditStudentAttendancePage/EditStudentAttendanceIndex.html">Edit Student Attendance Page</a>
+                <a href="../EditStudentPage/EditStudentIndex.html">Edit Student Page</a>
+                <a href="../EditVideoLinkPage/EditVideoLinkIndex.html">Edit Video Link Page</a>                
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="../../SupabaseConfig.js"></script>
+    <script src="AddAdminScript.js"></script>
+</body>
+</html>
