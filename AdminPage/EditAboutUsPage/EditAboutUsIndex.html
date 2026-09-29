@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
-    <title>Admin Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+    <title>About Us</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="EditAboutUsStyle.css">
 </head>
@@ -70,107 +71,37 @@
             <div id="ImportantContactBox">
                 <div id="ImportantContactHead">Add Some Important Contacts</div>
                 <div id="AboutUsImportantContactBox">
-                    <!-- Important Contacts will be populated here -->
-                    <div class="ImportantContactBoxes" id="contact_Principal">
-                        <div class="ImportantContactFirstBoxes"><label>Principal Name:</label><input type="text" id="PrincipalName" placeholder="Enter Principal Name"/></div>
-                        <div class="ImportantContactSecondBoxes"><label>Principal Contact:</label><input type="text" id="PrincipalContact" placeholder="Enter Principal Contact"/></div>
-                        <div class="ImportantContactThirdBoxes"><label>Principal Email:</label><input type="text" id="PrincipalEmail" placeholder="Enter Principal Email"/></div>
-                        <div class="ImportantContactFourthBoxes"><label>Principal Photo:</label><input type="file" id="PrincipalPhotoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" id="btnSelectPrincipalPhoto" onclick="document.getElementById('PrincipalPhotoFile').click()">Choose Photo</button><div id="PrincipalPhotoName">No file chosen</div></div>
-                    </div>
-                    <div class="ImportantContactBoxes" id="contact_SMCHead">
-                        <div class="ImportantContactFirstBoxes"><label>SMCHead Name:</label><input type="text" id="SMCHeadName" placeholder="Enter SMCHead Name"/></div>
-                        <div class="ImportantContactSecondBoxes"><label>SMCHead Contact:</label><input type="text" id="SMCHeadContact" placeholder="Enter SMCHead Contact"/></div>
-                        <div class="ImportantContactThirdBoxes"><label>SMCHead Email:</label><input type="text" id="SMCHeadEmail" placeholder="Enter SMCHead Email"/></div>
-                        <div class="ImportantContactFourthBoxes"><label>SMCHead Photo:</label><input type="file" id="SMCHeadPhotoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" id="btnSelectSMCHeadPhoto" onclick="document.getElementById('SMCHeadPhotoFile').click()">Choose Photo</button><div id="SMCHeadPhotoName">No file chosen</div></div>
-                    </div>
-                    <div class="ImportantContactBoxes" id="contact_VicePrincipal">
-                        <div class="ImportantContactFirstBoxes"><label>VicePrincipal Name:</label><input type="text" id="VicePrincipalName" placeholder="Enter VicePrincipal Name"/></div>
-                        <div class="ImportantContactSecondBoxes"><label>VicePrincipal Contact:</label><input type="text" id="VicePrincipalContact" placeholder="Enter VicePrincipal Contact"/></div>
-                        <div class="ImportantContactThirdBoxes"><label>VicePrincipal Email:</label><input type="text" id="VicePrincipalEmail" placeholder="Enter VicePrincipal Email"/></div>
-                        <div class="ImportantContactFourthBoxes"><label>VicePrincipal Photo:</label><input type="file" id="VicePrincipalPhotoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" id="btnSelectVicePrincipalPhoto" onclick="document.getElementById('VicePrincipalPhotoFile').click()">Choose Photo</button><div id="VicePrincipalPhotoName">No file chosen</div></div>
-                    </div>
-                    <div class="ImportantContactBoxes" id="contact_Accountant">
-                        <div class="ImportantContactFirstBoxes"><label>Accountant Name:</label><input type="text" id="AccountantName" placeholder="Enter Accountant Name"/></div>
-                        <div class="ImportantContactSecondBoxes"><label>Accountant Contact:</label><input type="text" id="AccountantContact" placeholder="Enter Accountant Contact"/></div>
-                        <div class="ImportantContactThirdBoxes"><label>Accountant Email:</label><input type="text" id="AccountantEmail" placeholder="Enter Accountant Email"/></div>
-                        <div class="ImportantContactFourthBoxes"><label>Accountant Photo:</label><input type="file" id="AccountantPhotoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" id="btnSelectAccountantPhoto" onclick="document.getElementById('AccountantPhotoFile').click()">Choose Photo</button><div id="AccountantPhotoName">No file chosen</div></div>
-                    </div>
-                    <div class="ImportantContactBoxes" id="contact_ExamHead">
-                        <div class="ImportantContactFirstBoxes"><label>ExamHead Name:</label><input type="text" id="ExamHeadName" placeholder="Enter ExamHead Name"/></div>
-                        <div class="ImportantContactSecondBoxes"><label>ExamHead Contact:</label><input type="text" id="ExamHeadContact" placeholder="Enter ExamHead Contact"/></div>
-                        <div class="ImportantContactThirdBoxes"><label>ExamHead Email:</label><input type="text" id="ExamHeadEmail" placeholder="Enter ExamHead Email"/></div>
-                        <div class="ImportantContactFourthBoxes"><label>ExamHead Photo:</label><input type="file" id="ExamHeadPhotoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" id="btnSelectExamHeadPhoto" onclick="document.getElementById('ExamHeadPhotoFile').click()">Choose Photo</button><div id="ExamHeadPhotoName">No file chosen</div></div>
-                    </div>
-                    <div class="ImportantContactBoxes" id="contact_ECAHead">
-                        <div class="ImportantContactFirstBoxes"><label>ECAHead Name:</label><input type="text" id="ECAHeadName" placeholder="Enter ECAHead Name"/></div>
-                        <div class="ImportantContactSecondBoxes"><label>ECAHead Contact:</label><input type="text" id="ECAHeadContact" placeholder="Enter ECAHead Contact"/></div>
-                        <div class="ImportantContactThirdBoxes"><label>ECAHead Email:</label><input type="text" id="ECAHeadEmail" placeholder="Enter ECAHead Email"/></div>
-                        <div class="ImportantContactFourthBoxes"><label>ECAHead Photo:</label><input type="file" id="ECAHeadPhotoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" id="btnSelectECAHeadPhoto" onclick="document.getElementById('ECAHeadPhotoFile').click()">Choose Photo</button><div id="ECAHeadPhotoName">No file chosen</div></div>
-                    </div>
+                    <!-- Dynamic contacts populated here -->
                 </div>
+                <button type="button" class="btnAddMore" id="btnAddContact" onclick="addContactGroup()">+ Add More Contact</button>
             </div>
+
             <div id="SocialMediaEditBox">
                 <div id="SocialMediaHead">Write Following Social Media Links</div>
                 <div id="AboutUsSocialMediaBox">
-                    <div class="SocialMediaBoxes"><label>Facebook:</label><input type="text" id="FacebookUrl" placeholder="Enter Facebook URL"/></div>
-                    <div class="SocialMediaBoxes"><label>TikTok:</label><input type="text" id="TikTokUrl" placeholder="Enter TikTok URL"/></div>
-                    <div class="SocialMediaBoxes"><label>Instagram:</label><input type="text" id="InstagramUrl" placeholder="Enter Instagram URL"/></div>
-                    <div class="SocialMediaBoxes"><label>WhatsApp:</label><input type="text" id="WhatsAppUrl" placeholder="Enter WhatsApp URL"/></div>
-                    <div class="SocialMediaBoxes"><label>YouTube:</label><input type="text" id="YouTubeUrl" placeholder="Enter YouTube URL"/></div>
-                </div>                
+                    <!-- Dynamic social media populated here -->
+                </div>
+                <button type="button" class="btnAddMore" id="btnAddSocial" onclick="addSocialGroup()">+ Add More Social Media</button>                
             </div>
+
             <div id="AboutUsLogoSelectBox">
                 <label>Select Logo:</label>
                 <input type="file" id="SelectLogoFile" accept=".jpg, .jpeg, .png, .webp, .gif"/>
-                <button id="btnChooseLogoFile" type="button" onclick="document.getElementById('SelectLogoFile').click()">Choose File</button>
-                <div id="AboutUsLogoName"></div>
+                <button id="btnChooseLogoFile" type="button">Choose File</button>
+                <div id="AboutUsLogoName">No file chosen</div>
+                <div class="PreviewWrapper">
+                    <img id="AboutUsLogoPreview" class="ImagePreview" alt="Logo Preview" />
+                </div>
             </div>
+
             <div id="SliderEditBox">
                 <div id="SliderPictureSelectHead">Select Slider Pictures Below</div>
                 <div id="AboutUsSliderBox">
-                    <!-- Slider entries will be populated here -->
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_1">
-                        <div class="InnerBoxes"><label>Select Slider Picture 1:</label><input type="file" id="selectSlider_1" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_1').click()">Choose File</button><div id="SliderPictureName_1"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 1:</label><input type="text" id="SliderCredential1"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_2">
-                        <div class="InnerBoxes"><label>Select Slider Picture 2:</label><input type="file" id="selectSlider_2" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_2').click()">Choose File</button><div id="SliderPictureName_2"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 2:</label><input type="text" id="SliderCredential2"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_3">
-                        <div class="InnerBoxes"><label>Select Slider Picture 3:</label><input type="file" id="selectSlider_3" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_3').click()">Choose File</button><div id="SliderPictureName_3"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 3:</label><input type="text" id="SliderCredential3"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_4">
-                        <div class="InnerBoxes"><label>Select Slider Picture 4:</label><input type="file" id="selectSlider_4" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_4').click()">Choose File</button><div id="SliderPictureName_4"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 4:</label><input type="text" id="SliderCredential4"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_5">
-                        <div class="InnerBoxes"><label>Select Slider Picture 5:</label><input type="file" id="selectSlider_5" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_5').click()">Choose File</button><div id="SliderPictureName_5"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 5:</label><input type="text" id="SliderCredential5"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_6">
-                        <div class="InnerBoxes"><label>Select Slider Picture 6:</label><input type="file" id="selectSlider_6" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_6').click()">Choose File</button><div id="SliderPictureName_6"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 6:</label><input type="text" id="SliderCredential6"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_7">
-                        <div class="InnerBoxes"><label>Select Slider Picture 7:</label><input type="file" id="selectSlider_7" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_7').click()">Choose File</button><div id="SliderPictureName_7"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 7:</label><input type="text" id="SliderCredential7"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_8">
-                        <div class="InnerBoxes"><label>Select Slider Picture 8:</label><input type="file" id="selectSlider_8" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_8').click()">Choose File</button><div id="SliderPictureName_8"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 8:</label><input type="text" id="SliderCredential8"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_9">
-                        <div class="InnerBoxes"><label>Select Slider Picture 9:</label><input type="file" id="selectSlider_9" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_9').click()">Choose File</button><div id="SliderPictureName_9"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 9:</label><input type="text" id="SliderCredential9"/></div>
-                    </div>
-                    <div class="SliderPictureSelectBoxes" id="SliderPicureSelectBox_10">
-                        <div class="InnerBoxes"><label>Select Slider Picture 10:</label><input type="file" id="selectSlider_10" accept=".jpg, .jpeg, .png, .webp, .gif"/><button type="button" onclick="document.getElementById('selectSlider_10').click()">Choose File</button><div id="SliderPictureName_10"></div></div>
-                        <div class="SliderCredentialBoxes"><label>Write Credential 10:</label><input type="text" id="SliderCredential10"/></div>
-                    </div>
-                </div>                
+                    <!-- Dynamic sliders populated here -->
+                </div>
+                <button type="button" class="btnAddMore" id="btnAddSlider" onclick="addSliderGroup()">+ Add More Slider</button>
             </div>
+
             <button id="btnSaveAboutUs" type="button" onclick="saveAboutUs()">Save Changes</button>
         </div>
         <div id="FooterPlace">
@@ -212,7 +143,23 @@
             </div>
         </div>       
     </div>
+
+    <!-- Cropper Modal -->
+    <div id="CropperModal" class="ModalOverlay">
+        <div class="ModalContent">
+            <div class="ModalHeader">Crop Image</div>
+            <div class="CropperContainer">
+                <img id="CropperImage" alt="Crop" />
+            </div>
+            <div class="ModalActions">
+                <button type="button" id="btnCancelCrop">Cancel</button>
+                <button type="button" id="btnApplyCrop">Apply Crop</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="../../SupabaseConfig.js"></script> 
     <script src="../../DateConverter.js"></script>
     <script src="../../SmartCalculator.js"></script>

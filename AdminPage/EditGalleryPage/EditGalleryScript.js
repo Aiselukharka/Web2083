@@ -1,25 +1,25 @@
 if (typeof supabaseClient === 'undefined') {
     console.error("Supabase client not found. Make sure SupabaseConfig.js is loaded first.");
 }
-// -------------------- CLOUDINARY --------------------
 const CLOUD_NAME = "dcdwpdnyp";
 
-// -------------------- PROTECTION FROM UNAUTHORIZED ACCESS --------------------
+// ============================================================================
+// AUTH
+// ============================================================================
 protectAdminPage();
 async function protectAdminPage() {
-    const {
-        data: { session },
-        error
-    } = await supabaseClient.auth.getSession();
+    const { data: { session }, error } = await supabaseClient.auth.getSession();
     if (error || !session) {
-      showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
+        showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
         window.location.replace("../LoginPage/LogInIndex.html");
         return;
     }
     document.body.style.display = "block";
 }
 
-// -------------------- NAVIGATE PAGES --------------------
+// ============================================================================
+// NAVIGATION
+// ============================================================================
 const PageNavigationDropDown = document.getElementById("PageNavigationSelect");
 PageNavigationDropDown.addEventListener("change", function () {
     const pageMap = {
@@ -35,14 +35,11 @@ PageNavigationDropDown.addEventListener("change", function () {
         "SMC_TGC_Page": "../../SMC_TGC_Page/SMC_TGC_Index.html",
         "HelpingHandPage": "../../HelpingHandPage/HelpingHandIndex.html",
         "HomePage": "../../index.html"
-    };   
-    const selectedPage = pageMap[this.value];
-    if (selectedPage) {
-        window.location.href = selectedPage;
-    }
+    };
+    const p = pageMap[this.value];
+    if (p) window.location.href = p;
 });
 
-// -------------------- NAVIGATE ADMIN EDITS --------------------
 const EditNavigationDropDown = document.getElementById("EditNavigationSelect");
 EditNavigationDropDown.addEventListener("change", function () {
     const pageMap = {
@@ -60,111 +57,104 @@ EditNavigationDropDown.addEventListener("change", function () {
         "BalPratibhaEditBox": "../EditBalPratibhaPage/EditBalPratibhaIndex.html",
         "AboutUsEditBox": "../EditAboutUsPage/EditAboutUsIndex.html",
         "HelpingHandEditBox": "../EditHelpingHandPage/EditHelpingHandIndex.html",
-        "ClassEditBox": "../EditClassPageEditClassIndex.html",
+        "ClassEditBox": "../EditClassPage/EditClassIndex.html",
         "AdminEditBox": "../AdminDashboardPage/AdminDashboardIndex.html"
-    };   
-    const selectedEdit = pageMap[this.value];
-    if (selectedEdit) {
-        window.location.href = selectedEdit;
-    }
+    };
+    const p = pageMap[this.value];
+    if (p) window.location.href = p;
 });
 
-// -------------------- DATE --------------------
-const dateBox = document.getElementById('DateBox');
-dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
+// ============================================================================
+// DATE BAR
+// ============================================================================
+document.getElementById('DateBox').innerText =
+    AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
 
-  //----------------------- Script for Admin Tools Dropdown -----------------------
+// ============================================================================
+// ADMIN TOOLS
+// ============================================================================
 document.getElementById("AdminToolsSelect").addEventListener("change", async function () {
     switch (this.value) {
         case "ChangePasswordTool":
-            window.location.href = "../ChangePasswordPage/ChangePasswordIndex.html";
-            break;
+            window.location.href = "../ChangePasswordPage/ChangePasswordIndex.html"; break;
         case "LogoutThisDeviceTool":
-            showCustomDialog2(
-            "Confirm Logout",
-            "Logout from this device?",
-            "Yes",
-            "Cancel",
-            async function () {
-                await supabaseClient.auth.signOut({scope: "local"});
-                window.location.replace("../LoginPage/LogInIndex.html");
-            },
-            function () {}
-        );
-        break;
+            showCustomDialog2("Confirm Logout", "Logout from this device?", "Yes", "Cancel",
+                async function () {
+                    await supabaseClient.auth.signOut({ scope: "local" });
+                    window.location.replace("../LoginPage/LogInIndex.html");
+                }, function () {});
+            break;
         case "LogoutAllDevicesTool":
-        const confirm = showCustomDialog2("Confirm Logout", "Logout from all devices?", "Yes", "Cancel", function() {}, function() {});
-            if (confirm==="Yes") {
-                await supabaseClient .auth .signOut({scope: "global"});
+            const c = showCustomDialog2("Confirm Logout", "Logout from all devices?", "Yes", "Cancel", function(){}, function(){});
+            if (c === "Yes") {
+                await supabaseClient.auth.signOut({ scope: "global" });
                 window.location.replace("../LoginPage/LogInIndex.html");
             }
             break;
         case "AddAdminTool":
-            window.location.href = "../AddAdminPage/AddAdminIndex.html";
-            break;
+            window.location.href = "../AddAdminPage/AddAdminIndex.html"; break;
     }
     this.selectedIndex = 0;
 });
 
-// Dynamically show logo and favicon
+// ============================================================================
+// LOGO / FAVICON
+// ============================================================================
 async function loadDynamicLogoAndFavicon() {
     try {
         const { data, error } = await supabaseClient
-            .from('AboutSchoolTable')
-            .select('Value')
-            .eq('Name', 'SchoolLogo')
-            .single();
-
-        if (error) {
-            console.error("Supabase query error loading branding:", error.message);
-            return;
-        }
-
+            .from('AboutSchoolTable').select('Value').eq('Name', 'SchoolLogo').single();
+        if (error) { console.error("Branding error:", error.message); return; }
         if (data && data.Value) {
-            const freshLogoUrl = data.Value;
-
-            const faviconElement = document.getElementById('dynamicFavicon');
-            if (faviconElement) {
-                faviconElement.href = freshLogoUrl;
-            }
-
-            const logoImgElement = document.querySelector('#LogoBox img');
-            if (logoImgElement) {
-                logoImgElement.src = freshLogoUrl;
-            }
-            
-            console.log("Logo and Favicon synced dynamically via supabaseClient!");
+            const fav = document.getElementById('dynamicFavicon');
+            if (fav) fav.href = data.Value;
+            const img = document.querySelector('#LogoBox img');
+            if (img) img.src = data.Value;
         }
-    } catch (error) {
-        console.error("Unexpected error setting up branding layout:", error);
-    }
+    } catch (e) { console.error(e); }
 }
 document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
 
-// -------------------- IMAGE UPLOAD SYSTEM --------------------
+// ============================================================================
+// HELPERS
+// ============================================================================
+function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[c]);
+}
+function escapeAttr(s) {
+    return String(s ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+function safeFileName(name) {
+    return String(name || 'gallery-image')
+        .replace(/[^\w\-. ]+/g, '_')
+        .slice(0, 80);
+}
+
+// ============================================================================
+// IMAGE UPLOADER
+// ============================================================================
 class ImageUploader {
     constructor() {
         this.selectedFiles = [];
         this.isUploading = false;
-        
-        // DOM Elements
-        this.imageInput = document.getElementById('imageInput');
-        this.descriptionInput = document.getElementById('imageDescriptionInput');
-        this.dropArea = document.getElementById('dropArea');
-        this.previewGrid = document.getElementById('PreviewGrid');
-        this.uploadBtn = document.getElementById('uploadBtn');
-        this.clearBtn = document.getElementById('clearBtn');
-        this.uploadProgress = document.getElementById('UploadProgress');
-        this.progressFill = document.getElementById('ProgressFill');
-        this.progressText = document.getElementById('ProgressText');
-        this.uploadStatus = document.getElementById('UploadStatus');
-        
-        // Initialize
+
+        this.imageInput      = document.getElementById('imageInput');
+        this.descriptionInput= document.getElementById('imageDescriptionInput');
+        this.dropArea        = document.getElementById('dropArea');
+        this.previewGrid     = document.getElementById('PreviewGrid');
+        this.uploadBtn       = document.getElementById('uploadBtn');
+        this.clearBtn        = document.getElementById('clearBtn');
+        this.uploadProgress  = document.getElementById('UploadProgress');
+        this.progressFill    = document.getElementById('ProgressFill');
+        this.progressText    = document.getElementById('ProgressText');
+        this.uploadStatus    = document.getElementById('UploadStatus');
+
         this.init();
     }
-    
+
     init() {
-        // Event Listeners
         this.imageInput.addEventListener('change', (e) => this.handleFileSelect(e));
         this.dropArea.addEventListener('dragover', (e) => this.handleDragOver(e));
         this.dropArea.addEventListener('dragleave', (e) => this.handleDragLeave(e));
@@ -172,64 +162,47 @@ class ImageUploader {
         this.uploadBtn.addEventListener('click', () => this.uploadFiles());
         this.clearBtn.addEventListener('click', () => this.clearAll());
     }
-    
+
     handleFileSelect(e) {
         const files = Array.from(e.target.files);
         this.addFiles(files);
         this.imageInput.value = '';
     }
-    
-    handleDragOver(e) {
-        e.preventDefault();
-        this.dropArea.classList.add('dragover');
-    }
-    
-    handleDragLeave(e) {
-        e.preventDefault();
-        this.dropArea.classList.remove('dragover');
-    }
-    
+    handleDragOver(e) { e.preventDefault(); this.dropArea.classList.add('dragover'); }
+    handleDragLeave(e){ e.preventDefault(); this.dropArea.classList.remove('dragover'); }
     handleDrop(e) {
         e.preventDefault();
         this.dropArea.classList.remove('dragover');
-        const files = Array.from(e.dataTransfer.files);
-        this.addFiles(files);
+        this.addFiles(Array.from(e.dataTransfer.files));
     }
-    
+
     addFiles(files) {
-        const imageFiles = files.filter(file => file.type.startsWith('image/'));
-        
+        const imageFiles = files.filter(f => f.type.startsWith('image/'));
         if (imageFiles.length === 0) {
-            this.showStatus('No valid image files found. Please select a JPG, PNG, GIF, or WebP image.', 'error');
+            this.showStatus('No valid image files found. Please select a JPG, PNG, GIF, or WebP.', 'error');
             return;
         }
-        
-        const oversizedFiles = imageFiles.filter(file => file.size > 5 * 1024 * 1024);
-        if (oversizedFiles.length > 0) {
-            this.showStatus(`File exceeds 5MB limit. Please resize it first.`, 'error');
+        const oversized = imageFiles.filter(f => f.size > 5 * 1024 * 1024);
+        if (oversized.length > 0) {
+            this.showStatus('File exceeds 5MB limit. Please resize it first.', 'error');
             return;
         }
-        
-        // Processing one file to guarantee precise image-description matching
         this.selectedFiles = [imageFiles[0]];
         this.updatePreview();
         this.uploadBtn.disabled = false;
         this.clearStatus();
     }
-    
+
     updatePreview() {
         this.previewGrid.innerHTML = '';
-        
         this.selectedFiles.forEach((file, index) => {
             const item = document.createElement('div');
             item.className = 'preview-item';
-            
+
             const img = document.createElement('img');
             img.src = URL.createObjectURL(file);
             img.alt = file.name;
-            img.style.maxWidth = "200px";
-            img.style.display = "block";
-            
+
             const removeBtn = document.createElement('button');
             removeBtn.className = 'remove-btn';
             removeBtn.innerHTML = '×';
@@ -238,40 +211,31 @@ class ImageUploader {
                 e.stopPropagation();
                 this.removeFile(index);
             });
-            
+
             const fileName = document.createElement('div');
             fileName.className = 'file-name';
             fileName.textContent = file.name;
-            
+
             item.appendChild(img);
             item.appendChild(removeBtn);
             item.appendChild(fileName);
             this.previewGrid.appendChild(item);
         });
     }
-    
+
     removeFile(index) {
         this.selectedFiles.splice(index, 1);
         this.updatePreview();
-        
-        if (this.selectedFiles.length === 0) {
-            this.uploadBtn.disabled = true;
-        }
-        
-        const previewItems = this.previewGrid.querySelectorAll('.preview-item img');
-        previewItems.forEach(img => {
-            URL.revokeObjectURL(img.src);
-        });
+        if (this.selectedFiles.length === 0) this.uploadBtn.disabled = true;
+        this.previewGrid.querySelectorAll('img').forEach(img => URL.revokeObjectURL(img.src));
     }
-    
+
     clearAll() {
         if (this.selectedFiles.length === 0 && this.descriptionInput.value === "") return;
-        
         showCustomDialog2(
             'Confirm Clear',
             'Remove selected image and clear data?',
-            'Yes',
-            'Cancel',
+            'Yes', 'Cancel',
             () => {
                 this.selectedFiles = [];
                 this.descriptionInput.value = '';
@@ -279,61 +243,48 @@ class ImageUploader {
                 this.uploadBtn.disabled = true;
                 this.clearStatus();
                 this.hideProgress();
-                
-                const previewItems = this.previewGrid.querySelectorAll('.preview-item img');
-                previewItems.forEach(img => {
-                    URL.revokeObjectURL(img.src);
-                });
+                this.previewGrid.querySelectorAll('img').forEach(img => URL.revokeObjectURL(img.src));
             },
             () => {}
         );
     }
-    
+
     async uploadFiles() {
         if (this.selectedFiles.length === 0 || this.isUploading) return;
-        
+
         const descriptionValue = this.descriptionInput.value.trim();
         if (!descriptionValue) {
-            this.showStatus('❌ Please provide an image description before uploading.', 'error');
+            this.showStatus('Please provide an image description before uploading.', 'error');
             return;
         }
-        
+
         this.isUploading = true;
         this.uploadBtn.disabled = true;
-        this.uploadBtn.textContent = 'Uploading...';
+        this.uploadBtn.textContent = 'Uploading…';
         this.showProgress();
         this.clearStatus();
-        
+
         const file = this.selectedFiles[0];
-        
         try {
-            // Step 1: Uploading the file to PostImages Edge/Cloud function
             const result = await this.uploadSingleFile(file);
-            
-            if (result.success) {
-                // Step 2: Saving properties to Supabase table
-                const { error: supabaseError } = await supabaseClient
-                    .from('GalleryImageLinkTable')
-                    .insert([
-                        { 
-                            ImageDescription: descriptionValue, 
-                            ImageUrl: result.url 
-                        }
-                    ]);
-                
-                if (supabaseError) {
-                    throw new Error(`Failed to save to Database: ${supabaseError.message}`);
-                }
-                
-                this.showStatus(`✅ Successfully uploaded & added to Database!`, 'success');
-                this.selectedFiles = [];
-                this.descriptionInput.value = '';
-                this.updatePreview();
-            } else {
-                this.showStatus(`❌ PostImages upload failed: ${result.error}`, 'error');
+            if (!result.success) {
+                this.showStatus('PostImages upload failed: ' + result.error, 'error');
+                return;
             }
+
+            const { error: supabaseError } = await supabaseClient
+                .from('GalleryImageLinkTable')
+                .insert([{ ImageDescription: descriptionValue, ImageUrl: result.url }]);
+            if (supabaseError) throw new Error('Failed to save to database: ' + supabaseError.message);
+
+            this.showStatus('✅ Image uploaded and saved to the gallery.', 'success');
+            this.selectedFiles = [];
+            this.descriptionInput.value = '';
+            this.updatePreview();
+
+            loadGalleryItems();
         } catch (error) {
-            this.showStatus(`❌ Error processing request: ${error.message}`, 'error');
+            this.showStatus('Error: ' + error.message, 'error');
         } finally {
             this.isUploading = false;
             this.uploadBtn.textContent = 'Upload Image';
@@ -341,121 +292,268 @@ class ImageUploader {
             this.hideProgress();
         }
     }
-    
+
     async uploadSingleFile(file) {
         try {
             const formData = new FormData();
             formData.append('image', file);
-            
+
             const timestamp = Date.now();
             const randomStr = Math.random().toString(36).substring(2, 8);
             const extension = file.name.split('.').pop();
             const filename = `gallery/${timestamp}_${randomStr}.${extension}`;
             formData.append('filename', filename);
-            
+
             const response = await fetch(`${_supabaseUrl}/functions/v1/upload-postimage`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${_supabaseKey}`
-                },
+                headers: { 'Authorization': `Bearer ${_supabaseKey}` },
                 body: formData
             });
-            
             if (!response.ok) {
-                const errorData = await response.json();
+                const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || 'Upload failed');
             }
-            
             const data = await response.json();
-            return {
-                success: true,
-                url: data.url
-            };
+            return { success: true, url: data.url };
         } catch (error) {
             console.error('Upload error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
+            return { success: false, error: error.message };
         }
     }
-    
+
     showProgress() {
         this.uploadProgress.style.display = 'block';
         this.progressFill.style.width = '50%';
-        this.progressText.textContent = 'Uploading to PostImages...';
+        this.progressText.textContent = 'Uploading to PostImages…';
     }
-    
     hideProgress() {
         this.progressFill.style.width = '100%';
-        setTimeout(() => {
-            this.uploadProgress.style.display = 'none';
-        }, 500);
+        setTimeout(() => { this.uploadProgress.style.display = 'none'; }, 500);
     }
-    
+
     showStatus(message, type = 'info') {
         const statusDiv = document.createElement('div');
         statusDiv.className = `status-message ${type}`;
-        
         const icon = document.createElement('span');
         icon.className = 'status-icon';
-        
-        switch(type) {
-            case 'success':
-                icon.textContent = '✅ ';
-                break;
-            case 'error':
-                icon.textContent = '❌ ';
-                break;
-            default:
-                icon.textContent = 'ℹ️ ';
-        }
-        
+        icon.textContent = type === 'success' ? '✅ ' : type === 'error' ? '❌ ' : 'ℹ️ ';
         const text = document.createElement('span');
         text.textContent = message;
-        
         statusDiv.appendChild(icon);
         statusDiv.appendChild(text);
         this.uploadStatus.appendChild(statusDiv);
         statusDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-    
-    clearStatus() {
-        this.uploadStatus.innerHTML = '';
-    }
+    clearStatus() { this.uploadStatus.innerHTML = ''; }
 }
 
-// Initialize uploader when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('UploadSection')) {
-        const uploader = new ImageUploader();
-        console.log('Image uploader initialized');
-    }
+    if (document.getElementById('UploadSection')) new ImageUploader();
 });
 
-// -------------------- MANAGE POSTIMAGES GALLERY --------------------
+// ============================================================================
+// GALLERY ITEMS LIST
+// ============================================================================
+async function loadGalleryItems() {
+    const grid = document.getElementById('GalleryItemsGrid');
+    if (!grid) return;
+    grid.innerHTML = '<div class="GalleryEmpty">Loading gallery items…</div>';
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('GalleryImageLinkTable')
+            .select('id, ImageDescription, ImageUrl, created_at')
+            .order('id', { ascending: false });
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            grid.innerHTML = '<div class="GalleryEmpty">No gallery images yet. Upload one above to get started.</div>';
+            return;
+        }
+
+        let html = '';
+        data.forEach(item => {
+            const id   = item.id;
+            const desc = item.ImageDescription || '';
+            const url  = item.ImageUrl || '';
+            if (!url) return;
+
+            html += `
+                <div class="GalleryItem">
+                    <div class="GalleryItemThumb">
+                        <img src="${escapeHtml(url)}" alt="${escapeHtml(desc)}" loading="lazy" />
+                    </div>
+                    <div class="GalleryItemBody">
+                        <div class="GalleryItemDesc" title="${escapeHtml(desc)}">${escapeHtml(desc || '(no description)')}</div>
+                    </div>
+                    <div class="GalleryItemActions">
+                        <button class="GalleryIconBtn ViewBtn"
+                                title="View"
+                                onclick="showPictureViewer('${escapeAttr(url)}', '${escapeAttr(desc)}')">👁️</button>
+                        <button class="GalleryIconBtn EditBtn"
+                                title="Edit description"
+                                onclick="openGalleryEditor(${id}, '${escapeAttr(desc)}')">✏️</button>
+                        <button class="GalleryIconBtn DownBtn"
+                                title="Download"
+                                onclick="downloadGalleryItem(this, '${escapeAttr(url)}', '${escapeAttr(desc)}')">⬇️</button>
+                    </div>
+                </div>`;
+        });
+        grid.innerHTML = html;
+    } catch (e) {
+        console.error('Gallery items load error:', e.message);
+        grid.innerHTML = `<div class="GalleryEmpty">Failed to load gallery items: ${escapeHtml(e.message)}</div>`;
+    }
+}
+window.loadGalleryItems = loadGalleryItems;
+document.addEventListener('DOMContentLoaded', loadGalleryItems);
+
+// ============================================================================
+// EDIT DESCRIPTION MODAL
+// ============================================================================
+let galleryEditorCurrentId = null;
+
+function openGalleryEditor(id, currentDescription) {
+    const modal  = document.getElementById('GalleryEditModal');
+    const input  = document.getElementById('GalleryEditInput');
+    const status = document.getElementById('GalleryEditStatus');
+    const saveBtn= document.getElementById('GalleryEditSaveBtn');
+
+    galleryEditorCurrentId = id;
+    input.value = currentDescription || '';
+    status.textContent = '';
+
+    saveBtn.disabled = false;
+    saveBtn.textContent = '💾 Save';
+    saveBtn.onclick = () => saveGalleryEditor();
+
+    modal.style.display = 'flex';
+    setTimeout(() => input.focus(), 50);
+}
+window.openGalleryEditor = openGalleryEditor;
+
+function closeGalleryEditor() {
+    const modal = document.getElementById('GalleryEditModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    document.getElementById('GalleryEditInput').value = '';
+    document.getElementById('GalleryEditStatus').textContent = '';
+    galleryEditorCurrentId = null;
+}
+window.closeGalleryEditor = closeGalleryEditor;
+
+async function saveGalleryEditor() {
+    const id     = galleryEditorCurrentId;
+    const input  = document.getElementById('GalleryEditInput');
+    const status = document.getElementById('GalleryEditStatus');
+    const saveBtn= document.getElementById('GalleryEditSaveBtn');
+
+    if (id === null || id === undefined) return;
+
+    const newDesc = (input.value || '').trim();
+    if (!newDesc) {
+        status.textContent = 'Description cannot be empty.';
+        status.style.color = '#c62828';
+        return;
+    }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving…';
+    status.textContent = '';
+
+    try {
+        const { error } = await supabaseClient
+            .from('GalleryImageLinkTable')
+            .update({ ImageDescription: newDesc })
+            .eq('id', id);
+        if (error) throw error;
+
+        status.textContent = '✅ Saved.';
+        status.style.color = '#2e7d32';
+
+        await loadGalleryItems();
+        setTimeout(() => { closeGalleryEditor(); }, 500);
+    } catch (e) {
+        console.error('Save description error:', e.message);
+        status.textContent = 'Save failed: ' + e.message;
+        status.style.color = '#c62828';
+        saveBtn.disabled = false;
+        saveBtn.textContent = '💾 Save';
+    }
+}
+window.saveGalleryEditor = saveGalleryEditor;
+
+// ============================================================================
+// MODAL CLOSE HANDLERS (outside click + Escape)
+// ============================================================================
+document.addEventListener('click', (e) => {
+    const editModal = document.getElementById('GalleryEditModal');
+    if (editModal && editModal.style.display === 'flex' && e.target === editModal) closeGalleryEditor();
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeGalleryEditor();
+});
+
+// ============================================================================
+// DOWNLOAD
+// ============================================================================
+async function downloadGalleryItem(btn, url, description) {
+    const originalText = btn.textContent;
+    try {
+        btn.disabled = true;
+        btn.textContent = '…';
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const blob = await response.blob();
+
+        let ext = 'jpg';
+        try {
+            const urlPath = new URL(url).pathname;
+            const m = urlPath.match(/\.([a-zA-Z0-9]{2,5})$/);
+            if (m) ext = m[1].toLowerCase();
+        } catch (_) {}
+        if (blob.type && blob.type.startsWith('image/')) {
+            const sub = blob.type.split('/')[1].split('+')[0];
+            if (sub) ext = sub === 'jpeg' ? 'jpg' : sub;
+        }
+
+        const base = safeFileName(description || 'gallery-image');
+        const fileName = base.toLowerCase().endsWith('.' + ext) ? base : `${base}.${ext}`;
+
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
+    } catch (e) {
+        console.error('Download error:', e.message);
+        alert('Download failed: ' + e.message);
+    } finally {
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }, 800);
+    }
+}
+window.downloadGalleryItem = downloadGalleryItem;
+
+// ============================================================================
+// MANAGE ON POSTIMAGES
+// ============================================================================
 function openPostImagesGallery() {
     window.open('https://postimg.cc/gallery/YLsjRbC', '_blank');
-    
     showCustomDialog1(
         'Gallery Management',
-        '✅ Your PostImages gallery is opening in a new tab.\n\nFrom there, you can:\n• View all uploaded images\n• Delete images you no longer need\n• Organize your gallery\n\nNote: Deleting images from PostImages will remove them from your website gallery.',
+        '✅ Your PostImages gallery is opening in a new tab.\n\n' +
+        'From there, you can view, organize, and delete images. Deleting an image ' +
+        'there will remove it from the public Gallery page.\n\n' +
+        'Note: the Gallery Items list on this page still shows the entry until you ' +
+        'delete the corresponding row from the GalleryImageLinkTable in Supabase.',
         'OK',
         function() {}
     );
 }
-
-// Optional: Add a help button to explain the deletion process
-function showDeleteHelp() {
-    showCustomDialog1(
-        'How to Delete Images from PostImages',
-        '1. Click "Open PostImages Gallery"\n' +
-        '2. Find the image you want to delete\n' +
-        '3. Click on the image to open it\n' +
-        '4. Look for the "Delete" or "Remove" option\n' +
-        '5. Confirm deletion\n\n' +
-        '⚠️ Deleted images will be removed from your website gallery.',
-        'Got it',
-        function() {}
-    );
-}
+window.openPostImagesGallery = openPostImagesGallery;

@@ -237,3 +237,48 @@ function BS2AD_YMD(bsDateString) {
     }    
     return `${adYear}-${adMonth + 1}-${adDay}`;
 }
+
+// ============================================================================
+// BS-YEAR HELPERS (used by Edit Student page)
+// ============================================================================
+
+// Returns the current BS year as an integer (e.g., 2082).
+function getCurrentBSYearNumeric() {
+    const bsString = AD2BS(new Date());
+    const devanagariDigits = ['०','१','२','३','४','५','६','७','८','९'];
+    const match = bsString.match(/[०-९]{4}/);
+    if (!match) throw new Error("Could not parse BS year from: " + bsString);
+    let year = 0;
+    for (const ch of match[0]) year = year * 10 + devanagariDigits.indexOf(ch);
+    return year;
+}
+
+// Returns [current, current-1, ..., current-count+1] as integers.
+function getRecentBSYears(count = 5) {
+    const current = getCurrentBSYearNumeric();
+    const years = [];
+    for (let i = 0; i < count; i++) years.push(current - i);
+    return years;
+}
+
+const YEAR_MIN = 2081;
+const YEAR_MAX = 2100;
+
+function getAllYears() {
+    const years = [];
+    for (let y = YEAR_MIN; y <= YEAR_MAX; y++) years.push(y);
+    return years;
+}
+
+function populateFixedYearDropdown(selectId, defaultYear) {
+    const dd = document.getElementById(selectId);
+    if (!dd) return;
+    dd.innerHTML = '';
+    getAllYears().forEach(y => {
+        const o = document.createElement('option');
+        o.value = y;
+        o.textContent = y;
+        if (y === defaultYear) o.selected = true;
+        dd.appendChild(o);
+    });
+}

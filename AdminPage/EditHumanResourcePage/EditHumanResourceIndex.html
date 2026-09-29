@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
     <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="EditHumanResourceStyle.css"/>
 </head>
@@ -32,7 +33,7 @@
         <div id="DateBox"></div>
         <div id="UtilityBox">
             <select id="EditNavigationSelect">
-                <option>Edit Teacher Data</option>
+                <option>Edit Human Resource</option>
                 <option value="AttendanceCardEditBox">Edit Attendance Cards</option>
                 <option value="IDCardEditBox">Edit ID Cards</option>
                 <option value="ResultEditBox">Edit Result</option>
@@ -119,10 +120,6 @@
                     <button type="button" id="btnSavePhoto" class="btn-action" onclick="savePhoto()" style="display:none;">Save Photos</button>
                 </div>
             </div>
-                <div class="button-wrapper">
-                    <button type="button" id="btnSavePhoto" class="btn-action" onclick="savePhoto()" style="display:none;">Save Photos</button>
-                </div>
-            </div>
         </div>
         <div id="FooterPlace">
             <div id="FooterPublicHead">Public Pages</div>
@@ -162,6 +159,19 @@
             </div>
         </div>
     </div>
+    <!-- ==================== Cropper Modal ==================== -->
+    <div id="CropperModal" class="ModalOverlay">
+        <div class="ModalContent">
+            <div class="ModalHeader">Crop Photo (3:4)</div>
+            <div class="CropperContainer">
+                <img id="CropperImage" alt="Crop" />
+            </div>
+            <div class="ModalActions">
+                <button type="button" id="btnCancelCrop">Cancel</button>
+                <button type="button" id="btnApplyCrop">Apply Crop</button>
+            </div>
+        </div>
+    </div>
     <script src="https://jsuites.net/v4/jsuites.js"></script>
     <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script><title>Admin Page</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
@@ -169,6 +179,7 @@
     <script src="../../DateConverter.js"></script>
     <script src="../../SmartCalculator.js"></script>
     <script src="../../NepaliCalendar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="EditHumanResourceScript.js"></script> 
 </body>
 </html>

@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'MySanskritFont';
-    src: url('../Sanskrit-2003.ttf') format('truetype');
+    src: url('../../Sanskrit-2003.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -216,4 +216,407 @@ body {
 .ActionButtons:hover{
     background: #ccffdd;
     transform: scale(1.02);
+}
+
+/* ============================================================================
+   RESPONSIVE STYLES — Admin Dashboard Page
+   Breakpoints:
+     • 1024px — tablets (portrait) / small laptops
+     • 768px  — large phones (landscape) / small tablets
+     • 600px  — phones
+     • 420px  — small phones  ← nav stacks vertically here and below
+     • max-height 500px + landscape — short landscape phones
+     • ≥1600px — ultrawide
+   ============================================================================ */
+
+/* ==================== TABLETS & BELOW (≤ 1024px) ==================== */
+@media (max-width: 1024px) {
+
+    #MainBody{
+        width: 98%;
+        max-width: 100%;
+        padding: 0 clamp(0.4rem, 0.8vw, 1rem);
+        overflow-x: hidden;
+    }
+
+    /* --- Top navigation --- */
+    #PageNaviggationBox{
+        gap: 0.5rem;
+        padding: clamp(0.4rem, 1.2vw, 1rem);
+        flex-wrap: nowrap;
+        overflow: hidden;
+    }
+    #LogoBox{
+        width: clamp(34px, 5vw, 70px);
+        flex: 0 0 auto;
+    }
+    #PageNavigationSelect{
+        font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+        padding: clamp(0.35rem, 1.2vw, 1rem);
+        border-width: 3px;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+    #PageNaviggationBox button{
+        flex: 0 0 auto;
+        min-width: clamp(80px, 13vw, 150px);
+        width: auto;
+        font-size: clamp(0.95rem, 2vw, 1.6rem);
+        padding: clamp(0.35rem, 1.2vw, 1rem) clamp(0.5rem, 1.2vw, 1.2rem);
+    }
+
+    /* --- Utility box --- */
+    #UtilityBox{
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: clamp(0.4rem, 1.2vw, 1.2rem) 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 96%;
+        max-width: 96%;
+        font-size: clamp(1.1rem, 2.2vw, 2rem);
+        padding: clamp(0.4rem, 1.2vw, 1rem) 0.4rem;
+    }
+
+    /* --- Section boxes: use auto width so margins don't push past 100% --- */
+    #PrivateLinkBox,
+    #PublicLinkBox,
+    #ActionLinkBox{
+        width: auto;
+        max-width: 100%;
+        margin: 8px;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    #PrivateLinkHead,
+    #PublicLinkHead,
+    #ActionLinkHead{
+        font-size: clamp(2rem, 3.2vw, 2.6rem);
+        padding: 8px;
+    }
+
+    /* --- Action buttons: max-width instead of fixed width --- */
+    .PrivateActionButtons,
+    .PublicActionButtons,
+    .ActionButtons{
+        width: clamp(200px, 42vw, 300px);
+        max-width: calc(100% - 16px);
+        margin: 8px auto;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    .ActionLabelE{
+        font-size: clamp(1.4rem, 2vw, 1.8rem);
+    }
+    .ActionLabelN{
+        font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+    }
+}
+
+/* ==================== LARGE PHONES / SMALL TABLETS (≤ 768px) ==================== */
+@media (max-width: 768px) {
+
+    #MainBody{
+        width: 100%;
+        padding: 0 0.4rem;
+    }
+
+    /* --- Top navigation: still one row --- */
+    #PageNaviggationBox{
+        gap: 0.4rem;
+        padding: clamp(0.35rem, 1.4vw, 0.8rem);
+    }
+    #LogoBox{
+        width: clamp(28px, 5vw, 56px);
+    }
+    #PageNavigationSelect{
+        font-size: clamp(1rem, 2.6vw, 1.5rem);
+        padding: 0.35rem 0.4rem;
+        border-width: 2px;
+    }
+    #PageNaviggationBox button{
+        min-width: clamp(70px, 13vw, 120px);
+        font-size: clamp(0.85rem, 2.4vw, 1.3rem);
+        padding: 0.4rem 0.5rem;
+    }
+
+    #DateBox{
+        font-size: clamp(1.1rem, 3.5vw, 1.8rem);
+        padding: 0.5rem;
+    }
+
+    /* --- Utility box --- */
+    #UtilityBox{
+        padding: 0.5rem 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 94%;
+        max-width: 94%;
+        font-size: clamp(1rem, 3.5vw, 1.6rem);
+        padding: 0.5rem 0.4rem;
+        border-width: 2px;
+    }
+
+    /* --- Section boxes: full width, margins = 0 --- */
+    #PrivateLinkBox,
+    #PublicLinkBox,
+    #ActionLinkBox{
+        width: 100%;
+        max-width: 100%;
+        margin: 6px 0;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    #PrivateLinkHead,
+    #PublicLinkHead,
+    #ActionLinkHead{
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+        padding: 6px;
+    }
+
+    /* --- Action buttons: fill the row --- */
+    .PrivateActionButtons,
+    .PublicActionButtons,
+    .ActionButtons{
+        width: 100%;
+        max-width: 100%;
+        margin: 6px 0;
+        padding: 10px;
+        display: block;
+        box-sizing: border-box;
+    }
+    .ActionLabelE{
+        font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+        padding: 4px 0;
+    }
+    .ActionLabelN{
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        padding: 4px 0;
+    }
+}
+
+/* ==================== PHONES (≤ 600px) ==================== */
+@media (max-width: 600px) {
+
+    #MainBody{
+        width: 100%;
+        padding: 0 0.3rem;
+    }
+
+    /* --- Top navigation: still one row --- */
+    #PageNaviggationBox{
+        gap: 0.35rem;
+        padding: 0.4rem;
+    }
+    #LogoBox{
+        width: clamp(26px, 6vw, 44px);
+    }
+    #PageNavigationSelect{
+        font-size: clamp(0.9rem, 3.2vw, 1.3rem);
+        padding: 0.3rem 0.3rem;
+    }
+    #PageNaviggationBox button{
+        min-width: clamp(60px, 14vw, 100px);
+        font-size: clamp(0.8rem, 3vw, 1.1rem);
+        padding: 0.35rem 0.4rem;
+        border-radius: 1.6rem;
+    }
+
+    #DateBox{
+        font-size: clamp(1rem, 3.8vw, 1.5rem);
+        padding: 0.45rem;
+    }
+
+    #UtilityBox{
+        padding: 0.5rem 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 96%;
+        max-width: 96%;
+        font-size: clamp(0.95rem, 3.8vw, 1.5rem);
+        padding: 0.45rem 0.3rem;
+    }
+
+    /* --- Section boxes --- */
+    #PrivateLinkBox,
+    #PublicLinkBox,
+    #ActionLinkBox{
+        padding: 6px;
+        margin: 5px 0;
+    }
+    #PrivateLinkHead,
+    #PublicLinkHead,
+    #ActionLinkHead{
+        font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+        padding: 5px;
+    }
+
+    /* --- Buttons: full width --- */
+    .PrivateActionButtons,
+    .PublicActionButtons,
+    .ActionButtons{
+        width: 100%;
+        max-width: 100%;
+        margin: 5px 0;
+        padding: 9px;
+    }
+    .ActionLabelE{
+        font-size: clamp(1.1rem, 3.8vw, 1.4rem);
+    }
+    .ActionLabelN{
+        font-size: clamp(0.95rem, 3.4vw, 1.2rem);
+    }
+}
+
+/* ============================================================================
+   SMALL PHONES (≤ 420px)  — NAV STACKS VERTICALLY HERE
+   ============================================================================ */
+@media (max-width: 420px) {
+
+    /* --- Top navigation: stack everything --- */
+    #PageNaviggationBox{
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.6rem 0.4rem;
+    }
+    #LogoBox{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 0.2rem 0;
+    }
+    #LogoBox img{
+        width: 56px;
+        height: 56px;
+    }
+    #PageNavigationSelect{
+        width: 100%;
+        flex: 0 0 auto;
+        font-size: clamp(1rem, 4vw, 1.3rem);
+        padding: 0.5rem 0.4rem;
+        border-width: 2px;
+    }
+    #PageNaviggationBox button{
+        width: 100%;
+        min-width: 0;
+        flex: 0 0 auto;
+        font-size: clamp(0.95rem, 4vw, 1.2rem);
+        padding: 0.55rem 0.4rem;
+        border-radius: 1rem;
+    }
+
+    #DateBox{
+        font-size: clamp(0.95rem, 4vw, 1.3rem);
+    }
+
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        font-size: clamp(0.9rem, 4vw, 1.2rem);
+    }
+
+    /* --- Section heads --- */
+    #PrivateLinkHead,
+    #PublicLinkHead,
+    #ActionLinkHead{
+        font-size: clamp(1.2rem, 5vw, 1.7rem);
+        padding: 4px;
+    }
+
+    /* --- Buttons --- */
+    .PrivateActionButtons,
+    .PublicActionButtons,
+    .ActionButtons{
+        padding: 8px;
+        margin: 4px 0;
+    }
+    .ActionLabelE{
+        font-size: clamp(1rem, 4vw, 1.3rem);
+    }
+    .ActionLabelN{
+        font-size: clamp(0.9rem, 3.6vw, 1.1rem);
+    }
+}
+
+/* ==================== SHORT LANDSCAPE PHONES ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+
+    #PageNaviggationBox{
+        padding: 0.3rem;
+    }
+    #LogoBox{
+        width: 26px;
+    }
+    #PageNavigationSelect{
+        font-size: 0.85rem;
+        padding: 0.3rem;
+    }
+    #PageNaviggationBox button{
+        font-size: 0.75rem;
+        padding: 0.3rem 0.4rem;
+    }
+    #DateBox{
+        padding: 0.25rem;
+        font-size: 0.9rem;
+    }
+    #UtilityBox{
+        padding: 0.3rem 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        font-size: 0.9rem;
+        padding: 0.35rem 0.3rem;
+    }
+
+    #PrivateLinkBox,
+    #PublicLinkBox,
+    #ActionLinkBox{
+        padding: 5px;
+        margin: 5px 0;
+    }
+    #PrivateLinkHead,
+    #PublicLinkHead,
+    #ActionLinkHead{
+        font-size: 1.1rem;
+        padding: 3px;
+    }
+    .PrivateActionButtons,
+    .PublicActionButtons,
+    .ActionButtons{
+        padding: 6px;
+        margin: 3px 0;
+    }
+    .ActionLabelE{ font-size: 1rem; padding: 2px 0; }
+    .ActionLabelN{ font-size: 0.85rem; padding: 2px 0; }
+}
+
+/* ==================== ULTRA-WIDE (≥ 1600px) ==================== */
+@media (min-width: 1600px) {
+
+    #MainBody{
+        max-width: 1500px;
+    }
+
+    #PrivateLinkHead,
+    #PublicLinkHead,
+    #ActionLinkHead{
+        font-size: 38px;
+        padding: 14px;
+    }
+
+    .PrivateActionButtons,
+    .PublicActionButtons,
+    .ActionButtons{
+        width: 340px;
+        padding: 14px;
+        margin: 12px 24px;
+    }
+    .ActionLabelE{ font-size: 24px; }
+    .ActionLabelN{ font-size: 18px; }
 }

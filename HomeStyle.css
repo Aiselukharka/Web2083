@@ -558,9 +558,493 @@ body {
     color: #00ffff;
     font-size: 18px;
     text-align: center;
+    text-decoration: none;
 }
 #FooterBox a:hover {
     color: #ff00ff;
     font-weight: bold;
     text-shadow: 1px 1px 2px #fff;
+    text-decoration: underline;
+}
+
+/* ============================================================
+   RESPONSIVE STYLES
+   Append this section to the end of HomeStyle.css
+   ============================================================ */
+
+/* ---------- Large tablets / small laptops (<= 1200px) ---------- */
+@media (max-width: 1200px) {
+    #PageNavigationSelect {
+        width: 45%;
+        min-width: 340px;
+        font-size: 28px;
+    }
+
+    #PageNaviggationBox button {
+        width: 24%;
+        min-width: 240px;
+        font-size: 28px;
+    }
+
+    .video-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+    }
+}
+
+/* ---------- Tablets (<= 992px) ---------- */
+@media (max-width: 992px) {
+    #MainBody {
+        width: 98%;
+        border-radius: 0.75rem;
+    }
+
+    #SchoolLogo {
+        width: 90px;
+        height: 90px;
+    }
+
+    #SchoolName {
+        font-size: 34px;
+    }
+
+    #SchoolAddress {
+        font-size: 24px;
+    }
+
+    #PageNaviggationBox {
+        gap: 8px;
+        padding: 8px 0;
+    }
+
+    #PageNavigationSelect {
+        width: 60%;
+        min-width: 0;
+        font-size: 24px;
+        padding: 8px;
+    }
+
+    #PageNaviggationBox button {
+        width: 30%;
+        min-width: 0;
+        font-size: 24px;
+        padding: 8px 0;
+        border-radius: 10px;
+    }
+
+    .slider-container,
+    .video-gallery-container {
+        padding: 14px;
+    }
+
+    .video-gallery-title {
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+    }
+
+    .video-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 14px;
+    }
+
+    .video-modal-content {
+        max-width: 95%;
+        max-height: 85vh;
+    }
+
+    #FooterBox a {
+        width: 45%;
+        font-size: 16px;
+    }
+}
+
+/* ---------- Large phones / small tablets (<= 768px) ---------- */
+@media (max-width: 768px) {
+    html {
+        overflow-y: auto !important;
+    }
+
+    #MainBody {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    #SchoolNameBox {
+        padding: 8px 0;
+    }
+
+    #SchoolLogo {
+        width: 80px;
+        height: 80px;
+    }
+
+    #SchoolName {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    #SchoolAddress {
+        font-size: 20px;
+        margin-top: 6px;
+    }
+
+    /* Navigation becomes a vertical stack for readability */
+    #PageNaviggationBox {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 10px;
+    }
+
+    #PageNavigationSelect {
+        width: 100%;
+        min-width: 0;
+        font-size: 20px;
+        padding: 10px;
+    }
+
+    #PageNaviggationBox button {
+        width: 100%;
+        min-width: 0;
+        font-size: 20px;
+        padding: 12px 0;
+        border-radius: 10px;
+    }
+
+    .slider-container,
+    .video-gallery-container {
+        padding: 12px;
+    }
+
+    .slider-wrapper {
+        border-radius: 0.75rem;
+    }
+
+    .credential-overlay {
+        padding: 1rem 0.9rem 0.6rem 0.9rem;
+        font-size: 0.85rem;
+    }
+
+    .nav-btn {
+        width: 38px;
+        height: 50px;
+        font-size: 1.8rem;
+    }
+
+    .dots-pagination {
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-bottom: 14px;
+    }
+
+    .dot {
+        width: 7px;
+        height: 7px;
+    }
+
+    .dot.active-dot {
+        width: 20px;
+    }
+
+    .video-gallery-title {
+        font-size: 1.35rem;
+    }
+
+    .video-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        padding: 6px;
+    }
+
+    .video-card-info {
+        padding: 12px;
+    }
+
+    .video-card-info h3 {
+        font-size: 1rem;
+    }
+
+    .video-card-info p {
+        font-size: 0.85rem;
+    }
+
+    .video-play-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .video-modal {
+        padding: 12px;
+    }
+
+    .video-modal-content {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 12px;
+    }
+
+    .video-modal-close {
+        width: 40px;
+        height: 40px;
+        font-size: 26px;
+        top: 8px;
+        right: 10px;
+    }
+
+    .video-modal-info {
+        padding: 16px 18px;
+    }
+
+    .video-modal-info h3 {
+        font-size: 1.15rem;
+    }
+
+    .video-modal-info p {
+        font-size: 0.9rem;
+    }
+
+    #FooterBox {
+        padding: 16px 0;
+    }
+
+    #FooterBox a {
+        width: 100%;
+        font-size: 16px;
+        padding: 4px 0;
+    }
+}
+
+/* ---------- Standard phones (<= 576px) ---------- */
+@media (max-width: 576px) {
+    #SchoolLogo {
+        width: 70px;
+        height: 70px;
+    }
+
+    #SchoolName {
+        font-size: 24px;
+    }
+
+    #SchoolAddress {
+        font-size: 17px;
+    }
+
+    #PageNavigationSelect {
+        font-size: 18px;
+        padding: 9px;
+    }
+
+    #PageNaviggationBox button {
+        font-size: 18px;
+        padding: 11px 0;
+    }
+
+    .slider-container,
+    .video-gallery-container {
+        padding: 10px;
+    }
+
+    .credential-overlay {
+        padding: 0.85rem 0.75rem 0.5rem 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .credential-text {
+        max-width: 92%;
+    }
+
+    .nav-btn {
+        width: 34px;
+        height: 44px;
+        font-size: 1.6rem;
+    }
+
+    .video-gallery-title {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    /* Single column video grid on phones */
+    .video-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .video-card-info h3 {
+        font-size: 1.05rem;
+    }
+
+    .video-card-info p {
+        font-size: 0.9rem;
+    }
+
+    .video-modal {
+        padding: 8px;
+    }
+
+    .video-modal-close {
+        width: 36px;
+        height: 36px;
+        font-size: 22px;
+    }
+
+    .video-modal-info {
+        padding: 14px;
+    }
+
+    .video-modal-info h3 {
+        font-size: 1.05rem;
+    }
+
+    .video-modal-info p {
+        font-size: 0.85rem;
+    }
+
+    #FooterBox a {
+        font-size: 15px;
+    }
+}
+
+/* ---------- Small phones (<= 400px) ---------- */
+@media (max-width: 400px) {
+    #SchoolLogo {
+        width: 60px;
+        height: 60px;
+    }
+
+    #SchoolName {
+        font-size: 20px;
+    }
+
+    #SchoolAddress {
+        font-size: 15px;
+    }
+
+    #PageNavigationSelect {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    #PageNaviggationBox button {
+        font-size: 16px;
+        padding: 10px 0;
+    }
+
+    .slider-container,
+    .video-gallery-container {
+        padding: 8px;
+    }
+
+    .credential-overlay {
+        padding: 0.7rem 0.6rem 0.4rem 0.6rem;
+        font-size: 0.7rem;
+    }
+
+    .credential-overlay i {
+        font-size: 0.75rem;
+        margin-right: 5px;
+    }
+
+    .nav-btn {
+        width: 30px;
+        height: 38px;
+        font-size: 1.4rem;
+    }
+
+    .dots-pagination {
+        gap: 0.4rem;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .dot.active-dot {
+        width: 16px;
+    }
+
+    .video-gallery-title {
+        font-size: 1.05rem;
+    }
+
+    .video-play-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+
+    .video-card-info {
+        padding: 10px;
+    }
+
+    .video-card-info h3 {
+        font-size: 0.95rem;
+    }
+
+    .video-card-info p {
+        font-size: 0.8rem;
+    }
+
+    .video-modal-info h3 {
+        font-size: 0.95rem;
+    }
+
+    .video-modal-info p {
+        font-size: 0.8rem;
+    }
+
+    #FooterBox a {
+        font-size: 14px;
+    }
+}
+
+/* ---------- Landscape phones (short viewports) ---------- */
+@media (max-height: 500px) and (orientation: landscape) {
+    .slides-area {
+        aspect-ratio: 16 / 9;
+        max-height: 70vh;
+    }
+
+    .video-modal-content {
+        max-height: 80vh;
+    }
+
+    .video-modal-body {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .video-wrapper {
+        width: 60%;
+        padding-top: 0;
+        min-height: 240px;
+    }
+
+    .video-modal-info {
+        width: 40%;
+        overflow-y: auto;
+    }
+}
+
+/* ---------- High-DPI / reduced motion accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .slides-track {
+        transition: none;
+    }
+
+    .video-card,
+    .video-play-icon,
+    .video-modal-close,
+    .dot,
+    .nav-btn {
+        transition: none;
+    }
+
+    .spinner,
+    .video-loader .spinner {
+        animation: none;
+    }
 }

@@ -4,12 +4,131 @@ if (typeof supabaseClient === 'undefined') {
 // -------------------- CLOUDINARY --------------------
 const CLOUD_NAME = "dcdwpdnyp";
 
+// ============================================================================
+// CROPPER MODAL LOGIC (3:4 for HR photos)
+// ============================================================================
+console.log("[HR] Cropper module loading...");
+
+const HR_CROP_RATIO  = 3 / 4;      // 3:4 portrait
+const HR_CROP_WIDTH  = 300;
+const HR_CROP_HEIGHT = 400;
+
+let activeCropper = null;
+function openCropperForFile(file) {
+    return new Promise((resolve, reject) => {
+        const cropperModal  = document.getElementById('CropperModal');
+        const cropperImage  = document.getElementById('CropperImage');
+        const btnCancel     = document.getElementById('btnCancelCrop');
+        const btnApply      = document.getElementById('btnApplyCrop');
+
+        if (!cropperModal || !cropperImage || !btnCancel || !btnApply) {
+            reject(new Error('Cropper modal elements not found in the page.'));
+            return;
+        }
+
+        // Destroy any previous instance FIRST
+        if (activeCropper) {
+            activeCropper.destroy();
+            activeCropper = null;
+        }
+
+        // Clear any previous cropper wrapper if one is stuck in the DOM
+        const existingWrapper = cropperImage.parentElement;
+        if (existingWrapper && existingWrapper.classList.contains('cropper-container')) {
+            existingWrapper.parentElement.insertBefore(cropperImage, existingWrapper);
+            existingWrapper.remove();
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            // 1. Set the src and wait for the image to be fully decoded
+            cropperImage.onload = () => {
+                // 2. Show the modal
+                cropperModal.classList.add('active');
+
+                // 3. Wait TWO frames for layout to settle before init.
+                //    One frame is not enough — the flex container hasn't
+                //    computed its child sizes yet.
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        try {
+                            activeCropper = new Cropper(cropperImage, {
+                                aspectRatio: HR_CROP_RATIO,
+                                viewMode: 2,
+                                autoCropArea: 0.9,
+                                movable: true,
+                                zoomable: true,
+                                rotatable: false,
+                                scalable: false,
+                                responsive: true,
+                                background: true,
+                                cropBoxResizable: true,
+                                checkOrientation: false,
+                                highlight: false,
+                                guides: true,
+                                center: true,
+                                toggleDragModeOnDblclick: false,
+                                ready() {
+                                    // Force a resize once Cropper has taken over
+                                    activeCropper.resize();
+                                }
+                            });
+                        } catch (err) {
+                            console.error('Cropper init failed:', err);
+                            reject(err);
+                            closeCropper();
+                        }
+                    });
+                });
+            };
+
+            cropperImage.onerror = () => reject(new Error('Image failed to load'));
+            cropperImage.src = e.target.result;
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+
+        // Wire buttons ONCE (not inside onload, to avoid stacking handlers
+        // if the modal is reused)
+        btnApply.onclick = () => {
+            if (!activeCropper) return;
+            const canvas = activeCropper.getCroppedCanvas({
+                width: HR_CROP_WIDTH,
+                height: HR_CROP_HEIGHT,
+                imageSmoothingQuality: 'high'
+            });
+            if (!canvas) { reject(new Error('Crop failed')); closeCropper(); return; }
+
+            canvas.toBlob((blob) => {
+                if (!blob) { reject(new Error('Blob generation failed')); closeCropper(); return; }
+                resolve(blob);
+                closeCropper();
+            }, 'image/jpeg', 0.92);
+        };
+
+        btnCancel.onclick = () => {
+            reject(new Error('Cancelled'));
+            closeCropper();
+        };
+    });
+}
+
+function closeCropper() {
+    const cropperModal = document.getElementById('CropperModal');
+    if (cropperModal) cropperModal.classList.remove('active');
+    if (activeCropper) { activeCropper.destroy(); activeCropper = null; }
+}
+
+console.log("[HR] Cropper module loaded. openCropperForFile is defined:", typeof openCropperForFile === 'function');
+
 // -------------------- PROTECTION FORM UNAUTHORIZED ACCESS --------------------
 protectAdminPage();
 async function protectAdminPage() {
     const {data: { session }, error} = await supabaseClient.auth.getSession();
     if (error || !session) {
-      showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
+        showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
         window.location.replace("../LoginPage/LogInIndex.html");
         return;
     }
@@ -32,7 +151,7 @@ PageNavigationDropDown.addEventListener("change", function () {
         "SMC_TGC_Page": "../../SMC_TGC_Page/SMC_TGC_Index.html",
         "HelpingHandPage": "../../HelpingHandPage/HelpingHandIndex.html",
         "HomePage": "../../index.html"
-    };   
+    };
     const selectedPage = pageMap[this.value];
     if (selectedPage) {
         window.location.href = selectedPage;
@@ -59,7 +178,7 @@ EditNavigationDropDown.addEventListener("change", function () {
         "HelpingHandEditBox": "../EditHelpingHandPage/EditHelpingHandIndex.html",
         "ClassEditBox": "../EditClassPage/EditClassIndex.html",
         "AdminEditBox": "../AdminDashboardPage/AdminDashboardIndex.html"
-    };   
+    };
     const selectedEdit = pageMap[this.value];
     if (selectedEdit) {
         window.location.href = selectedEdit;
@@ -70,7 +189,7 @@ EditNavigationDropDown.addEventListener("change", function () {
 const dateBox = document.getElementById('DateBox');
 dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
 
-  //----------------------- Script for Admin Tools Dropdown -----------------------
+// ----------------------- ADMIN TOOLS DROPDOWN -----------------------
 document.getElementById("AdminToolsSelect").addEventListener("change", async function () {
     switch (this.value) {
         case "ChangePasswordTool":
@@ -78,21 +197,21 @@ document.getElementById("AdminToolsSelect").addEventListener("change", async fun
             break;
         case "LogoutThisDeviceTool":
             showCustomDialog2(
-            "Confirm Logout",
-            "Logout from this device?",
-            "Yes",
-            "Cancel",
-            async function () {
-                await supabaseClient.auth.signOut({scope: "local"});
-                window.location.replace("../LoginPage/LogInIndex.html");
-            },
-            function () {}
-        );
-        break;
+                "Confirm Logout",
+                "Logout from this device?",
+                "Yes",
+                "Cancel",
+                async function () {
+                    await supabaseClient.auth.signOut({scope: "local"});
+                    window.location.replace("../LoginPage/LogInIndex.html");
+                },
+                function () {}
+            );
+            break;
         case "LogoutAllDevicesTool":
-        const confirm = showCustomDialog2("Confirm Logout", "Logout from all devices?", "Yes", "Cancel", function() {}, function() {});
-            if (confirm==="Yes") {
-                await supabaseClient .auth .signOut({scope: "global"});
+            const confirm = showCustomDialog2("Confirm Logout", "Logout from all devices?", "Yes", "Cancel", function() {}, function() {});
+            if (confirm === "Yes") {
+                await supabaseClient.auth.signOut({scope: "global"});
                 window.location.replace("../LoginPage/LogInIndex.html");
             }
             break;
@@ -103,7 +222,7 @@ document.getElementById("AdminToolsSelect").addEventListener("change", async fun
     this.selectedIndex = 0;
 });
 
-// Dynamically show logo and favicon
+// -------------------- DYNAMIC LOGO & FAVICON --------------------
 async function loadDynamicLogoAndFavicon() {
     try {
         const { data, error } = await supabaseClient
@@ -124,7 +243,7 @@ async function loadDynamicLogoAndFavicon() {
             const logoImgElement = document.querySelector('#LogoBox img');
             if (logoImgElement) {
                 logoImgElement.src = freshLogoUrl;
-            }            
+            }
             console.log("Logo and Favicon synced dynamically via supabaseClient!");
         }
     } catch (error) {
@@ -132,9 +251,13 @@ async function loadDynamicLogoAndFavicon() {
     }
 }
 document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
+
+// ============================================================================
+// SPREADSHEET BUILDERS
+// ============================================================================
 function loadTeacherSpreadsheet() {
-    const teacherBox = document.getElementById('TeacherBox');    
-    teacherBox.innerHTML = '';    
+    const teacherBox = document.getElementById('TeacherBox');
+    teacherBox.innerHTML = '';
     const columns = [
         { title: 'Name', width: '300px', type: 'text' },
         { title: 'Address', width: '450px', type: 'text' },
@@ -156,8 +279,8 @@ function loadTeacherSpreadsheet() {
         { title: 'Service Type', width: '150px', type: 'dropdown', source: ['स्थायी', 'अस्थायी', 'राहत', 'कार्यालय सहयोगी', 'लेखापाल', 'बालकक्षा शिक्षक', 'निजीश्रोत', 'पालिका करार', 'अन्य'] },
         { title: 'Qualification', width: '200px', type: 'text' },
         { title: 'Major Subject', width: '300px', type: 'text' }
-    ];    
-    const initialData = Array(30).fill().map(() => Array(20).fill(''));    
+    ];
+    const initialData = Array(30).fill().map(() => Array(20).fill(''));
     const spreadsheet = jspreadsheet(teacherBox, {
         data: initialData,
         columns: columns,
@@ -173,13 +296,13 @@ function loadTeacherSpreadsheet() {
         onchange: function(el, cell, x, y, value) {
             console.log(`Cell (${y}, ${x}) changed to: ${value}`);
         }
-    });    
+    });
     return spreadsheet;
 }
 
 function loadSMCSpreadsheet() {
-    const SMCBox = document.getElementById('SMCBox');    
-    SMCBox.innerHTML = '';    
+    const SMCBox = document.getElementById('SMCBox');
+    SMCBox.innerHTML = '';
     const columns = [
         { title: 'Name', width: '300px', type: 'text' },
         { title: 'Address', width: '450px', type: 'text' },
@@ -187,9 +310,9 @@ function loadSMCSpreadsheet() {
         { title: 'Contact', width: '200px', type: 'text' },
         { title: 'Email', width: '300px', type: 'text' },
         { title: 'Appointment Date', width: '200px', type: 'text' },
-        { title: 'Post', width: '200px', type: 'text' }        
-    ];    
-    const initialData = Array(12).fill().map(() => Array(7).fill(''));    
+        { title: 'Post', width: '200px', type: 'text' }
+    ];
+    const initialData = Array(12).fill().map(() => Array(7).fill(''));
     const spreadsheet = jspreadsheet(SMCBox, {
         data: initialData,
         columns: columns,
@@ -205,13 +328,13 @@ function loadSMCSpreadsheet() {
         onchange: function(el, cell, x, y, value) {
             console.log(`Cell (${y}, ${x}) changed to: ${value}`);
         }
-    });    
+    });
     return spreadsheet;
 }
 
 function loadPTASpreadsheet() {
-    const PTABox = document.getElementById('PTABox');    
-    PTABox.innerHTML = '';    
+    const PTABox = document.getElementById('PTABox');
+    PTABox.innerHTML = '';
     const columns = [
         { title: 'Name', width: '300px', type: 'text' },
         { title: 'Address', width: '450px', type: 'text' },
@@ -219,9 +342,9 @@ function loadPTASpreadsheet() {
         { title: 'Contact', width: '200px', type: 'text' },
         { title: 'Email', width: '300px', type: 'text' },
         { title: 'Appointment Date', width: '200px', type: 'text' },
-        { title: 'Post', width: '200px', type: 'text' }        
-    ];    
-    const initialData = Array(12).fill().map(() => Array(7).fill(''));    
+        { title: 'Post', width: '200px', type: 'text' }
+    ];
+    const initialData = Array(12).fill().map(() => Array(7).fill(''));
     const spreadsheet = jspreadsheet(PTABox, {
         data: initialData,
         columns: columns,
@@ -237,14 +360,15 @@ function loadPTASpreadsheet() {
         onchange: function(el, cell, x, y, value) {
             console.log(`Cell (${y}, ${x}) changed to: ${value}`);
         }
-    });    
+    });
     return spreadsheet;
 }
 
-// Handle topic selection from dropdown
+// ============================================================================
+// CONTAINER VISIBILITY
+// ============================================================================
 function handleTopicSelect(value) {
     hideAllContainers();
-    
     switch(value) {
         case 'EditTeacherData':
             showTeacherContainer();
@@ -263,24 +387,22 @@ function handleTopicSelect(value) {
     }
 }
 
-// Function to show a specific container
 function showContainer(containerId) {
     hideAllContainers();
-    
     const container = document.getElementById(containerId);
     if (container) {
         container.classList.remove('EditContainers');
         container.classList.add('visible');
     }
 }
-// Function to hide all containers
+
 function hideAllContainers() {
     const containers = [
         'EditTeacherContainer',
-        'EditSMCContainer', 
+        'EditSMCContainer',
         'EditPTAContainer',
         'EditPhotoContainer'
-    ];    
+    ];
     containers.forEach(id => {
         const container = document.getElementById(id);
         if (container) {
@@ -289,7 +411,7 @@ function hideAllContainers() {
         }
     });
 }
-// Function to toggle a container visibility
+
 function toggleContainer(containerId) {
     const container = document.getElementById(containerId);
     if (container) {
@@ -297,80 +419,10 @@ function toggleContainer(containerId) {
         container.classList.toggle('visible');
     }
 }
-// Function to show container and load its content
-function showTeacherContainer() {
-    showContainer('EditTeacherContainer');    
-    // Load teacher spreadsheet with a slight delay to ensure container is visible
-    setTimeout(function() {
-        if (!window.spreadsheet) {
-            window.spreadsheet = loadTeacherSpreadsheet();
-        } else {
-            // Re-render if already exists
-            const teacherBox = document.getElementById('TeacherBox');
-            teacherBox.innerHTML = '';
-            window.spreadsheet = loadTeacherSpreadsheet();
-        }
-    }, 100);
-}
 
-function showSMCContainer() {
-    showContainer('EditSMCContainer');
-    // Load teacher spreadsheet with a slight delay to ensure container is visible
-    setTimeout(function() {
-        if (!window.spreadsheet) {
-            window.spreadsheet = loadSMCSpreadsheet();
-        } else {
-            // Re-render if already exists
-            const SMCBox = document.getElementById('SMCBox');
-            SMCBox.innerHTML = '';
-            window.spreadsheet = loadSMCSpreadsheet();
-        }
-    }, 100);
-}
-
-function showPTAContainer() {
-    showContainer('EditPTAContainer');
-    // Load teacher spreadsheet with a slight delay to ensure container is visible
-    setTimeout(function() {
-        if (!window.spreadsheet) {
-            window.spreadsheet = loadPTASpreadsheet();
-        } else {
-            // Re-render if already exists
-            const PTABox = document.getElementById('PTABox');
-            PTABox.innerHTML = '';
-            window.spreadsheet = loadPTASpreadsheet();
-        }
-    }, 100);
-}
-
-function showPhotoContainer() {
-    showContainer('EditPhotoContainer');
-    // Load Photo content here
-    const photoBox = document.getElementById('PhotoBox');
-    photoBox.innerHTML = '<p>Photo upload interface will be loaded here</p>';
-}
-
-// Placeholder functions for save operations
-function saveTeacherData() {
-    const data = getTeacherData();
-    console.log('Teacher Data:', data);
-    alert('Teacher data saved successfully!');
-}
-
-function saveSMCData() {
-    alert('SMC data saved successfully!');
-}
-function savePTAData() {
-    alert('PTA data saved successfully!');
-}
-function savePhoto() {
-    alert('Photos saved successfully!');
-}
-document.addEventListener('DOMContentLoaded', function() {
-    hideAllContainers();
-});
-
-// -------------------- GLOBAL VARIABLES --------------------
+// ============================================================================
+// GLOBAL VARIABLES
+// ============================================================================
 let teacherSpreadsheet = null;
 let smcSpreadsheet = null;
 let ptaSpreadsheet = null;
@@ -378,6 +430,7 @@ let currentSpreadsheet = null;
 let teacherDataChanged = false;
 let smcDataChanged = false;
 let ptaDataChanged = false;
+
 const COLUMN_MAPPING = {
     'Name': 'Name',
     'Address': 'Address',
@@ -400,6 +453,7 @@ const COLUMN_MAPPING = {
     'Qualification': 'Qualification',
     'Major Subject': 'MajorSubject'
 };
+
 const SMC_COLUMN_MAPPING = {
     'Name': 'Name',
     'Address': 'Address',
@@ -410,7 +464,9 @@ const SMC_COLUMN_MAPPING = {
     'Post': 'Post'
 };
 
-// -------------------- LOAD DATA ON PAGE LOAD --------------------
+// ============================================================================
+// LOAD ALL DATA
+// ============================================================================
 async function loadAllData() {
     try {
         const { data, error } = await supabaseClient
@@ -422,29 +478,24 @@ async function loadAllData() {
             return;
         }
         if (data && data.length > 0) {
-            // Separate data by WorkArea
             const staffData = data.filter(item => item.WorkArea === 'Staff');
             const smcData = data.filter(item => item.WorkArea === 'SMC');
             const ptaData = data.filter(item => item.WorkArea === 'PTA');
-            if (staffData.length > 0) {
-                loadTeacherData(staffData);
-            }
-            if (smcData.length > 0) {
-                loadSMCData(smcData);
-            }
-            if (ptaData.length > 0) {
-                loadPTAData(ptaData);
-            }
+            if (staffData.length > 0) loadTeacherData(staffData);
+            if (smcData.length > 0)   loadSMCData(smcData);
+            if (ptaData.length > 0)   loadPTAData(ptaData);
         }
     } catch (error) {
         console.error('Error in loadAllData:', error);
     }
 }
 
-// -------------------- LOAD TEACHER DATA --------------------
+// ============================================================================
+// LOAD TEACHER DATA
+// ============================================================================
 function loadTeacherData(data) {
     const teacherBox = document.getElementById('TeacherBox');
-    teacherBox.innerHTML = '';    
+    teacherBox.innerHTML = '';
     const columns = [
         { title: 'Name', width: '300px', type: 'text' },
         { title: 'Address', width: '450px', type: 'text' },
@@ -466,7 +517,7 @@ function loadTeacherData(data) {
         { title: 'Service Type', width: '150px', type: 'dropdown', source: ['स्थायी', 'अस्थायी', 'राहत', 'कार्यालय सहयोगी', 'लेखापाल', 'बालकक्षा शिक्षक', 'निजीश्रोत', 'पालिका करार', 'अन्य'] },
         { title: 'Qualification', width: '200px', type: 'text' },
         { title: 'Major Subject', width: '300px', type: 'text' }
-    ];    
+    ];
     const rowData = data.map(item => [
         item.Name || '',
         item.Address || '',
@@ -488,8 +539,8 @@ function loadTeacherData(data) {
         item.ServiceType || '',
         item.Qualification || '',
         item.MajorSubject || ''
-    ]);    
-    const finalData = rowData.length > 0 ? rowData : Array(30).fill().map(() => Array(20).fill('')); 
+    ]);
+    const finalData = rowData.length > 0 ? rowData : Array(30).fill().map(() => Array(20).fill(''));
     teacherSpreadsheet = jspreadsheet(teacherBox, {
         data: finalData,
         columns: columns,
@@ -505,16 +556,17 @@ function loadTeacherData(data) {
         onchange: function(el, cell, x, y, value) {
             teacherDataChanged = true;
             document.getElementById('btnSaveTeacher').style.display = 'block';
-            console.log(`Teacher cell (${y}, ${x}) changed to: ${value}`);
         }
-    });    
+    });
     document.getElementById('btnSaveTeacher').style.display = 'none';
 }
 
-// -------------------- LOAD SMC DATA --------------------
+// ============================================================================
+// LOAD SMC DATA
+// ============================================================================
 function loadSMCData(data) {
     const smcBox = document.getElementById('SMCBox');
-    smcBox.innerHTML = '';    
+    smcBox.innerHTML = '';
     const columns = [
         { title: 'Name', width: '300px', type: 'text' },
         { title: 'Address', width: '450px', type: 'text' },
@@ -523,7 +575,7 @@ function loadSMCData(data) {
         { title: 'Email', width: '300px', type: 'text' },
         { title: 'Appointment Date', width: '200px', type: 'text' },
         { title: 'Post', width: '200px', type: 'text' }
-    ];    
+    ];
     const rowData = data.map(item => [
         item.Name || '',
         item.Address || '',
@@ -532,8 +584,8 @@ function loadSMCData(data) {
         item.Email || '',
         item.TemporaryAppointment || '',
         item.Post || ''
-    ]);    
-    const finalData = rowData.length > 0 ? rowData : Array(12).fill().map(() => Array(7).fill(''));    
+    ]);
+    const finalData = rowData.length > 0 ? rowData : Array(12).fill().map(() => Array(7).fill(''));
     smcSpreadsheet = jspreadsheet(smcBox, {
         data: finalData,
         columns: columns,
@@ -549,16 +601,17 @@ function loadSMCData(data) {
         onchange: function(el, cell, x, y, value) {
             smcDataChanged = true;
             document.getElementById('btnSaveSMC').style.display = 'block';
-            console.log(`SMC cell (${y}, ${x}) changed to: ${value}`);
         }
-    });    
+    });
     document.getElementById('btnSaveSMC').style.display = 'none';
 }
 
-// -------------------- LOAD PTA DATA --------------------
+// ============================================================================
+// LOAD PTA DATA
+// ============================================================================
 function loadPTAData(data) {
     const ptaBox = document.getElementById('PTABox');
-    ptaBox.innerHTML = '';    
+    ptaBox.innerHTML = '';
     const columns = [
         { title: 'Name', width: '300px', type: 'text' },
         { title: 'Address', width: '450px', type: 'text' },
@@ -567,7 +620,7 @@ function loadPTAData(data) {
         { title: 'Email', width: '300px', type: 'text' },
         { title: 'Appointment Date', width: '200px', type: 'text' },
         { title: 'Post', width: '200px', type: 'text' }
-    ];    
+    ];
     const rowData = data.map(item => [
         item.Name || '',
         item.Address || '',
@@ -576,8 +629,8 @@ function loadPTAData(data) {
         item.Email || '',
         item.TemporaryAppointment || '',
         item.Post || ''
-    ]);    
-    const finalData = rowData.length > 0 ? rowData : Array(12).fill().map(() => Array(7).fill(''));    
+    ]);
+    const finalData = rowData.length > 0 ? rowData : Array(12).fill().map(() => Array(7).fill(''));
     ptaSpreadsheet = jspreadsheet(ptaBox, {
         data: finalData,
         columns: columns,
@@ -593,289 +646,18 @@ function loadPTAData(data) {
         onchange: function(el, cell, x, y, value) {
             ptaDataChanged = true;
             document.getElementById('btnSavePTA').style.display = 'block';
-            console.log(`PTA cell (${y}, ${x}) changed to: ${value}`);
         }
-    });    
+    });
     document.getElementById('btnSavePTA').style.display = 'none';
 }
 
-// -------------------- SAVE TEACHER DATA --------------------
-async function saveTeacherData() {
-    if (!teacherDataChanged) {
-        alert('No changes to save.');
-        return;
-    }
-    
-    try {
-        const data = teacherSpreadsheet.getData();
-        const records = [];
-        
-        // Get existing data with PhotoUrl
-        const { data: existingData, error: fetchError } = await supabaseClient
-            .from('HumanResourceTable')
-            .select('id, Name, PhotoUrl')
-            .eq('WorkArea', 'Staff');
-            
-        if (fetchError) {
-            console.error('Error fetching existing records:', fetchError);
-            alert('Error fetching existing records.');
-            return;
-        }
-        
-        // Create a map of existing names to PhotoUrl
-        const existingMap = {};
-        existingData.forEach(item => {
-            existingMap[item.Name] = {
-                id: item.id,
-                PhotoUrl: item.PhotoUrl
-            };
-        });
-        
-        for (let row of data) {
-            // Skip empty rows
-            if (!row[0] || row[0].trim() === '') continue;
-            
-            const name = row[0] || '';
-            
-            // Check if this person already exists and preserve their PhotoUrl
-            const existing = existingMap[name];
-            const photoUrl = existing ? existing.PhotoUrl : null;
-            
-            const record = {
-                Name: name,
-                Address: row[1] || '',
-                Gender: row[2] || '',
-                DOB: row[3] || '',
-                Father: row[4] || '',
-                Mother: row[5] || '',
-                Contact: row[6] || '',
-                Email: row[7] || '',
-                TemporaryAppointment: row[8] || '',
-                PermanentAppointment: row[9] || '',
-                Post: row[10] || '',
-                Level: row[11] || '',
-                Nationality: row[12] || '',
-                Pan: row[13] || '',
-                NIN: row[14] || '',
-                License: row[15] || '',
-                CIF: row[16] || '',
-                ServiceType: row[17] || '',
-                Qualification: row[18] || '',
-                MajorSubject: row[19] || '',
-                WorkArea: 'Staff',
-                PhotoUrl: photoUrl // Preserve the existing PhotoUrl
-            };
-            
-            records.push(record);
-        }
-        
-        // Delete existing staff records
-        const { error: deleteError } = await supabaseClient
-            .from('HumanResourceTable')
-            .delete()
-            .eq('WorkArea', 'Staff');
-            
-        if (deleteError) {
-            console.error('Error deleting existing records:', deleteError);
-            alert('Error updating records.');
-            return;
-        }
-        
-        // Insert new records
-        if (records.length > 0) {
-            const { error: insertError } = await supabaseClient
-                .from('HumanResourceTable')
-                .insert(records);
-                
-            if (insertError) {
-                console.error('Error inserting records:', insertError);
-                alert('Error saving data.');
-                return;
-            }
-        }
-        
-        teacherDataChanged = false;
-        document.getElementById('btnSaveTeacher').style.display = 'none';
-        alert('Teacher data saved successfully!');
-        
-    } catch (error) {
-        console.error('Error in saveTeacherData:', error);
-        alert('Error saving teacher data.');
-    }
-}
-
-// -------------------- SAVE SMC DATA --------------------
-async function saveSMCData() {
-    if (!smcDataChanged) {
-        alert('No changes to save.');
-        return;
-    }
-    
-    try {
-        const data = smcSpreadsheet.getData();
-        const records = [];
-        
-        // Get existing data with PhotoUrl
-        const { data: existingData, error: fetchError } = await supabaseClient
-            .from('HumanResourceTable')
-            .select('id, Name, PhotoUrl')
-            .eq('WorkArea', 'SMC');
-            
-        if (fetchError) {
-            console.error('Error fetching existing records:', fetchError);
-            alert('Error fetching existing records.');
-            return;
-        }
-        
-        const existingMap = {};
-        existingData.forEach(item => {
-            existingMap[item.Name] = item.PhotoUrl;
-        });
-        
-        for (let row of data) {
-            if (!row[0] || row[0].trim() === '') continue;
-            
-            const name = row[0] || '';
-            const photoUrl = existingMap[name] || null;
-            
-            const record = {
-                Name: name,
-                Address: row[1] || '',
-                Gender: row[2] || '',
-                Contact: row[3] || '',
-                Email: row[4] || '',
-                TemporaryAppointment: row[5] || '',
-                Post: row[6] || '',
-                WorkArea: 'SMC',
-                PhotoUrl: photoUrl // Preserve existing PhotoUrl
-            };
-            
-            records.push(record);
-        }
-        
-        // Delete existing SMC records
-        const { error: deleteError } = await supabaseClient
-            .from('HumanResourceTable')
-            .delete()
-            .eq('WorkArea', 'SMC');
-            
-        if (deleteError) {
-            console.error('Error deleting SMC records:', deleteError);
-            alert('Error updating records.');
-            return;
-        }
-        
-        if (records.length > 0) {
-            const { error: insertError } = await supabaseClient
-                .from('HumanResourceTable')
-                .insert(records);
-                
-            if (insertError) {
-                console.error('Error inserting SMC records:', insertError);
-                alert('Error saving data.');
-                return;
-            }
-        }
-        
-        smcDataChanged = false;
-        document.getElementById('btnSaveSMC').style.display = 'none';
-        alert('SMC data saved successfully!');
-        
-    } catch (error) {
-        console.error('Error in saveSMCData:', error);
-        alert('Error saving SMC data.');
-    }
-}
-
-// Update savePTAData to preserve PhotoUrl
-async function savePTAData() {
-    if (!ptaDataChanged) {
-        alert('No changes to save.');
-        return;
-    }
-    
-    try {
-        const data = ptaSpreadsheet.getData();
-        const records = [];
-        
-        // Get existing data with PhotoUrl
-        const { data: existingData, error: fetchError } = await supabaseClient
-            .from('HumanResourceTable')
-            .select('id, Name, PhotoUrl')
-            .eq('WorkArea', 'PTA');
-            
-        if (fetchError) {
-            console.error('Error fetching existing records:', fetchError);
-            alert('Error fetching existing records.');
-            return;
-        }
-        
-        const existingMap = {};
-        existingData.forEach(item => {
-            existingMap[item.Name] = item.PhotoUrl;
-        });
-        
-        for (let row of data) {
-            if (!row[0] || row[0].trim() === '') continue;
-            
-            const name = row[0] || '';
-            const photoUrl = existingMap[name] || null;
-            
-            const record = {
-                Name: name,
-                Address: row[1] || '',
-                Gender: row[2] || '',
-                Contact: row[3] || '',
-                Email: row[4] || '',
-                TemporaryAppointment: row[5] || '',
-                Post: row[6] || '',
-                WorkArea: 'PTA',
-                PhotoUrl: photoUrl // Preserve existing PhotoUrl
-            };
-            
-            records.push(record);
-        }
-        
-        // Delete existing PTA records
-        const { error: deleteError } = await supabaseClient
-            .from('HumanResourceTable')
-            .delete()
-            .eq('WorkArea', 'PTA');
-            
-        if (deleteError) {
-            console.error('Error deleting PTA records:', deleteError);
-            alert('Error updating records.');
-            return;
-        }
-        
-        if (records.length > 0) {
-            const { error: insertError } = await supabaseClient
-                .from('HumanResourceTable')
-                .insert(records);
-                
-            if (insertError) {
-                console.error('Error inserting PTA records:', insertError);
-                alert('Error saving data.');
-                return;
-            }
-        }
-        
-        ptaDataChanged = false;
-        document.getElementById('btnSavePTA').style.display = 'none';
-        alert('PTA data saved successfully!');
-        
-    } catch (error) {
-        console.error('Error in savePTAData:', error);
-        alert('Error saving PTA data.');
-    }
-}
-
-// -------------------- SHOW FUNCTIONS --------------------
+// ============================================================================
+// SHOW CONTAINERS (with lazy loading of spreadsheets)
+// ============================================================================
 function showTeacherContainer() {
     showContainer('EditTeacherContainer');
     setTimeout(function() {
         if (!teacherSpreadsheet) {
-            // Load empty spreadsheet if no data exists
             const teacherBox = document.getElementById('TeacherBox');
             teacherBox.innerHTML = '';
             const columns = [
@@ -899,8 +681,8 @@ function showTeacherContainer() {
                 { title: 'Service Type', width: '150px', type: 'dropdown', source: ['स्थायी', 'अस्थायी', 'राहत', 'कार्यालय सहयोगी', 'लेखापाल', 'बालकक्षा शिक्षक', 'निजीश्रोत', 'पालिका करार', 'अन्य'] },
                 { title: 'Qualification', width: '200px', type: 'text' },
                 { title: 'Major Subject', width: '300px', type: 'text' }
-            ];            
-            const initialData = Array(30).fill().map(() => Array(20).fill(''));            
+            ];
+            const initialData = Array(30).fill().map(() => Array(20).fill(''));
             teacherSpreadsheet = jspreadsheet(teacherBox, {
                 data: initialData,
                 columns: columns,
@@ -917,7 +699,7 @@ function showTeacherContainer() {
                     teacherDataChanged = true;
                     document.getElementById('btnSaveTeacher').style.display = 'block';
                 }
-            });            
+            });
             document.getElementById('btnSaveTeacher').style.display = 'none';
         }
     }, 100);
@@ -937,8 +719,8 @@ function showSMCContainer() {
                 { title: 'Email', width: '300px', type: 'text' },
                 { title: 'Appointment Date', width: '200px', type: 'text' },
                 { title: 'Post', width: '200px', type: 'text' }
-            ];            
-            const initialData = Array(12).fill().map(() => Array(7).fill(''));            
+            ];
+            const initialData = Array(12).fill().map(() => Array(7).fill(''));
             smcSpreadsheet = jspreadsheet(smcBox, {
                 data: initialData,
                 columns: columns,
@@ -955,7 +737,7 @@ function showSMCContainer() {
                     smcDataChanged = true;
                     document.getElementById('btnSaveSMC').style.display = 'block';
                 }
-            });            
+            });
             document.getElementById('btnSaveSMC').style.display = 'none';
         }
     }, 100);
@@ -975,8 +757,8 @@ function showPTAContainer() {
                 { title: 'Email', width: '300px', type: 'text' },
                 { title: 'Appointment Date', width: '200px', type: 'text' },
                 { title: 'Post', width: '200px', type: 'text' }
-            ];            
-            const initialData = Array(12).fill().map(() => Array(7).fill(''));            
+            ];
+            const initialData = Array(12).fill().map(() => Array(7).fill(''));
             ptaSpreadsheet = jspreadsheet(ptaBox, {
                 data: initialData,
                 columns: columns,
@@ -993,23 +775,286 @@ function showPTAContainer() {
                     ptaDataChanged = true;
                     document.getElementById('btnSavePTA').style.display = 'block';
                 }
-            });            
+            });
             document.getElementById('btnSavePTA').style.display = 'none';
         }
     }, 100);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    hideAllContainers();    
-    loadAllData();
-});
+function showPhotoContainer() {
+    showContainer('EditPhotoContainer');
+    setTimeout(function() {
+        loadPhotoData();
+    }, 100);
+}
 
-// -------------------- PHOTO CONTAINER FUNCTIONS --------------------
+// ============================================================================
+// SAVE TEACHER DATA (preserves PhotoUrl)
+// ============================================================================
+async function saveTeacherData() {
+    if (!teacherDataChanged) {
+        alert('No changes to save.');
+        return;
+    }
+
+    try {
+        const data = teacherSpreadsheet.getData();
+        const records = [];
+
+        const { data: existingData, error: fetchError } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('id, Name, PhotoUrl')
+            .eq('WorkArea', 'Staff');
+
+        if (fetchError) {
+            console.error('Error fetching existing records:', fetchError);
+            alert('Error fetching existing records.');
+            return;
+        }
+
+        const existingMap = {};
+        existingData.forEach(item => {
+            existingMap[item.Name] = {
+                id: item.id,
+                PhotoUrl: item.PhotoUrl
+            };
+        });
+
+        for (let row of data) {
+            if (!row[0] || row[0].trim() === '') continue;
+            const name = row[0] || '';
+            const existing = existingMap[name];
+            const photoUrl = existing ? existing.PhotoUrl : null;
+
+            const record = {
+                Name: name,
+                Address: row[1] || '',
+                Gender: row[2] || '',
+                DOB: row[3] || '',
+                Father: row[4] || '',
+                Mother: row[5] || '',
+                Contact: row[6] || '',
+                Email: row[7] || '',
+                TemporaryAppointment: row[8] || '',
+                PermanentAppointment: row[9] || '',
+                Post: row[10] || '',
+                Level: row[11] || '',
+                Nationality: row[12] || '',
+                Pan: row[13] || '',
+                NIN: row[14] || '',
+                License: row[15] || '',
+                CIF: row[16] || '',
+                ServiceType: row[17] || '',
+                Qualification: row[18] || '',
+                MajorSubject: row[19] || '',
+                WorkArea: 'Staff',
+                PhotoUrl: photoUrl
+            };
+            records.push(record);
+        }
+
+        const { error: deleteError } = await supabaseClient
+            .from('HumanResourceTable')
+            .delete()
+            .eq('WorkArea', 'Staff');
+
+        if (deleteError) {
+            console.error('Error deleting existing records:', deleteError);
+            alert('Error updating records.');
+            return;
+        }
+
+        if (records.length > 0) {
+            const { error: insertError } = await supabaseClient
+                .from('HumanResourceTable')
+                .insert(records);
+
+            if (insertError) {
+                console.error('Error inserting records:', insertError);
+                alert('Error saving data.');
+                return;
+            }
+        }
+
+        teacherDataChanged = false;
+        document.getElementById('btnSaveTeacher').style.display = 'none';
+        alert('Teacher data saved successfully!');
+
+    } catch (error) {
+        console.error('Error in saveTeacherData:', error);
+        alert('Error saving teacher data.');
+    }
+}
+
+// ============================================================================
+// SAVE SMC DATA (preserves PhotoUrl)
+// ============================================================================
+async function saveSMCData() {
+    if (!smcDataChanged) {
+        alert('No changes to save.');
+        return;
+    }
+
+    try {
+        const data = smcSpreadsheet.getData();
+        const records = [];
+
+        const { data: existingData, error: fetchError } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('id, Name, PhotoUrl')
+            .eq('WorkArea', 'SMC');
+
+        if (fetchError) {
+            console.error('Error fetching existing records:', fetchError);
+            alert('Error fetching existing records.');
+            return;
+        }
+
+        const existingMap = {};
+        existingData.forEach(item => {
+            existingMap[item.Name] = item.PhotoUrl;
+        });
+
+        for (let row of data) {
+            if (!row[0] || row[0].trim() === '') continue;
+            const name = row[0] || '';
+            const photoUrl = existingMap[name] || null;
+
+            const record = {
+                Name: name,
+                Address: row[1] || '',
+                Gender: row[2] || '',
+                Contact: row[3] || '',
+                Email: row[4] || '',
+                TemporaryAppointment: row[5] || '',
+                Post: row[6] || '',
+                WorkArea: 'SMC',
+                PhotoUrl: photoUrl
+            };
+            records.push(record);
+        }
+
+        const { error: deleteError } = await supabaseClient
+            .from('HumanResourceTable')
+            .delete()
+            .eq('WorkArea', 'SMC');
+
+        if (deleteError) {
+            console.error('Error deleting SMC records:', deleteError);
+            alert('Error updating records.');
+            return;
+        }
+
+        if (records.length > 0) {
+            const { error: insertError } = await supabaseClient
+                .from('HumanResourceTable')
+                .insert(records);
+
+            if (insertError) {
+                console.error('Error inserting SMC records:', insertError);
+                alert('Error saving data.');
+                return;
+            }
+        }
+
+        smcDataChanged = false;
+        document.getElementById('btnSaveSMC').style.display = 'none';
+        alert('SMC data saved successfully!');
+
+    } catch (error) {
+        console.error('Error in saveSMCData:', error);
+        alert('Error saving SMC data.');
+    }
+}
+
+// ============================================================================
+// SAVE PTA DATA (preserves PhotoUrl)
+// ============================================================================
+async function savePTAData() {
+    if (!ptaDataChanged) {
+        alert('No changes to save.');
+        return;
+    }
+
+    try {
+        const data = ptaSpreadsheet.getData();
+        const records = [];
+
+        const { data: existingData, error: fetchError } = await supabaseClient
+            .from('HumanResourceTable')
+            .select('id, Name, PhotoUrl')
+            .eq('WorkArea', 'PTA');
+
+        if (fetchError) {
+            console.error('Error fetching existing records:', fetchError);
+            alert('Error fetching existing records.');
+            return;
+        }
+
+        const existingMap = {};
+        existingData.forEach(item => {
+            existingMap[item.Name] = item.PhotoUrl;
+        });
+
+        for (let row of data) {
+            if (!row[0] || row[0].trim() === '') continue;
+            const name = row[0] || '';
+            const photoUrl = existingMap[name] || null;
+
+            const record = {
+                Name: name,
+                Address: row[1] || '',
+                Gender: row[2] || '',
+                Contact: row[3] || '',
+                Email: row[4] || '',
+                TemporaryAppointment: row[5] || '',
+                Post: row[6] || '',
+                WorkArea: 'PTA',
+                PhotoUrl: photoUrl
+            };
+            records.push(record);
+        }
+
+        const { error: deleteError } = await supabaseClient
+            .from('HumanResourceTable')
+            .delete()
+            .eq('WorkArea', 'PTA');
+
+        if (deleteError) {
+            console.error('Error deleting PTA records:', deleteError);
+            alert('Error updating records.');
+            return;
+        }
+
+        if (records.length > 0) {
+            const { error: insertError } = await supabaseClient
+                .from('HumanResourceTable')
+                .insert(records);
+
+            if (insertError) {
+                console.error('Error inserting PTA records:', insertError);
+                alert('Error saving data.');
+                return;
+            }
+        }
+
+        ptaDataChanged = false;
+        document.getElementById('btnSavePTA').style.display = 'none';
+        alert('PTA data saved successfully!');
+
+    } catch (error) {
+        console.error('Error in savePTAData:', error);
+        alert('Error saving PTA data.');
+    }
+}
+
+// ============================================================================
+// PHOTO CONTAINER — data, state, and rendering
+// ============================================================================
 let photoChanges = {};
 let photoData = [];
 let deletingIds = new Set();
 
-// Load photo data
 async function loadPhotoData() {
     try {
         const { data, error } = await supabaseClient
@@ -1033,7 +1078,6 @@ async function loadPhotoData() {
     }
 }
 
-// Render photo table
 function renderPhotoTable(data) {
     const tbody = document.getElementById('PhotoTableBody');
     tbody.innerHTML = '';
@@ -1054,19 +1098,19 @@ function renderPhotoTable(data) {
             <td>${item.WorkArea || 'N/A'}</td>
             <td>${item.Post || 'N/A'}</td>
             <td style="text-align: center;">
-                ${hasPhoto ? 
-                    `<img src="${item.PhotoUrl}" alt="${item.Name}" class="photo-preview" onerror="this.src='../images/no-photo.png'">` : 
+                ${hasPhoto ?
+                    `<img src="${item.PhotoUrl}" alt="${item.Name}" class="photo-preview" onerror="this.src='../images/no-photo.png'">` :
                     '<span class="no-photo">No Photo</span>'
                 }
             </td>
             <td style="text-align: center;">
-                <input type="file" id="photoInput_${item.id}" class="photo-file-input" accept="image/*" 
+                <input type="file" id="photoInput_${item.id}" class="photo-file-input" accept="image/*"
                        onchange="handlePhotoSelect(${item.id}, this)">
                 <button class="photo-upload-btn" onclick="document.getElementById('photoInput_${item.id}').click()">
                     📷 Choose Photo
                 </button>
-                ${photoChanges[item.id] ? 
-                    `<span style="margin-left: 10px; color: #ff6600; font-size: 0.9em;">New photo selected</span>` : 
+                ${photoChanges[item.id] ?
+                    `<span style="margin-left: 10px; color: #ff6600; font-size: 0.9em;">New photo selected</span>` :
                     ''
                 }
             </td>
@@ -1086,131 +1130,110 @@ function renderPhotoTable(data) {
     });
 }
 
-// Handle photo selection
-function handlePhotoSelect(id, input) {
+// ============================================================================
+// PHOTO SELECTION — opens cropper, stores cropped blob
+// ============================================================================
+async function handlePhotoSelect(id, input) {
     const file = input.files[0];
     if (!file) return;
 
-    // Validate file type
+    // Pre-crop validations
     if (!file.type.startsWith('image/')) {
         alert('Please select an image file.');
         input.value = '';
         return;
     }
-
-    // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
         alert('File size should be less than 10MB.');
         input.value = '';
         return;
     }
 
-    // Store the file for upload
-    photoChanges[id] = {
-        file: file,
-        fileName: file.name
-    };
+    // Sanity check: is Cropper library present?
+    if (typeof Cropper === 'undefined') {
+        alert('Cropper library not loaded. Please check that cropper.min.js is included.');
+        input.value = '';
+        return;
+    }
 
-    // Show preview
-    const reader = new FileReader();
-    reader.onload = function(e) {
+    try {
+        const croppedBlob = await openCropperForFile(file);
+        const croppedFile = new File(
+            [croppedBlob],
+            file.name.replace(/\.[^/.]+$/, '') + '_cropped.jpg',
+            { type: 'image/jpeg', lastModified: Date.now() }
+        );
+
+        // Store the CROPPED file for upload
+        photoChanges[id] = {
+            file: croppedFile,
+            fileName: croppedFile.name
+        };
+
+        // Show cropped preview in the row
+        const previewUrl = URL.createObjectURL(croppedFile);
         const row = input.closest('tr');
         const previewCell = row.querySelector('td:nth-child(5)');
-        previewCell.innerHTML = `<img src="${e.target.result}" alt="Preview" class="photo-preview">`;
-        
+        previewCell.innerHTML = `<img src="${previewUrl}" alt="Preview" class="photo-preview">`;
+
         // Update status
         const statusCell = row.querySelector('td:nth-child(7) .photo-status');
         statusCell.className = 'photo-status pending';
         statusCell.textContent = 'Pending Upload';
-        
+
         // Show save button
         document.getElementById('btnSavePhoto').style.display = 'block';
-    };
-    reader.readAsDataURL(file);
 
-    console.log(`Photo selected for ID ${id}: ${file.name}`);
+        console.log(`Photo cropped for ID ${id}: ${croppedFile.name}`);
+    } catch (err) {
+        // User cancelled or cropper failed
+        input.value = '';
+        console.log('Cropper cancelled or failed:', err.message);
+    }
 }
 
-// Resize image to 300x450 before upload
-function resizeImage(file, targetWidth, targetHeight) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        
-        reader.onload = function(event) {
-            const img = new Image();
-            img.onload = function() {
-                // Create canvas with target dimensions
-                const canvas = document.createElement('canvas');
-                canvas.width = targetWidth;
-                canvas.height = targetHeight;
-                const ctx = canvas.getContext('2d');
-                
-                // Clear canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Draw image with proper aspect ratio (cover mode - 300x450)
-                const aspectRatio = img.width / img.height;
-                const targetAspectRatio = targetWidth / targetHeight;
-                
-                let sourceX = 0, sourceY = 0;
-                let sourceWidth = img.width, sourceHeight = img.height;
-                
-                // Calculate cropping to maintain aspect ratio
-                if (aspectRatio > targetAspectRatio) {
-                    // Image is wider than target - crop width
-                    sourceWidth = img.height * targetAspectRatio;
-                    sourceX = (img.width - sourceWidth) / 2;
-                } else if (aspectRatio < targetAspectRatio) {
-                    // Image is taller than target - crop height
-                    sourceHeight = img.width / targetAspectRatio;
-                    sourceY = (img.height - sourceHeight) / 2;
-                }
-                
-                ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, targetWidth, targetHeight);
-                
-                // Convert to blob
-                canvas.toBlob(function(blob) {
-                    if (!blob) {
-                        reject(new Error('Failed to resize image'));
-                        return;
-                    }
-                    
-                    // Create a new file from the blob
-                    const resizedFile = new File([blob], file.name, {
-                        type: 'image/jpeg',
-                        lastModified: Date.now()
-                    });
-                    
-                    resolve(resizedFile);
-                }, 'image/jpeg', 0.9);
-            };
-            img.onerror = function() {
-                reject(new Error('Failed to load image for resizing'));
-            };
-            img.src = event.target.result;
-        };
-        reader.onerror = function() {
-            reject(new Error('Failed to read file'));
-        };
-    });
+// ============================================================================
+// CLOUDINARY UPLOAD
+// ============================================================================
+async function uploadToCloudinary(file) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'AdminFileUploadPreset');
+        // Cropping is handled client-side; no Cloudinary transform params needed.
+
+        const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+            { method: 'POST', body: formData }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Cloudinary upload failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.secure_url;
+    } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        throw error;
+    }
 }
 
-// Save photos to Cloudinary and Supabase
+// ============================================================================
+// SAVE PHOTOS
+// ============================================================================
 async function savePhoto() {
     const pendingUploads = Object.keys(photoChanges);
-    
+
     if (pendingUploads.length === 0) {
         alert('No photos to upload.');
         return;
     }
 
-    // Confirm upload
     if (!confirm(`Upload ${pendingUploads.length} photo(s)?`)) {
         return;
     }
 
-    // Disable save button to prevent multiple clicks
     const saveBtn = document.getElementById('btnSavePhoto');
     saveBtn.disabled = true;
     saveBtn.textContent = 'Uploading...';
@@ -1224,18 +1247,11 @@ async function savePhoto() {
             if (!change || !change.file) continue;
 
             try {
-                // Resize image to 300x450
-                const resizedFile = await resizeImage(change.file, 300, 450);
-                
-                // Upload to Cloudinary
-                const cloudinaryUrl = await uploadToCloudinary(resizedFile);
-                
+                // File is already cropped to 300x400 by the cropper.
+                const cloudinaryUrl = await uploadToCloudinary(change.file);
+
                 if (cloudinaryUrl) {
-                    // Get the current PhotoUrl to keep it
-                    const currentPerson = photoData.find(p => p.id === parseInt(id));
-                    const currentPhotoUrl = currentPerson ? currentPerson.PhotoUrl : null;
-                    
-                    // Update Supabase with the new PhotoUrl (keep other fields unchanged)
+                    // Update Supabase with new PhotoUrl (other fields unchanged)
                     const { error: updateError } = await supabaseClient
                         .from('HumanResourceTable')
                         .update({ PhotoUrl: cloudinaryUrl })
@@ -1246,24 +1262,23 @@ async function savePhoto() {
                         uploadSuccess = false;
                     } else {
                         uploadedCount++;
-                        
+
                         // Update local photoData
                         const personIndex = photoData.findIndex(p => p.id === parseInt(id));
                         if (personIndex !== -1) {
                             photoData[personIndex].PhotoUrl = cloudinaryUrl;
                         }
-                        
-                        // Remove from pending changes
+
+                        // Remove from pending
                         delete photoChanges[id];
-                        
-                        // Update the row status
+
+                        // Update row UI
                         const row = document.querySelector(`#photoInput_${id}`).closest('tr');
                         if (row) {
                             const statusCell = row.querySelector('td:nth-child(7) .photo-status');
                             statusCell.className = 'photo-status uploaded';
                             statusCell.textContent = 'Uploaded';
-                            
-                            // Update preview
+
                             const previewCell = row.querySelector('td:nth-child(5)');
                             previewCell.innerHTML = `<img src="${cloudinaryUrl}" alt="Uploaded" class="photo-preview">`;
                         }
@@ -1272,8 +1287,7 @@ async function savePhoto() {
             } catch (error) {
                 console.error(`Error uploading photo for ID ${id}:`, error);
                 uploadSuccess = false;
-                
-                // Update status to error
+
                 const row = document.querySelector(`#photoInput_${id}`).closest('tr');
                 if (row) {
                     const statusCell = row.querySelector('td:nth-child(7) .photo-status');
@@ -1283,12 +1297,10 @@ async function savePhoto() {
             }
         }
 
-        // Show success message
         if (uploadedCount > 0) {
             alert(`${uploadedCount} photo(s) uploaded successfully!`);
         }
 
-        // Hide save button if no more pending uploads
         if (Object.keys(photoChanges).length === 0) {
             document.getElementById('btnSavePhoto').style.display = 'none';
         }
@@ -1297,81 +1309,35 @@ async function savePhoto() {
         console.error('Error in savePhoto:', error);
         alert('Error uploading photos. Please try again.');
     } finally {
-        // Re-enable save button
         saveBtn.disabled = false;
         saveBtn.textContent = 'Save Photos';
     }
 }
 
-// Upload image to Cloudinary
-async function uploadToCloudinary(file) {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'AdminFileUploadPreset');
-        formData.append('cloud_name', 'dcdwpdnyp');
-        // Let Cloudinary handle the resizing with transformations
-        formData.append('width', '300');
-        formData.append('height', '450');
-        formData.append('crop', 'fill');
-
-        const response = await fetch(
-            'https://api.cloudinary.com/v1_1/dcdwpdnyp/image/upload',
-            {
-                method: 'POST',
-                body: formData
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(`Cloudinary upload failed: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data.secure_url;
-
-    } catch (error) {
-        console.error('Error uploading to Cloudinary:', error);
-        throw error;
-    }
-}
-
-// Helper function to extract public_id from Cloudinary URL
+// ============================================================================
+// DELETE PERSON (also removes Cloudinary asset)
+// ============================================================================
 function extractPublicIdFromUrl(photoUrl) {
     try {
-        // Example URL: https://res.cloudinary.com/dcdwpdnyp/image/upload/v1234567890/folder/filename.jpg
-        // Expected public_id: folder/filename (without extension)
-        
-        // Parse the URL
         const url = new URL(photoUrl);
         const pathParts = url.pathname.split('/');
-        
-        // Find the index of 'upload' in the path
         const uploadIndex = pathParts.indexOf('upload');
         if (uploadIndex === -1) {
             console.error('Invalid Cloudinary URL format: "upload" not found in path');
             return null;
         }
-        
-        // Get the version part (starts with 'v' and numbers)
         const versionIndex = uploadIndex + 1;
         if (versionIndex >= pathParts.length) {
             console.error('Invalid Cloudinary URL format: No version found');
             return null;
         }
-        
-        // Get the public_id parts (everything after version)
         const publicIdParts = pathParts.slice(versionIndex + 1);
         if (publicIdParts.length === 0) {
             console.error('Invalid Cloudinary URL format: No public_id found');
             return null;
         }
-        
-        // Join the parts and remove file extension
         let publicId = publicIdParts.join('/');
-        // Remove file extension (e.g., .jpg, .png, .jpeg)
         publicId = publicId.replace(/\.[^/.]+$/, '');
-        
         return publicId;
     } catch (error) {
         console.error('Error extracting public_id from URL:', error);
@@ -1379,16 +1345,13 @@ function extractPublicIdFromUrl(photoUrl) {
     }
 }
 
-// Delete person - removes photo from Cloudinary and record from Supabase
 async function deletePerson(id) {
-    // Find the person in the data
     const person = photoData.find(p => p.id === id);
     if (!person) {
         alert('Person not found!');
         return;
     }
 
-    // Confirm deletion
     const confirmDelete = confirm(
         `Are you sure you want to delete "${person.Name}"?\n\n` +
         `Work Area: ${person.WorkArea}\n` +
@@ -1398,58 +1361,43 @@ async function deletePerson(id) {
 
     if (!confirmDelete) return;
 
-    // Disable the delete button
     deletingIds.add(id);
     renderPhotoTable(photoData);
-    
+
     try {
-        // Step 1: Extract public_id from Cloudinary URL
         let publicIds = [];
-        
+
         if (person.PhotoUrl && person.PhotoUrl.trim() !== '') {
             try {
-                // Extract public_id from Cloudinary URL
                 const publicId = extractPublicIdFromUrl(person.PhotoUrl);
-                if (publicId) {
-                    publicIds = [publicId];
-                }
+                if (publicId) publicIds = [publicId];
             } catch (extractError) {
                 console.error('Error extracting public_id:', extractError);
-                // Continue with deletion even if extraction fails
             }
         }
 
-        // Step 2: Delete photo from Cloudinary using Edge Function
         let photoDeleted = false;
-        
+
         if (publicIds.length > 0) {
             try {
-                // Call the Edge Function with the correct format (publicIds array)
                 const { data: edgeData, error: edgeError } = await supabaseClient.functions.invoke(
                     'delete-student-photo',
-                    {
-                        body: { 
-                            publicIds: publicIds // Send as array as expected by the function
-                        }
-                    }
+                    { body: { publicIds: publicIds } }
                 );
 
                 if (edgeError) {
                     console.error('Error calling delete-student-photo edge function:', edgeError);
-                    // Continue with deletion even if edge function fails
                 } else {
                     photoDeleted = true;
                     console.log('Photo deleted from Cloudinary successfully:', edgeData);
                 }
             } catch (edgeError) {
                 console.error('Edge function error:', edgeError);
-                // Continue with deletion even if edge function fails
             }
         } else {
             console.log('No photo to delete or could not extract public_id');
         }
 
-        // Step 3: Delete the record from Supabase
         const { error: deleteError } = await supabaseClient
             .from('HumanResourceTable')
             .delete()
@@ -1459,19 +1407,15 @@ async function deletePerson(id) {
             throw new Error(`Failed to delete record: ${deleteError.message}`);
         }
 
-        // Step 4: Remove from local data
         photoData = photoData.filter(item => item.id !== id);
         deletingIds.delete(id);
-        
-        // Remove from pending changes if any
+
         if (photoChanges[id]) {
             delete photoChanges[id];
         }
 
-        // Re-render the table
         renderPhotoTable(photoData);
 
-        // Hide save button if no pending changes
         if (Object.keys(photoChanges).length === 0) {
             document.getElementById('btnSavePhoto').style.display = 'none';
         }
@@ -1484,28 +1428,16 @@ async function deletePerson(id) {
     } catch (error) {
         console.error('Error deleting person:', error);
         alert(`Error deleting person: ${error.message}`);
-        
-        // Re-enable the delete button
+
         deletingIds.delete(id);
         renderPhotoTable(photoData);
     }
 }
 
-// Function to show photo container
-function showPhotoContainer() {
-    showContainer('EditPhotoContainer');
-    setTimeout(function() {
-        loadPhotoData();
-    }, 100);
-}
-
-// Update the saveTeacherData function to preserve PhotoUrl
-
-
-// Update saveSMCData to preserve PhotoUrl
-
-
+// ============================================================================
+// BOOT
+// ============================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    hideAllContainers();    
-    loadAllData();    
+    hideAllContainers();
+    loadAllData();
 });

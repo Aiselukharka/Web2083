@@ -1,175 +1,832 @@
 @font-face {
     font-family: 'MySanskritFont';
-    src: url('../Sanskrit-2003.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+    src: url('../../Sanskrit-2003.ttf') format('truetype');
+    font-weight: normal; font-style: normal;
 }
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 html{
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;  
+    width: 100%; height: auto;
+    display: flex; flex-direction: column; align-items: center;
     font-size: 62.5%;
 }
-body { 
-    width: 100%;
-    height: auto;
-    font-family: Arial, sans-serif; 
-    min-height: 100%;
+body {
+    width: 100%; height: auto;
     font-family: 'Arial', 'MySanskritFont', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;  
+    min-height: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    font-size: 1.8rem;
+    color: #222;
 }
 
 #MainBody{
-    width: 96%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #ffaaaa;
-    min-height: 100%;
-    margin: 0 auto;    
-    padding: 0 clamp(0.4rem, 0.6rem, 1rem);   
+    width: 96%; height: auto;
+    display: flex; flex-direction: column; align-items: center;
+    background-color: #ffaaaa; min-height: 100%;
+    margin: 0 auto; padding: 0 clamp(0.6rem, 0.8rem, 1.2rem);
 }
 
+/* ============================================================================
+   TOP NAVIGATION
+   ============================================================================ */
 #PageNaviggationBox {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    display: flex; flex-direction: row; justify-content: space-evenly;
+    align-items: center;
     background: #000000;
-    padding: clamp(0.3rem, 1rem, 1.6rem);
+    padding: clamp(0.6rem, 1.2rem, 1.6rem);
     text-align: center;
+    gap: 8px;
 }
-#LogoBox{
-    width: 6%;
-    height: auto;     
-}
-#LogoBox img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+#LogoBox{ width: 6%; height: auto; }
+#LogoBox img{ width: 100%; height: 100%; object-fit: contain; }
 #PageNavigationSelect{
     width: 50%;
-    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-size: 2rem;
     font-weight: bold;
-    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    padding: clamp(0.6rem, 1rem, 1.2rem);
     border: 4px solid #000000;
+    color: #000;
 }
 #PageNaviggationBox button{
     width: 20%;
-    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    padding: clamp(0.6rem, 1rem, 1.2rem) 0;
     background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
     color: #ffffff;
-    border-radius: 4vw;  
-    font-size: clamp(1rem, 2vw, 3rem);  
+    border-radius: 4vw;
+    font-size: 1.8rem;
     font-weight: bold;
     cursor: pointer;
+    border: none;
 }
-#pageNaviggationBox button:hover{
+#PageNaviggationBox button:hover{
     background: linear-gradient(180deg, #009900, #00aa00, #009900);
     color: #ffff00;
 }
+
 #DateBox{
     width: 100%;
     text-align: center;
-    font-size: clamp(1.2rem, 3vw, 2.5rem);
+    font-size: 2rem;
     font-weight: 800;
     color: #ffff00;
-    padding: clamp(0.3rem, 1rem, 1.6rem);   
-    background: linear-gradient(180deg, #111111, #333333); 
+    padding: clamp(0.4rem, 0.8rem, 1.2rem);
+    background: linear-gradient(180deg, #111111, #333333);
 }
+
 #UtilityBox{
     width: 100%;
-    height: auto;
     background: linear-gradient(180deg, #333333, #555555);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    display: flex; flex-direction: row; align-items: center; justify-content: space-evenly;
+    padding: clamp(0.6rem, 1rem, 1.4rem) 0;
+    gap: 8px;
 }
 #EditNavigationSelect, #AdminToolsSelect{
     width: 48%;
-    font-size: clamp(1.2rem, 2vw, 3rem);
+    font-size: 1.9rem;
     font-weight: bold;
-    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    padding: clamp(0.5rem, 0.9rem, 1.2rem) 0;
     border: 4px solid #000000;
+    color: #000;
 }
 
+/* ============================================================================
+   TOGGLE (Internal / External)
+   ============================================================================ */
+#HelpingHandToggleBox {
+    width: 100%;
+    display: flex; justify-content: center; align-items: center;
+    gap: clamp(0.6rem, 1.2vw, 1.4rem);
+    padding: clamp(0.6rem, 1.2vw, 1.4rem) 0;
+    background: linear-gradient(180deg, #222, #444);
+    flex-wrap: wrap;
+}
+.HHButton {
+    /* Base flex: allow wide buttons side by side on desktop */
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 240px;
+    max-width: 460px;
+    padding: clamp(0.8rem, 1.4vw, 1.4rem) clamp(1rem, 1.6vw, 1.8rem);
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(180deg, #0066cc, #0088ee, #0066cc);
+    border: 3px solid #000000;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+    line-height: 1.2;
+    height: auto;
+}
+.HHButton:hover { background: linear-gradient(180deg, #004499, #0066cc, #004499); color: #ffff00; }
+.HHButton.active {
+    background: linear-gradient(180deg, #009900, #00cc00, #009900);
+    border-color: #00ff00;
+    box-shadow: 0 0 12px #00ff00;
+}
+
+/* ============================================================================
+   SECTIONS
+   ============================================================================ */
+.HHSection {
+    width: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    padding: clamp(0.8rem, 1.4vw, 1.6rem) 0;
+}
+.HHSectionHead {
+    width: 96%;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #0000aa;
+    text-shadow: 1px 1px 2px #fff;
+    padding: clamp(0.8rem, 1.2vw, 1.2rem) 0;
+}
+.HHToolbar {
+    width: 96%;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+    padding: clamp(0.6rem, 1vw, 1rem) 0;
+}
+
+.HHAddBtn, .HHSaveBtn, .HHCancelBtn {
+    padding: clamp(0.7rem, 1.2vw, 1.2rem) clamp(1.2rem, 2vw, 2rem);
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    border: 3px solid #000000;
+    border-radius: 0.9rem;
+    cursor: pointer;
+    line-height: 1.2;
+    height: auto;
+}
+.HHAddBtn   { background: linear-gradient(180deg, #000066, #000099, #000066); }
+.HHAddBtn:hover { color: #ffff00; }
+.HHSaveBtn  { background: linear-gradient(180deg, #006600, #009900, #006600); }
+.HHSaveBtn:hover { color: #ffff00; }
+.HHSaveBtn:disabled { background: linear-gradient(180deg, #777, #999, #777); cursor: wait; }
+.HHCancelBtn { background: linear-gradient(180deg, #880000, #aa0000, #880000); }
+.HHCancelBtn:hover { color: #ffff00; }
+.HHStatus { font-size: 1.7rem; font-weight: bold; color: #a60; }
+
+/* ============================================================================
+   LIST
+   ============================================================================ */
+.HHList {
+    width: 96%;
+    display: flex; flex-direction: column; gap: 12px;
+    margin-bottom: 16px;
+}
+.HHListRow {
+    display: flex; align-items: center; gap: 16px;
+    background: #ffffff;
+    border: 2px solid #555;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+.HHListLogoWrap {
+    width: 80px; height: 80px;
+    aspect-ratio: 1 / 1;
+    flex: 0 0 auto;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.HHListLogo {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+}
+.HHListLogoEmpty {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; color: #888;
+}
+.HHListInfo { flex: 1; min-width: 0; }
+.HHListName {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #111;
+    line-height: 1.3;
+}
+.HHListMeta {
+    font-size: 1.7rem;
+    color: #444;
+    margin-top: 4px;
+}
+.HHBadge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.HHBadgeActive   { background: #c8e6c9; color: #1b5e20; }
+.HHBadgeInactive { background: #ffcdd2; color: #b71c1c; }
+.HHBadgeFeatured { background: #fff9c4; color: #f57f17; }
+.HHListActions { display: flex; gap: 10px; }
+.HHIconBtn {
+    width: 46px; height: 46px;
+    border-radius: 10px;
+    border: 1px solid #888;
+    background: #f4f4f4;
+    cursor: pointer;
+    font-size: 1.9rem;
+    line-height: 1;
+}
+.HHIconBtn:hover { background: #e0e0e0; }
+.HHIconBtnDanger { color: #a00; }
+.HHIconBtnDanger:hover { background: #ffdddd; }
+
+/* ============================================================================
+   EDITOR
+   ============================================================================ */
+.HHEditorWrap { width: 96%; margin-top: 10px; }
+.HHEditor {
+    background: #fafafa;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.HHEditorHead {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #000066;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 16px;
+}
+.HHEditorClose {
+    background: #aa0000; color: #fff;
+    border: none; border-radius: 50%;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    font-size: 1.8rem;
+    line-height: 1;
+}
+.HHEditorBody { display: flex; flex-direction: column; gap: 16px; }
+
+.HHFieldRow { display: flex; flex-wrap: wrap; gap: 16px; }
+.HHField {
+    flex: 1 1 240px; min-width: 0;
+    display: flex; flex-direction: column; gap: 6px;
+}
+.HHFieldSmall { flex: 0 0 180px; }
+.HHFieldFull { width: 100%; }
+.HHField label {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+}
+.HHField input[type="text"],
+.HHField input[type="number"],
+.HHField select,
+.HHField textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1.9rem;
+    border: 1px solid #888;
+    border-radius: 6px;
+    font-family: inherit;
+    background: #ffffff;
+    color: #111;
+    line-height: 1.4;
+}
+.HHField textarea { resize: vertical; min-height: 110px; }
+
+.HHLogoRow { align-items: flex-end; }
+.HHLogoPreviewCol { flex: 0 0 180px; }
+.HHLogoPreviewBox {
+    width: 160px; height: 160px;
+    aspect-ratio: 1 / 1;
+    border: 2px dashed #888;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    background: #ffffff; overflow: hidden;
+}
+.HHLogoPreviewBox img {
+    width: 100%; height: 100%;
+    object-fit: contain; display: block;
+}
+.HHLogoPreviewHint { color: #888; font-style: italic; font-size: 1.7rem; }
+.HHLogoUploadCol { justify-content: flex-end; }
+.HHGhostBtn {
+    padding: 12px 20px;
+    background: #f0f0f0;
+    border: 1px solid #666;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1.2;
+    height: auto;
+}
+.HHGhostBtn:hover { background: #e0e0e0; }
+.HHLogoFileName {
+    font-size: 1.6rem;
+    color: #666;
+    margin-top: 8px;
+    max-width: 320px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ============================================================================
+   CHILD BLOCKS
+   ============================================================================ */
+.HHChildBlock {
+    background: #ffffff;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    padding: 14px;
+}
+.HHChildHead {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000066;
+    margin-bottom: 12px;
+}
+.HHChildRows { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+.HHChildRow {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    padding: 12px; background: #f5f5f5; border-radius: 8px;
+}
+.HHChildCell { flex: 1 1 180px; min-width: 0; }
+.HHChildRole { flex: 0 0 200px; }
+.HHChildPerson { flex: 2 1 300px; }
+.HHChildYear { flex: 0 0 120px; }
+.HHChildFlag { flex: 0 0 140px; font-size: 1.8rem; }
+.HHChildNotes { flex: 2 1 220px; }
+.HHChildTitle { flex: 1 1 220px; }
+.HHChildDesc { flex: 2 1 280px; }
+.HHChildRow input[type="text"],
+.HHChildRow input[type="number"],
+.HHChildRow select {
+    width: 100%;
+    padding: 11px 12px;
+    font-size: 1.8rem;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-family: inherit;
+    line-height: 1.3;
+}
+.HHPickerBtn {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 1.8rem;
+    background: #ffffff;
+    border: 1px solid #666;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    line-height: 1.3;
+}
+.HHPickerBtn:hover { background: #eef4ff; }
+.HHChildRemove {
+    flex: 0 0 auto;
+    background: #cc0000; color: #fff;
+    border: none; border-radius: 6px;
+    width: 40px; height: 40px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.HHChildRemove:hover { background: #a00000; }
+
+.HHEditorActions {
+    display: flex; justify-content: flex-end; gap: 14px;
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid #ccc;
+}
+
+.HHEmpty {
+    text-align: center;
+    padding: 26px;
+    color: #666;
+    font-style: italic;
+    background: #ffffff;
+    border: 1px dashed #aaa;
+    border-radius: 10px;
+    font-size: 1.9rem;
+}
+
+/* ============================================================================
+   MODALS
+   ============================================================================ */
+.HHModalOverlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 99999; padding: 14px;
+}
+.HHModal {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 90%; max-width: 620px; max-height: 90vh;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+}
+.HHModalHead {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px;
+    background: #333; color: #ffffff;
+    font-size: 2rem;
+    font-weight: bold;
+}
+.HHModalClose {
+    background: #aa0000; color: #fff;
+    border: none; border-radius: 50%;
+    width: 38px; height: 38px;
+    cursor: pointer;
+    font-size: 1.8rem;
+    line-height: 1;
+}
+.HHModalBody { padding: 16px; overflow-y: auto; }
+.HHModalFilters { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.HHModalFilters select,
+.HHModalFilters input {
+    flex: 1 1 200px;
+    padding: 12px;
+    border: 1px solid #888;
+    border-radius: 6px;
+    font-size: 1.9rem;
+    line-height: 1.3;
+}
+.HHModalResults { max-height: 360px; overflow-y: auto; }
+.HHModalResultRow {
+    padding: 12px 14px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    border-radius: 6px;
+}
+.HHModalResultRow:hover { background: #eef4ff; }
+.HHModalResultName {
+    font-size: 1.9rem;
+    font-weight: bold;
+    color: #222;
+}
+.HHModalResultMeta {
+    font-size: 1.7rem;
+    color: #555;
+    margin-top: 2px;
+}
+
+/* ============================================================================
+   CROPPER
+   ============================================================================ */
+.HHCropperModalInner { max-width: 680px; }
+.HHCropperStage {
+    position: relative; width: 100%;
+    min-height: 360px; max-height: 62vh;
+    background: #111;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.HHCropperStage img { display: block; max-width: 100%; max-height: 100%; }
+.HHCropperStage .cropper-point {
+    width: 14px !important; height: 14px !important;
+    background-color: #00ff88 !important; opacity: 1 !important;
+}
+.HHCropperStage .cropper-line { background-color: #00ff88 !important; }
+.HHCropperStage .cropper-modal { opacity: 0.65 !important; }
+.HHCropperActions {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 14px;
+    border-top: 1px solid #ddd;
+}
+.HHCropperActions button { flex: 1; font-size: 1.9rem; padding: 12px; }
+
+/* ============================================================================
+   VIEW MODAL
+   ============================================================================ */
+.HHViewModal { max-width: 900px; }
+.HHViewModalBody { padding: 20px; }
+.HHViewPrintable { background: #ffffff; padding: 6px 0; }
+
+.HHViewSchoolHeader {
+    text-align: center;
+    padding: 10px 0 16px;
+    margin-bottom: 16px;
+    border-bottom: 3px solid #8B1A1A;
+}
+.HHViewSchoolName {
+    font-size: 2.6rem;
+    font-weight: bold;
+    color: #000066;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+}
+.HHViewSchoolAddress {
+    font-size: 1.9rem;
+    color: #444;
+    margin-top: 4px;
+}
+.HHViewSchoolTitle {
+    font-size: 1.7rem;
+    color: #8B1A1A;
+    letter-spacing: 3px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.HHViewTop {
+    display: flex; gap: 18px; align-items: flex-start;
+    padding-bottom: 16px; margin-bottom: 16px;
+    border-bottom: 1px solid #ddd;
+}
+.HHViewLogo {
+    width: 150px; height: 150px;
+    aspect-ratio: 1 / 1;
+    flex: 0 0 auto;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.HHViewLogo img {
+    width: 100%; height: 100%;
+    object-fit: contain; display: block;
+}
+.HHViewTopText { flex: 1; min-width: 0; }
+.HHViewTitle {
+    font-size: 2.3rem;
+    font-weight: bold;
+    color: #000066;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+.HHViewMeta {
+    font-size: 1.9rem;
+    color: #333;
+    margin-top: 6px;
+}
+.HHViewSection { margin-top: 18px; }
+.HHViewSectionHead {
+    font-size: 2.1rem;
+    font-weight: bold;
+    color: #8B1A1A;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #eee;
+}
+.HHViewText {
+    font-size: 1.9rem;
+    line-height: 1.6;
+    color: #222;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.HHViewTableWrap { overflow-x: auto; }
+.HHViewTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.9rem;
+}
+.HHViewTable th,
+.HHViewTable td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.4;
+}
+.HHViewTable th { background: #f2f2f2; font-weight: bold; }
+.HHViewTable tr:nth-child(even) td { background: #fafafa; }
+
+.HHViewActions {
+    display: flex; justify-content: flex-end; gap: 14px;
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid #ccc;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
 #FooterPlace{
     width: 100%;
     background: linear-gradient(135deg, #333, #555);
     padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin-top: 20px;
 }
-#PublicFooterBox{
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
+#PublicFooterBox{ width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 #FooterPublicHead{
-    width: 100%;
-    text-align: center;
-    font-size: 28px;
-    color: #00ffff;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px #fff;
-    border-bottom: 2px solid #00ffff;
-    padding: 20px;
-    margin-bottom: 20px;
+    width: 100%; text-align: center; font-size: 28px;
+    color: #00ffff; font-weight: bold; text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #00ffff; padding: 20px; margin-bottom: 20px;
 }
-#PublicFooterBox a{
-    color: #ff0;
-    font-style: italic;
-    font-size: 20px;
-    font-weight: bold;
-    text-decoration: none;
-    text-align: center;
-}
-#PublicFooterBox a:hover{
-    color: #0f0;
-    text-decoration: underline;
-}
-#PrivateFooterBox{
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
+#PublicFooterBox a{ color: #ff0; font-style: italic; font-size: 20px; font-weight: bold; text-decoration: none; text-align: center; }
+#PublicFooterBox a:hover{ color: #0f0; text-decoration: underline; }
+#PrivateFooterBox{ width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 #FooterPrivateHead{
-    width: 100%;
-    text-align: center;
-    font-size: 28px;
-    color: #ff00ff;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px #fff;
-    border-bottom: 2px solid #ff00ff;
-    padding: 20px;
-    margin-bottom: 20px;
+    width: 100%; text-align: center; font-size: 28px;
+    color: #ff00ff; font-weight: bold; text-shadow: 1px 1px 2px #fff;
+    border-bottom: 2px solid #ff00ff; padding: 20px; margin-bottom: 20px;
 }
-#PrivateFooterBox a{
-    color: #0ff;
-    font-style: italic;
-    font-size: 20px;
-    font-weight: bold;
-    text-decoration: none;
-    text-align: center;
+#PrivateFooterBox a{ color: #0ff; font-style: italic; font-size: 20px; font-weight: bold; text-decoration: none; text-align: center; }
+#PrivateFooterBox a:hover{ color: #0f0; text-decoration: underline; }
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+/* --- Tablets & small laptops (≤ 900px) --- */
+@media (max-width: 900px) {
+    #MainBody { width: 98%; padding: 0 6px; }
+    #LogoBox { width: 9%; }
+    #PageNavigationSelect { width: 48%; font-size: 1.9rem; padding: 10px; border-width: 3px; }
+    #PageNaviggationBox button { width: 21%; font-size: 1.7rem; padding: 10px 6px; border-radius: 1.4rem; }
+    #EditNavigationSelect, #AdminToolsSelect { font-size: 1.8rem; padding: 8px 0; border-width: 3px; }
+    .HHButton { font-size: 1.7rem; }
+    .HHSectionHead { font-size: 2rem; }
+    .HHAddBtn, .HHSaveBtn, .HHCancelBtn { font-size: 1.7rem; }
+    #PublicFooterBox, #PrivateFooterBox { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    #FooterPublicHead, #FooterPrivateHead { font-size: 22px; padding: 14px; margin-bottom: 14px; }
+    #PublicFooterBox a, #PrivateFooterBox a { font-size: 16px; }
 }
-#PrivateFooterBox a:hover{
-    color: #0f0;
-    text-decoration: underline;
+
+/* --- Phones (≤ 640px) --- */
+@media (max-width: 640px) {
+    #MainBody { width: 100%; padding: 0 6px; }
+
+    /* Top nav: four stacked rows */
+    #PageNaviggationBox {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 8px;
+    }
+    #LogoBox {
+        width: 100%; display: flex; justify-content: center; order: 1;
+    }
+    #LogoBox img { width: 76px; height: 76px; }
+    #PageNaviggationBox button {
+        width: 100%; order: 2;
+        font-size: 1.7rem;
+        padding: 12px 8px;
+        border-radius: 0.9rem;
+        border-width: 2px;
+    }
+    #PageNavigationSelect {
+        width: 100%; order: 3;
+        font-size: 1.7rem;
+        padding: 10px;
+        border-width: 2px;
+    }
+    #btnCalendar { order: 4; }
+
+    #DateBox { font-size: 1.7rem; padding: 8px; }
+
+    #UtilityBox { flex-direction: column; gap: 10px; padding: 12px 6px; }
+    #EditNavigationSelect, #AdminToolsSelect {
+        width: 96%;
+        font-size: 1.7rem;
+        padding: 10px;
+        border-width: 2px;
+    }
+
+    /* Toggle: stack, and importantly NEUTRALIZE the base flex so height is not controlled by flex-basis */
+    #HelpingHandToggleBox {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 6px;
+    }
+    .HHButton {
+        /* The fix: override base `flex` so `min-width: 240px` is not treated as min-height */
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        height: auto;
+        font-size: 1.7rem;
+        border-radius: 0.9rem;
+        padding: 10px 12px;
+        line-height: 1.2;
+    }
+
+    .HHSectionHead { font-size: 1.9rem; }
+    .HHToolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .HHAddBtn, .HHSaveBtn, .HHCancelBtn {
+        width: 100%;
+        font-size: 1.7rem;
+        padding: 12px 8px;
+        border-radius: 0.9rem;
+    }
+    .HHStatus { text-align: center; font-size: 1.6rem; }
+
+    /* List */
+    .HHListRow {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        text-align: center;
+        padding: 14px 12px;
+    }
+    .HHListLogoWrap { align-self: center; width: 88px; height: 88px; }
+    .HHListName { font-size: 1.9rem; }
+    .HHListMeta { font-size: 1.6rem; }
+    .HHListActions { justify-content: center; }
+    .HHIconBtn { width: 44px; height: 44px; font-size: 1.8rem; }
+
+    /* Editor */
+    .HHFieldRow { flex-direction: column; gap: 12px; }
+    .HHFieldSmall, .HHLogoPreviewCol { flex: 1 1 100%; }
+    .HHLogoPreviewBox { margin: 0 auto; width: 150px; height: 150px; }
+    .HHField label { font-size: 1.7rem; }
+    .HHField input,
+    .HHField select,
+    .HHField textarea { font-size: 1.8rem; }
+
+    /* Child rows */
+    .HHChildRow {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 10px;
+    }
+    .HHChildCell,
+    .HHChildRole,
+    .HHChildPerson,
+    .HHChildYear,
+    .HHChildFlag,
+    .HHChildNotes,
+    .HHChildTitle,
+    .HHChildDesc { flex: 1 1 100%; }
+    .HHChildRemove { align-self: flex-end; }
+    .HHChildHead { font-size: 1.8rem; }
+    .HHChildRow input,
+    .HHChildRow select,
+    .HHPickerBtn { font-size: 1.7rem; }
+
+    /* View modal */
+    .HHViewTop { flex-direction: column; align-items: center; text-align: center; }
+    .HHViewLogo { align-self: center; width: 140px; height: 140px; }
+    .HHViewTitle { font-size: 2rem; }
+    .HHViewSchoolName { font-size: 2.2rem; }
+    .HHViewSchoolAddress { font-size: 1.7rem; }
+    .HHViewSectionHead { font-size: 1.8rem; }
+    .HHViewText, .HHViewTable { font-size: 1.7rem; }
+    .HHViewMeta { font-size: 1.7rem; }
+
+    /* Modals */
+    .HHModalHead { font-size: 1.8rem; padding: 12px 16px; }
+    .HHModalFilters select,
+    .HHModalFilters input { font-size: 1.7rem; padding: 10px; }
+    .HHModalResultName { font-size: 1.8rem; }
+    .HHModalResultMeta { font-size: 1.6rem; }
+
+    /* Footer */
+    #FooterPlace { padding: 20px 14px; }
+    #PublicFooterBox, #PrivateFooterBox { grid-template-columns: 1fr; gap: 10px; }
+    #FooterPublicHead, #FooterPrivateHead { font-size: 20px; padding: 12px; margin-bottom: 12px; }
+    #PublicFooterBox a, #PrivateFooterBox a { font-size: 16px; }
+}
+
+/* --- Small phones (≤ 420px) --- */
+@media (max-width: 420px) {
+    #MainBody { padding: 0 4px; }
+    #LogoBox img { width: 68px; height: 68px; }
+
+    #PageNaviggationBox button,
+    #PageNavigationSelect { font-size: 1.6rem; padding: 10px 6px; }
+
+    #EditNavigationSelect,
+    #AdminToolsSelect { font-size: 1.6rem; padding: 8px; width: 98%; }
+
+    /* Toggle: same fix as 640px plus smaller text */
+    .HHButton {
+        flex: 0 0 auto;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        font-size: 1.6rem;
+        padding: 9px 10px;
+    }
+    .HHAddBtn, .HHSaveBtn, .HHCancelBtn {
+        font-size: 1.6rem;
+        padding: 10px 6px;
+    }
+    .HHSectionHead { font-size: 1.8rem; }
+    .HHListName { font-size: 1.8rem; }
+    .HHListMeta { font-size: 1.5rem; }
+    .HHIconBtn { width: 42px; height: 42px; font-size: 1.7rem; }
+
+    .HHField label { font-size: 1.6rem; }
+    .HHField input,
+    .HHField select,
+    .HHField textarea { font-size: 1.7rem; padding: 10px 12px; }
+
+    .HHModalHead { font-size: 1.7rem; }
+    .HHModalResultName { font-size: 1.7rem; }
+    .HHModalResultMeta { font-size: 1.5rem; }
+
+    #FooterPlace { padding: 14px 10px; }
+    #FooterPublicHead, #FooterPrivateHead { font-size: 17px; padding: 10px; }
+    #PublicFooterBox a, #PrivateFooterBox a { font-size: 14px; }
 }

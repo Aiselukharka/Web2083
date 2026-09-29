@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
-    <title>Admin Page</title>
+    <title>Edit Gallery</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="EditGalleryStyle.css"/>
 </head>
@@ -59,49 +59,69 @@
                 <option value="AddAdminTool">Add/Delete Admin</option>
             </select>            
         </div>      
-        <div id="UploadSection">
-            <h2>Upload Gallery Image</h2>
-            <div id="UploadForm">
-                <div style="margin-bottom: 15px;">
-                    <label for="imageDescriptionInput" style="display:block; margin-bottom: 5px; font-weight: bold;">Image Description:</label>
-                    <input type="text" id="imageDescriptionInput" placeholder="Enter image description here..." style="width: 100%; padding: 8px; box-sizing: border-box;">
-                </div>
 
-                <div id="UploadArea">
+        <!-- ================= UPLOAD SECTION ================= -->
+        <div id="UploadSection">
+            <div class="SectionHeader">
+                <h2>Upload Gallery Image</h2>
+                <p class="SectionSub">Add a new photo to the school gallery</p>
+            </div>
+
+            <div id="UploadForm">
+                <div id="UploadLeftCol">
                     <input type="file" id="imageInput" accept="image/*">
                     <label for="imageInput" id="dropArea">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                             <polyline points="17 8 12 3 7 8"/>
                             <line x1="12" y1="3" x2="12" y2="15"/>
                         </svg>
-                        <p>Drag & drop an image here or click to browse</p>
-                        <span>Supports: JPG, PNG, GIF, WebP (Max 5MB)</span>
+                        <p>Drag &amp; drop an image here</p>
+                        <span>or click to browse &middot; JPG, PNG, GIF, WebP (max 5MB)</span>
                     </label>
+                    <div id="PreviewGrid"></div>
                 </div>
-                <div id="PreviewGrid"></div>
-                <div id="UploadControls">
-                    <button type="button" id="uploadBtn" disabled>Upload Image</button>
-                    <button type="button" id="clearBtn">Clear All</button>
+
+                <div id="UploadRightCol">
+                    <label for="imageDescriptionInput" class="FieldLabel">Image Description</label>
+                    <textarea id="imageDescriptionInput" rows="3"
+                              placeholder="Enter a short description for this image…"></textarea>
+
+                    <div id="UploadControls">
+                        <button type="button" id="uploadBtn" disabled>Upload Image</button>
+                        <button type="button" id="clearBtn">Clear</button>
+                    </div>
+
+                    <div id="UploadProgress" style="display:none;">
+                        <div id="ProgressBar"><div id="ProgressFill"></div></div>
+                        <p id="ProgressText">Uploading image…</p>
+                    </div>
+
+                    <div id="UploadStatus"></div>
                 </div>
-            </div>
-            <div id="UploadProgress" style="display:none;">
-                <div id="ProgressBar">
-                    <div id="ProgressFill"></div>
-                </div>
-                <p id="ProgressText">Uploading image...</p>
-            </div>
-            <div id="UploadStatus"></div>
-        </div>
-        <div id="ManageSection">
-            <h2>Manage Gallery Images</h2>
-            <p>Click the button below to open your PostImages gallery. From there, you can delete images to free up space.</p>
-            <div id="ManageControls">
-                <button type="button" id="manageGalleryBtn" onclick="openPostImagesGallery()">🗑️ Open PostImages Gallery</button>
-                <button type="button" id="deleteHelpBtn" onclick="showDeleteHelp()">❓ How to delete</button>
-                <span id="manageNote">Note: Deleting images here will remove them from your gallery page.</span>
             </div>
         </div>
+
+        <!-- ================= GALLERY ITEMS ================= -->
+        <div id="ItemsSection">
+            <div class="SectionHeader">
+                <h2>Gallery Items</h2>
+                <p class="SectionSub">
+                    All images currently in the gallery.
+                    To delete an image permanently, open the PostImages gallery.
+                </p>
+                <div class="SectionHeaderActions">
+                    <button type="button" class="GhostBtn" onclick="loadGalleryItems()">🔄 Refresh</button>
+                    <button type="button" class="PrimaryBtn" onclick="openPostImagesGallery()">🗑️ Manage on PostImages</button>
+                </div>
+            </div>
+
+            <div id="GalleryItemsGrid">
+                <div class="GalleryEmpty">Loading gallery items…</div>
+            </div>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
         <div id="FooterPlace">
             <div id="FooterPublicHead">Public Pages</div>
             <div id="PublicFooterBox">
@@ -141,9 +161,31 @@
             </div>
         </div>
     </div>
+
+    <!-- ================= EDIT DESCRIPTION MODAL ================= -->
+    <div id="GalleryEditModal" class="ModalOverlay" style="display:none;">
+        <div class="ModalShell ModalShellSmall">
+            <div class="ModalHead">
+                <span>Edit Description</span>
+                <button type="button" class="ModalClose" onclick="closeGalleryEditor()">✕</button>
+            </div>
+            <div class="ModalBody ModalBodyEdit">
+                <label for="GalleryEditInput" class="FieldLabel">Image Description</label>
+                <textarea id="GalleryEditInput" rows="4"
+                          placeholder="Enter a description for this image…"></textarea>
+                <div id="GalleryEditStatus" class="ModalInlineStatus"></div>
+            </div>
+            <div class="ModalActions">
+                <button type="button" class="PrimaryBtn" id="GalleryEditSaveBtn">💾 Save</button>
+                <button type="button" class="GhostBtn" onclick="closeGalleryEditor()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
     <script src="../../SupabaseConfig.js"></script> 
     <script src="../../CustomDialog.js"></script>
+    <script src="../../DocumentReader.js"></script>
     <script src="../../DateConverter.js"></script>
     <script src="../../SmartCalculator.js"></script>
     <script src="../../NepaliCalendar.js"></script>

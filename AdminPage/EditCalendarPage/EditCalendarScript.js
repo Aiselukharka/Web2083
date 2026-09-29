@@ -4,6 +4,24 @@ if (typeof supabaseClient === 'undefined') {
 // -------------------- CLOUDINARY --------------------
 const CLOUD_NAME = "dcdwpdnyp";
 
+// ============================================================================
+// XLSX LIBRARY LOADER (lazy)
+// ============================================================================
+const XLSX_LIB_URL = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+let xlsxLibPromise = null;
+function ensureXLSX() {
+    if (typeof XLSX !== 'undefined') return Promise.resolve();
+    if (xlsxLibPromise) return xlsxLibPromise;
+    xlsxLibPromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = XLSX_LIB_URL;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('Failed to load XLSX library.'));
+        document.head.appendChild(s);
+    });
+    return xlsxLibPromise;
+}
+
 // -------------------- PROTECTION FORM UNAUTHORIZED ACCESS --------------------
 protectAdminPage();
 async function protectAdminPage() {
@@ -12,7 +30,7 @@ async function protectAdminPage() {
         error
     } = await supabaseClient.auth.getSession();
     if (error || !session) {
-      showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
+        showCustomDialog1("Unauthorized", "Please login first.", "OK", function(){});
         window.location.replace("../LoginPage/LogInIndex.html");
         return;
     }
@@ -73,7 +91,7 @@ EditNavigationDropDown.addEventListener("change", function () {
 const dateBox = document.getElementById('DateBox');
 dateBox.innerText = AD2BS(new Date()) + " (" + new Date().toISOString().split('T')[0] + ")";
 
-  //----------------------- Script for Admin Tools Dropdown -----------------------
+//----------------------- Script for Admin Tools Dropdown -----------------------
 document.getElementById("AdminToolsSelect").addEventListener("change", async function () {
     switch (this.value) {
         case "ChangePasswordTool":
@@ -141,8 +159,90 @@ async function loadDynamicLogoAndFavicon() {
 }
 document.addEventListener('DOMContentLoaded', loadDynamicLogoAndFavicon);
 
-// Ensure jexcel and juice dependencies are loaded in your HTML:
+// ============================================================================
+// SPREADSHEET SCROLL FORWARDER
+// ============================================================================
+function attachSpreadsheetWheelForwarder(container) {
+    if (!container) return;
 
+    const findHScroller = () => {
+        let el = container.parentElement;
+        while (el && el !== document.body) {
+            const style = window.getComputedStyle(el);
+            if (style.overflowX === 'auto' || style.overflowX === 'scroll') return el;
+            el = el.parentElement;
+        }
+        return container;
+    };
+
+    // ---- Wheel handling ----
+    if (container.__wheelForwarder) {
+        container.removeEventListener('wheel', container.__wheelForwarder, { passive: false });
+    }
+    const wheelHandler = function (e) {
+        const hScroller = findHScroller();
+
+        let dx = e.deltaX;
+        let dy = e.deltaY;
+        if (e.shiftKey && dx === 0 && dy !== 0) {
+            dx = dy;
+            dy = 0;
+        }
+
+        let handled = false;
+
+        if (dx !== 0) {
+            const prev = hScroller.scrollLeft;
+            hScroller.scrollLeft = prev + dx;
+            if (hScroller.scrollLeft !== prev) handled = true;
+        }
+
+        if (dy !== 0) {
+            window.scrollBy({ top: dy, left: 0, behavior: 'auto' });
+            handled = true;
+        }
+
+        if (handled) e.preventDefault();
+    };
+    container.__wheelForwarder = wheelHandler;
+    container.addEventListener('wheel', wheelHandler, { passive: false });
+
+    // ---- Touch handling ----
+    if (container.__touchForwarder) {
+        container.removeEventListener('touchstart', container.__touchForwarder.onStart);
+        container.removeEventListener('touchmove',  container.__touchForwarder.onMove);
+    }
+    const touchState = { startX: 0, startY: 0, startScrollLeft: 0, axis: null };
+    const onStart = (e) => {
+        if (!e.touches || e.touches.length !== 1) return;
+        const hScroller = findHScroller();
+        touchState.startX = e.touches[0].clientX;
+        touchState.startY = e.touches[0].clientY;
+        touchState.startScrollLeft = hScroller.scrollLeft;
+        touchState.axis = null;
+    };
+    const onMove = (e) => {
+        if (!e.touches || e.touches.length !== 1) return;
+        const t = e.touches[0];
+        const dx = t.clientX - touchState.startX;
+        const dy = t.clientY - touchState.startY;
+
+        if (!touchState.axis) {
+            if (Math.abs(dx) > Math.abs(dy) + 4) touchState.axis = 'x';
+            else if (Math.abs(dy) > Math.abs(dx) + 4) touchState.axis = 'y';
+            else return;
+        }
+
+        if (touchState.axis === 'x') {
+            const hScroller = findHScroller();
+            hScroller.scrollLeft = touchState.startScrollLeft - dx;
+            e.preventDefault();
+        }
+    };
+    container.__touchForwarder = { onStart, onMove };
+    container.addEventListener('touchstart', onStart, { passive: true });
+    container.addEventListener('touchmove', onMove, { passive: false });
+}
 
 const columns = [
     'e_year', 'e_month', 'e_day', 'e_day_of_week',
@@ -157,7 +257,6 @@ const columnDisplayNames = {
     'day_type': 'Day Type'
 };
 
-// COMPULSORY FIX: Converted from object list to flat string elements so Jspreadsheet v4 dropdown works perfectly
 const dayTypeOptions = [
     "Public Holiday",
     "Study Time",
@@ -207,7 +306,6 @@ function updateSaveButtonState() {
 
 // Map database column schema to jexcel configurations
 function getJexcelColumns() {
-    // Define explicit widths for columns that need extra room
     const specialWidths = {
         'e_year': 200,
         'e_month': 200,
@@ -245,28 +343,26 @@ function getJexcelColumns() {
 function renderTable() {
     const container = document.getElementById('CalendarDataBox');
     
-    // COMPULSORY FIX: Wrapped inside an explicit overflow container to prevent table leaking outside your #MainBody layout box
     container.innerHTML = `
         <div style="width: 100%; overflow-x: auto; background: #ffffff; border: 1px solid #ccc;">
             <div id="spreadsheetContainer"></div>
         </div>
         <div style="margin-top: 20px; text-align: center;">
-            <button id="importButton">📥 Import CSV</button>
+            <button id="importButton">📥 Import CSV / XLSX</button>
             <button id="saveButton" disabled>💾 Save Changes</button>
+            <button id="exportXlsxButton">📊 Save as XLSX</button>
             <span id="saveStatus" style="margin-left: 15px; font-size: 13px;"></span>
         </div>
     `;
 
-    // Map rows arrays into standard 2D data matrix matching columns layout
     const spreadsheetData = calendarData.map(row => columns.map(col => row[col] ?? ''));
 
-    // Initialize jexcel Instance
     jexcelInstance = jspreadsheet(document.getElementById('spreadsheetContainer'), {
         data: spreadsheetData,
         columns: getJexcelColumns(),
-        tableOverflow: false, // Turned false to let page manage normal scrolling heights
-        search: false,        // 1. Removed search box
-        pagination: false,    // 3. Removed pagination to display all 365 rows seamlessly
+        tableOverflow: false,
+        search: false,
+        pagination: false,
         onchange: function(el, cell, colIndex, rowIndex, newValue) {
             const rowDbRecord = calendarData[rowIndex];
             if (rowDbRecord) {
@@ -275,8 +371,6 @@ function renderTable() {
                     rowDbRecord[updatedFieldName] = newValue;
                     modifiedRows.add(rowDbRecord.id);
                     
-                    // NATIVE FIX: Loop through the cells of the current row and color them
-                    // using standard DOM styling via Jspreadsheet's internal records layer
                     if (jexcelInstance && jexcelInstance.records && jexcelInstance.records[rowIndex]) {
                         jexcelInstance.records[rowIndex].forEach(tdCell => {
                             if (tdCell) tdCell.style.backgroundColor = '#fff3cd';
@@ -289,7 +383,6 @@ function renderTable() {
             }
         },
         onload: function(el) {
-            // Apply initial styles on load if existing pending mutations match
             calendarData.forEach((row, rowIndex) => {
                 if (modifiedRows.has(row.id)) {
                     if (jexcelInstance && jexcelInstance.records && jexcelInstance.records[rowIndex]) {
@@ -302,46 +395,183 @@ function renderTable() {
         }
     });
 
-    // Event Wireups
+    attachSpreadsheetWheelForwarder(document.getElementById('spreadsheetContainer'));
+
     document.getElementById('saveButton').addEventListener('click', saveChanges);
+    document.getElementById('exportXlsxButton').addEventListener('click', exportCalendarAsXlsx);
     setupFileUpload();
 }
 
-// Let jexcel handle CSV reading natively via file element hook
+// ============================================================================
+// IMPORT: CSV and XLSX
+// ============================================================================
 function setupFileUpload() {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.csv';
+    // Accept CSV and Excel (both .xlsx and legacy .xls)
+    fileInput.accept = '.csv, .xlsx, .xls, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/csv';
     fileInput.style.display = 'none';
-    
-    fileInput.addEventListener('change', (e) => {
+
+    fileInput.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const contents = e.target.result;
-            if (confirm('Importing CSV rows will overwrite matching table items. proceed?')) {
-                // Parse lines sequentially directly into current configuration cells array
-                const lines = contents.trim().split('\n').slice(1); // skip heading
-                lines.forEach((line, rowIndex) => {
-                    if (rowIndex >= calendarData.length) return;
-                    
-                    const values = line.split(',').map(v => v.replace(/"/g, '').trim());
-                    values.forEach((val, colIndex) => {
-                        if (colIndex < columns.length) {
-                            jexcelInstance.setValueFromCoords(colIndex, rowIndex, val);
-                        }
-                    });
-                });
-                alert('CSV adjustments parsed inside working grid layer successfully.');
+        const ext = (file.name.split('.').pop() || '').toLowerCase();
+
+        if (!confirm(`Import rows from "${file.name}"?\nThis will overwrite matching table items in the on-screen grid. Click Save Changes afterwards to commit.`)) {
+            fileInput.value = '';
+            return;
+        }
+
+        try {
+            let rows;
+            if (ext === 'csv') {
+                rows = await parseCSVFile(file);
+            } else if (ext === 'xlsx' || ext === 'xls') {
+                rows = await parseExcelFile(file);
+            } else {
+                alert('Unsupported file type. Please choose a .csv, .xlsx, or .xls file.');
+                fileInput.value = '';
+                return;
             }
-        };
-        reader.readAsText(file);
+
+            if (!rows || rows.length === 0) {
+                alert('The file appears to be empty or could not be parsed.');
+                fileInput.value = '';
+                return;
+            }
+
+            const imported = applyImportedRows(rows);
+            showSaveStatus(`Imported ${imported} rows from "${file.name}". Click Save Changes to commit.`, 'info');
+            alert(`Imported ${imported} rows into the grid.\n\nClick "Save Changes" to store them in the database.`);
+        } catch (err) {
+            console.error('Import error:', err);
+            alert('Import failed: ' + err.message);
+        } finally {
+            fileInput.value = '';
+        }
     });
-    
+
     document.body.appendChild(fileInput);
     document.getElementById('importButton').addEventListener('click', () => fileInput.click());
+}
+
+// Parse CSV text → array of row arrays (values only, no header handling here)
+function parseCSVFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const text = e.target.result.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                const lines = text.split('\n').filter(l => l.trim() !== '');
+                const rows = lines.map(line => splitCSVLine(line));
+                resolve(rows);
+            } catch (err) { reject(err); }
+        };
+        reader.onerror = () => reject(new Error('Failed to read CSV file.'));
+        reader.readAsText(file);
+    });
+}
+
+// Small CSV splitter that handles quoted fields
+function splitCSVLine(line) {
+    const out = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQuotes) {
+            if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+            else if (ch === '"') inQuotes = false;
+            else cur += ch;
+        } else {
+            if (ch === '"') inQuotes = true;
+            else if (ch === ',') { out.push(cur.trim()); cur = ''; }
+            else cur += ch;
+        }
+    }
+    out.push(cur.trim());
+    return out;
+}
+
+// Parse Excel file → array of row arrays
+async function parseExcelFile(file) {
+    await ensureXLSX();
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const wb = XLSX.read(data, { type: 'array' });
+                const sheetName = wb.SheetNames[0];
+                if (!sheetName) throw new Error('No sheet found in workbook.');
+                const ws = wb.Sheets[sheetName];
+                // header: 1 → produce an array of arrays
+                const aoa = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false });
+                resolve(aoa);
+            } catch (err) { reject(err); }
+        };
+        reader.onerror = () => reject(new Error('Failed to read Excel file.'));
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+// Given parsed rows, map them to grid columns and set cell values.
+// Returns the number of rows written.
+function applyImportedRows(rows) {
+    if (!jexcelInstance) return 0;
+
+    // Detect if first row is a header row by comparing against our display names.
+    let columnOrder = null;    // will be array of internal column keys
+    let dataStart = 0;
+
+    const firstRow = rows[0] || [];
+    const normalized = firstRow.map(v => String(v || '').trim().toLowerCase());
+    const looksLikeHeader = normalized.some(cell =>
+        Object.values(columnDisplayNames).some(dn => dn.toLowerCase() === cell)
+    );
+
+    if (looksLikeHeader) {
+        // Map each cell of the header row to an internal column name (or null if unknown)
+        columnOrder = firstRow.map(cell => {
+            const raw = String(cell || '').trim().toLowerCase();
+            for (const [key, display] of Object.entries(columnDisplayNames)) {
+                if (display.toLowerCase() === raw) return key;
+            }
+            // Also allow matching by internal key name (e.g., user's Excel uses 'e_year')
+            for (const key of columns) {
+                if (key.toLowerCase() === raw) return key;
+            }
+            return null;
+        });
+        dataStart = 1;
+    } else {
+        // Positional fallback: assume columns are in our standard order
+        columnOrder = columns.slice();
+        dataStart = 0;
+    }
+
+    let written = 0;
+
+    for (let i = dataStart; i < rows.length; i++) {
+        const gridRow = i - dataStart;
+        if (gridRow >= calendarData.length) break; // don't add or overwrite beyond existing rows
+        const rowValues = rows[i];
+        let touchedThisRow = false;
+
+        for (let col = 0; col < columnOrder.length && col < rowValues.length; col++) {
+            const key = columnOrder[col];
+            if (!key) continue;
+            const colIndex = columns.indexOf(key);
+            if (colIndex === -1) continue;
+            const value = String(rowValues[col] ?? '').trim();
+            jexcelInstance.setValueFromCoords(colIndex, gridRow, value);
+            touchedThisRow = true;
+        }
+        if (touchedThisRow) written++;
+    }
+
+    return written;
 }
 
 // Push mutations out to client service endpoint API 
@@ -383,6 +613,62 @@ async function saveChanges() {
         showSaveStatus(`❌ Error: ${error.message}`, 'error');
         saveButton.disabled = false;
         saveButton.innerHTML = originalText;
+    }
+}
+
+// ============================================================================
+// EXPORT XLSX
+// ============================================================================
+async function exportCalendarAsXlsx() {
+    if (!calendarData || calendarData.length === 0) {
+        alert("No calendar data to export.");
+        return;
+    }
+
+    const exportBtn = document.getElementById('exportXlsxButton');
+    const originalText = exportBtn ? exportBtn.innerHTML : '';
+    if (exportBtn) {
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '📊 Preparing…';
+    }
+
+    try {
+        await ensureXLSX();
+
+        const headerRow = columns.map(col => columnDisplayNames[col] || col);
+        const dataRows = calendarData.map(row => columns.map(col => row[col] ?? ''));
+
+        const aoa = [headerRow, ...dataRows];
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+        ws['!cols'] = columns.map(col => {
+            if (col === 'event_detail') return { wch: 60 };
+            if (col === 'national_event' || col === 'local_event' || col === 'day_type') return { wch: 30 };
+            if (col === 'tithi') return { wch: 22 };
+            return { wch: 18 };
+        });
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Calendar');
+
+        let yearLabel = 'Calendar';
+        try {
+            if (typeof getCurrentBSYearNumeric === 'function') {
+                yearLabel = String(getCurrentBSYearNumeric());
+            }
+        } catch (_) { /* fallback */ }
+
+        XLSX.writeFile(wb, `NepaliCalendar_${yearLabel}.xlsx`);
+        showSaveStatus('✅ XLSX file downloaded.', 'success');
+    } catch (err) {
+        console.error('XLSX export failed:', err);
+        alert('Failed to export XLSX: ' + err.message);
+        showSaveStatus(`❌ XLSX export error: ${err.message}`, 'error');
+    } finally {
+        if (exportBtn) {
+            exportBtn.disabled = false;
+            exportBtn.innerHTML = originalText || '📊 Save as XLSX';
+        }
     }
 }
 

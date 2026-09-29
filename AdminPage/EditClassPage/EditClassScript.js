@@ -179,37 +179,128 @@ function initJspreadsheet() {
             btnSave.style.display = "block";
         }
     });
-    const container = document.querySelector('.jexcel_content') || document.getElementById('ClassDataBox');
-    if (container) {
-        container.addEventListener('wheel', function(e) {
-            const hasInternalScroll = container.scrollHeight > container.clientHeight;            
-            if (!hasInternalScroll) {
-                window.scrollBy({
-                    top: e.deltaY,
-                    behavior: 'auto' 
-                });
-                e.stopPropagation();
-            }
-        }, { capture: true, passive: true });
-        let touchStartY = 0;
-        container.addEventListener('touchstart', function(e) {
-            if (e.touches.length === 1) {
-                touchStartY = e.touches[0].clientY;
-            }
-        }, { capture: true, passive: true });
-        container.addEventListener('touchmove', function(e) {
-            if (e.touches.length === 1) {
-                const touchCurrentY = e.touches[0].clientY;
-                const deltaY = touchStartY - touchCurrentY;                
-                const hasInternalScroll = container.scrollHeight > container.clientHeight;
-                if (!hasInternalScroll) {
-                    window.scrollBy(0, deltaY);
-                    touchStartY = touchCurrentY; // Update start position for fluid dragging
-                    e.stopPropagation();
-                }
-            }
-        }, { capture: true, passive: true });
+
+    attachSmartScrollToSpreadsheet();
+}
+
+/**
+ * Lets the page scroll when the spreadsheet cannot scroll further in the
+ * requested direction, and lets the spreadsheet scroll when it can.
+ * Works for both mouse wheel and touch drag.
+ */
+function attachSmartScrollToSpreadsheet() {
+    // Attach only once per page load.
+    if (window.__smartScrollAttached) return;
+    window.__smartScrollAttached = true;
+
+    const GRID_ROOT_SELECTOR = '#ClassDataBox';
+
+    function isInsideGrid(node) {
+        if (!node || !(node instanceof Element)) return false;
+        return node.closest(GRID_ROOT_SELECTOR) !== null;
     }
+
+    // Walk up from the event target to find the nearest ancestor that is
+    // actually scrollable in the vertical direction. Version-agnostic —
+    // does not depend on .jexcel_content existing.
+    function findVerticalScroller(startNode) {
+        let el = startNode;
+        while (el && el !== document.body && el !== document.documentElement) {
+            if (el.scrollHeight > el.clientHeight + 1) {
+                const style = window.getComputedStyle(el);
+                const canScroll = /(auto|scroll|overlay)/.test(style.overflowY);
+                if (canScroll) return el;
+            }
+            el = el.parentElement;
+        }
+        return null;
+    }
+
+    // ---------- WHEEL ----------
+    window.addEventListener('wheel', function (e) {
+        if (!isInsideGrid(e.target)) return;      // page handles it natively
+
+        const scrollEl = findVerticalScroller(e.target);
+        const deltaY = e.deltaY;
+
+        // If we can't find a scroller, or the delta is 0, let page scroll.
+        if (!scrollEl || deltaY === 0) {
+            e.preventDefault();
+            window.scrollBy(0, deltaY);
+            e.stopImmediatePropagation();
+            return;
+        }
+
+        const atTop    = scrollEl.scrollTop <= 0;
+        const atBottom = scrollEl.scrollTop + scrollEl.clientHeight
+                         >= scrollEl.scrollHeight - 1;
+
+        const wantsUp   = deltaY < 0;
+        const wantsDown = deltaY > 0;
+
+        if ((atTop && wantsUp) || (atBottom && wantsDown)) {
+            // Grid is at the boundary — hand off to the page.
+            e.preventDefault();
+            window.scrollBy(0, deltaY);
+            e.stopImmediatePropagation();
+            return;
+        }
+
+        // Grid can still scroll in this direction — let jspreadsheet do it.
+        // We do NOT preventDefault; jspreadsheet's own handler runs and
+        // scrolls the grid. (It will call preventDefault itself.)
+    }, { capture: true, passive: false });
+
+    // ---------- TOUCH ----------
+    let touchStartY = 0;
+    let touchLastY  = 0;
+    let activeScroller = null;
+
+    window.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) return;
+        if (!isInsideGrid(e.target)) {
+            activeScroller = null;
+            return;
+        }
+        touchStartY = e.touches[0].clientY;
+        touchLastY  = touchStartY;
+        activeScroller = findVerticalScroller(e.target);
+    }, { capture: true, passive: true });
+
+    window.addEventListener('touchmove', function (e) {
+        if (e.touches.length !== 1) return;
+        if (!isInsideGrid(e.target)) return;      // native page scroll
+
+        const currentY = e.touches[0].clientY;
+        const deltaY = touchLastY - currentY;     // positive = finger moved up
+
+        if (!activeScroller) {
+            // No internal scroller found → page scrolls.
+            touchLastY = currentY;
+            return;
+        }
+
+        const atTop    = activeScroller.scrollTop <= 0;
+        const atBottom = activeScroller.scrollTop + activeScroller.clientHeight
+                         >= activeScroller.scrollHeight - 1;
+
+        const wantsUp   = deltaY < 0;   // finger moved down → content moves up
+        const wantsDown = deltaY > 0;
+
+        if ((atTop && wantsUp) || (atBottom && wantsDown)) {
+            // Grid at boundary → let the page scroll natively.
+            // Do NOT preventDefault. The browser will scroll the page.
+            touchLastY = currentY;
+            return;
+        }
+
+        // Grid can still scroll — let jspreadsheet handle it.
+        touchLastY = currentY;
+    }, { capture: true, passive: true });
+
+    window.addEventListener('touchend', function () {
+        activeScroller = null;
+    }, { capture: true, passive: true });
 }
 
 // Load data from Supabase

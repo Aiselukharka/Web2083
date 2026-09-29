@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'MySanskritFont';
-    src: url('../Sanskrit-2003.ttf') format('truetype');
+    src: url('../../Sanskrit-2003.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -44,36 +44,45 @@ body {
     width: 100%;
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
     justify-content: space-evenly;
+    gap: clamp(0.4rem, 1vw, 1rem);
     background: #000000;
     padding: clamp(0.3rem, 1rem, 1.6rem);
     text-align: center;
 }
 #LogoBox{
-    width: 6%;
-    height: auto;     
+    flex: 0 0 auto;
+    width: clamp(36px, 6vw, 90px);
+    height: auto;
 }
 #LogoBox img{
     width: 100%;
     height: 100%;
     object-fit: contain;
+    display: block;
 }
 #PageNavigationSelect{
-    width: 50%;
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: clamp(1.2rem, 2vw, 3rem);
     font-weight: bold;
-    padding: clamp(0.3rem, 1rem, 1.6rem);;
+    padding: clamp(0.3rem, 1rem, 1.6rem);
     border: 4px solid #000000;
 }
 #PageNaviggationBox button{
-    width: 20%;
-    padding: clamp(0.3rem, 1rem, 1.6rem) 0;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: clamp(90px, 14vw, 180px);
+    padding: clamp(0.3rem, 1rem, 1.6rem) clamp(0.6rem, 1.4vw, 1.4rem);
     background: linear-gradient(180deg, #00aa00, #00cc00, #00aa00);
     color: #ffffff;
-    border-radius: 4vw;  
-    font-size: clamp(1rem, 2vw, 3rem);  
+    border-radius: 4vw;
+    font-size: clamp(1rem, 2vw, 3rem);
     font-weight: bold;
     cursor: pointer;
+    white-space: nowrap;
 }
 #pageNaviggationBox button:hover{
     background: linear-gradient(180deg, #009900, #00aa00, #009900);
@@ -275,26 +284,6 @@ body {
 .EditContainers.visible #PhotoBox {
     display: block !important;
 }
-/* Responsive adjustments for buttons */
-@media (max-width: 768px) {
-    .btn-action {
-        width: 50%;
-        min-width: 120px;
-        font-size: clamp(1.2rem, 2vw, 1.8rem);
-    }    
-    .button-wrapper {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-}
-@media (max-width: 480px) {
-    .btn-action {
-        width: 80%;
-        min-width: 100px;
-        font-size: clamp(1rem, 1.8vw, 1.4rem);
-    }
-}
 /* Photo Container Styles */
 #PhotoListContainer {
     width: 100%;
@@ -393,6 +382,106 @@ body {
     cursor: not-allowed;
     opacity: 0.6;
 }
+/* ==================== CROPPER MODAL ==================== */
+.ModalOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 99999;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+.ModalOverlay.active { display: flex; }
+
+.ModalContent {
+    background: #fff;
+    width: 92%;
+    max-width: 720px;
+    height: 90vh;          
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    padding: 1.2rem;
+    box-sizing: border-box;
+    overflow: hidden;      
+    gap: 0.8rem;
+}
+
+.ModalHeader {
+    font-size: clamp(1.4rem, 2.2vw, 2.6rem);
+    font-weight: bold;
+    color: #0000aa;
+    text-align: center;
+    flex: 0 0 auto;
+}
+
+.CropperContainer {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    background: #111;
+    border-radius: 0.6rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: block;
+}
+
+.CropperContainer > img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    opacity: 0;
+}
+
+.CropperContainer .cropper-container img {
+    opacity: 1;
+}
+
+.CropperContainer .cropper-container {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Make the handles bigger and easier to see */
+.CropperContainer .cropper-point {
+    width: 14px !important;
+    height: 14px !important;
+    background-color: #00ff88 !important;
+    opacity: 1 !important;
+}
+.CropperContainer .cropper-line {
+    background-color: #00ff88 !important;
+}
+.CropperContainer .cropper-modal {
+    opacity: 0.6 !important;
+}
+
+.ModalActions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.6rem;
+    flex: 0 0 auto;
+}
+.ModalActions button {
+    flex: 1;
+    padding: clamp(0.6rem, 1.2vw, 1.4rem);
+    font-size: clamp(1rem, 1.6vw, 2.2rem);
+    font-weight: bold;
+    border: none;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    color: #fff;
+}
+#btnCancelCrop { background: #aa0000; }
+#btnCancelCrop:hover { background: #660000; }
+#btnApplyCrop { background: #006600; }
+#btnApplyCrop:hover { background: #004400; }
 
 #FooterPlace{
     width: 100%;
@@ -460,4 +549,507 @@ body {
 #PrivateFooterBox a:hover{
     color: #0f0;
     text-decoration: underline;
+}
+
+/* ============================================================================
+   RESPONSIVE STYLES
+   Breakpoints:
+     • 1024px — tablets (portrait) / small laptops
+     • 768px  — large phones (landscape) / small tablets
+     • 600px  — phones
+     • 420px  — small phones  ← nav stacks vertically here and below
+     • max-height 500px + landscape — short landscape phones
+     • ≥1600px — ultrawide
+   ============================================================================ */
+
+/* ==================== TABLETS & BELOW (≤ 1024px) ==================== */
+@media (max-width: 1024px) {
+
+    #MainBody{
+        width: 98%;
+        padding: 0 clamp(0.4rem, 0.8vw, 1rem);
+    }
+
+    /* --- Top navigation: keep single row, just shrink --- */
+    #PageNaviggationBox{
+        gap: 0.5rem;
+        padding: clamp(0.4rem, 1.2vw, 1rem);
+    }
+    #LogoBox{
+        width: clamp(34px, 5vw, 70px);
+    }
+    #PageNavigationSelect{
+        font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+        padding: clamp(0.35rem, 1.2vw, 1rem);
+        border-width: 3px;
+    }
+    #PageNaviggationBox button{
+        min-width: clamp(80px, 13vw, 150px);
+        font-size: clamp(0.95rem, 2vw, 1.6rem);
+        padding: clamp(0.35rem, 1.2vw, 1rem) clamp(0.5rem, 1.2vw, 1.2rem);
+    }
+
+    /* --- Utility box (Edit nav + admin tools) --- */
+    #UtilityBox{
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: clamp(0.4rem, 1.2vw, 1.2rem) 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 96%;
+        font-size: clamp(1.1rem, 2.2vw, 2rem);
+        padding: clamp(0.4rem, 1.2vw, 1rem) 0.4rem;
+    }
+
+    /* --- Page head & topic select --- */
+    #EditHumanResourceHead{
+        font-size: clamp(2rem, 3.4vw, 3.4rem);
+    }
+    #EditTopicSelect{
+        width: 92%;
+        font-size: clamp(1.2rem, 2.2vw, 2rem);
+        padding: clamp(0.4rem, 1.2vw, 1rem);
+    }
+
+    /* --- Spreadsheet containers --- */
+    #TeacherBox,
+    #SMCBox,
+    #PTABox{
+        padding: clamp(0.4rem, 1vw, 1.2rem);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* --- Buttons --- */
+    .btn-action{
+        width: 45%;
+        min-width: 140px;
+        font-size: clamp(1.2rem, 2vw, 2rem);
+        border-radius: 1.2rem;
+    }
+
+    /* --- Photo table --- */
+    #PhotoTable{
+        font-size: clamp(1rem, 1.4vw, 1.6rem);
+    }
+    #PhotoTable th,
+    #PhotoTable td{
+        padding: 6px;
+    }
+    .photo-preview{
+        width: 60px;
+        height: 90px;
+    }
+    .photo-upload-btn,
+    .delete-btn{
+        padding: 5px 10px;
+        font-size: clamp(0.8rem, 1.2vw, 1.3rem);
+    }
+
+    /* --- Cropper modal --- */
+    .ModalContent{
+        width: 94%;
+        padding: 1rem;
+    }
+    .CropperContainer{
+        padding: 0.8rem;
+    }
+
+    /* --- Footer: 3 cols → 2 cols --- */
+    #PublicFooterBox,
+    #PrivateFooterBox{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 24px;
+        padding: 16px;
+    }
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 18px;
+    }
+}
+
+/* ==================== LARGE PHONES / SMALL TABLETS (≤ 768px) ==================== */
+@media (max-width: 768px) {
+
+    /* --- Top navigation: still single row, smaller --- */
+    #PageNaviggationBox{
+        gap: 0.4rem;
+        padding: clamp(0.35rem, 1.4vw, 0.8rem);
+    }
+    #LogoBox{
+        width: clamp(28px, 5vw, 56px);
+    }
+    #PageNavigationSelect{
+        font-size: clamp(1rem, 2.6vw, 1.5rem);
+        padding: 0.35rem 0.4rem;
+        border-width: 2px;
+    }
+    #PageNaviggationBox button{
+        min-width: clamp(70px, 13vw, 120px);
+        font-size: clamp(0.85rem, 2.4vw, 1.3rem);
+        padding: 0.4rem 0.5rem;
+    }
+
+    #DateBox{
+        font-size: clamp(1.1rem, 3.5vw, 1.8rem);
+        padding: 0.5rem;
+    }
+
+    /* --- Utility box --- */
+    #UtilityBox{
+        padding: 0.5rem 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 94%;
+        font-size: clamp(1rem, 3.5vw, 1.6rem);
+        padding: 0.5rem 0.4rem;
+        border-width: 2px;
+    }
+
+    /* --- Page head --- */
+    #EditHumanResourceHead{
+        font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+        padding: 0.6rem 0;
+    }
+    #EditTopicSelect{
+        width: 96%;
+        font-size: clamp(1rem, 3.5vw, 1.6rem);
+        padding: 0.5rem 0.4rem;
+        margin: 0.6rem 0;
+    }
+    #EditHumanResourceContainer{
+        padding: 0.6rem 0.4rem;
+    }
+
+    /* --- Containers inside --- */
+    #EditTeacherContainer,
+    #EditSMCContainer,
+    #EditPTAContainer,
+    #EditPhotoContainer{
+        padding: 0.6rem 0.4rem;
+        margin: 0.5rem 0;
+    }
+    #EditTeacherHead,
+    #EditSMCHead,
+    #EditPTAHead,
+    #EditPhotoHead{
+        font-size: clamp(1.4rem, 4vw, 2.2rem);
+        padding: 0.5rem 0;
+    }
+
+    /* --- jspreadsheet containers: allow horizontal scroll --- */
+    #TeacherBox,
+    #SMCBox,
+    #PTABox{
+        padding: 0.4rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* --- Buttons --- */
+    .button-wrapper{
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 0.6rem 0;
+    }
+    .btn-action{
+        width: 90%;
+        min-width: 0;
+        font-size: clamp(1.1rem, 3.5vw, 1.7rem);
+        padding: 0.7rem 0.4rem;
+        border-radius: 1rem;
+    }
+
+    /* --- Photo table: force scroll instead of squashing --- */
+    #PhotoListContainer{
+        padding: 0.4rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    #PhotoTable{
+        min-width: 720px;            /* keeps columns readable; scrolls horizontally */
+        font-size: clamp(0.95rem, 3vw, 1.4rem);
+    }
+    #PhotoTable th,
+    #PhotoTable td{
+        padding: 5px;
+        white-space: nowrap;
+    }
+    #PhotoTable th{
+        font-size: clamp(0.9rem, 3vw, 1.3rem);
+    }
+    .photo-preview{
+        width: 50px;
+        height: 75px;
+    }
+    .photo-upload-btn,
+    .delete-btn{
+        padding: 4px 8px;
+        font-size: clamp(0.75rem, 2.8vw, 1.1rem);
+    }
+    .photo-status{
+        font-size: clamp(0.75rem, 2.8vw, 1.1rem);
+        padding: 3px 6px;
+    }
+
+    /* --- Cropper modal --- */
+    .ModalContent{
+        width: 96%;
+        max-height: 94vh;
+        padding: 0.8rem;
+        gap: 0.5rem;
+    }
+    .CropperContainer{
+        padding: 0.8rem;
+    }
+    .ModalHeader{
+        font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+    }
+    .ModalActions button{
+        font-size: clamp(1rem, 3.5vw, 1.5rem);
+        padding: clamp(0.6rem, 2vw, 1rem);
+    }
+
+    /* --- Footer: 2 cols → 1 col --- */
+    #PublicFooterBox,
+    #PrivateFooterBox{
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    #FooterPlace{
+        padding: 20px 12px;
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 20px;
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 16px;
+    }
+}
+
+/* ==================== PHONES (≤ 600px) ==================== */
+@media (max-width: 600px) {
+
+    #MainBody{
+        width: 100%;
+        padding: 0 0.4rem;
+    }
+
+    /* --- Top navigation: still single row --- */
+    #PageNaviggationBox{
+        gap: 0.35rem;
+        padding: 0.4rem;
+    }
+    #LogoBox{
+        width: clamp(26px, 6vw, 44px);
+    }
+    #PageNavigationSelect{
+        font-size: clamp(0.9rem, 3.2vw, 1.3rem);
+        padding: 0.3rem 0.3rem;
+    }
+    #PageNaviggationBox button{
+        min-width: clamp(60px, 14vw, 100px);
+        font-size: clamp(0.8rem, 3vw, 1.1rem);
+        padding: 0.35rem 0.4rem;
+        border-radius: 1.6rem;
+    }
+
+    #DateBox{
+        font-size: clamp(1rem, 3.8vw, 1.5rem);
+        padding: 0.45rem;
+    }
+
+    #UtilityBox{
+        padding: 0.5rem 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 96%;
+        font-size: clamp(0.95rem, 3.8vw, 1.5rem);
+        padding: 0.45rem 0.3rem;
+    }
+
+    #EditHumanResourceHead{
+        font-size: clamp(1.4rem, 5vw, 2.2rem);
+    }
+    #EditTopicSelect{
+        font-size: clamp(0.95rem, 3.8vw, 1.5rem);
+        padding: 0.45rem 0.3rem;
+    }
+
+    #EditTeacherContainer,
+    #EditSMCContainer,
+    #EditPTAContainer,
+    #EditPhotoContainer{
+        padding: 0.5rem 0.3rem;
+    }
+    #EditTeacherHead,
+    #EditSMCHead,
+    #EditPTAHead,
+    #EditPhotoHead{
+        font-size: clamp(1.2rem, 4.5vw, 1.9rem);
+    }
+
+    .btn-action{
+        width: 96%;
+        font-size: clamp(1rem, 3.8vw, 1.5rem);
+        padding: 0.6rem 0.4rem;
+    }
+
+    #PhotoTable{
+        min-width: 680px;
+    }
+    .photo-preview{
+        width: 44px;
+        height: 66px;
+    }
+
+    /* Cropper modal tighter */
+    .ModalOverlay{
+        padding: 0.4rem;
+    }
+    .ModalContent{
+        width: 100%;
+        max-height: 96vh;
+        border-radius: 0.6rem;
+        padding: 0.6rem;
+    }
+    .CropperContainer{
+        padding: 0.5rem;
+    }
+}
+
+/* ============================================================================
+   SMALL PHONES (≤ 420px)  — NAV STACKS VERTICALLY HERE
+   ============================================================================ */
+@media (max-width: 420px) {
+
+    /* --- Top navigation: stack logo, calculator, select, calendar --- */
+    #PageNaviggationBox{
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.6rem 0.4rem;
+    }
+    #LogoBox{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 0.2rem 0;
+    }
+    #LogoBox img{
+        width: 60px;
+        height: 60px;
+    }
+    #PageNavigationSelect{
+        width: 100%;
+        font-size: clamp(1rem, 4vw, 1.4rem);
+        padding: 0.5rem 0.4rem;
+        border-width: 2px;
+    }
+    #btnCalculator,
+    #btnCalendar{
+        width: 100%;
+        min-width: 0;
+        flex: 0 0 auto;
+        font-size: clamp(1rem, 4vw, 1.4rem);
+        padding: 0.6rem 0.4rem;
+        border-radius: 1.2rem;
+    }
+
+    #DateBox{
+        font-size: clamp(0.95rem, 4vw, 1.3rem);
+    }
+
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        font-size: clamp(0.9rem, 4vw, 1.3rem);
+    }
+
+    #EditHumanResourceHead{
+        font-size: clamp(1.2rem, 5.5vw, 1.8rem);
+    }
+
+    #PhotoTable{
+        min-width: 640px;
+    }
+
+    /* Footer */
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 15px;
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 18px;
+    }
+}
+
+/* ==================== SHORT LANDSCAPE PHONES ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+
+    .ModalOverlay{
+        padding: 0.4rem;
+    }
+    .ModalContent{
+        max-height: 98vh;
+        padding: 0.5rem;
+        gap: 0.4rem;
+    }
+    .CropperContainer{
+        padding: 0.4rem;
+    }
+    .ModalHeader{
+        font-size: 1.1rem;
+        padding-bottom: 0.2rem;
+    }
+    .ModalActions{
+        padding-top: 0.3rem;
+    }
+    .ModalActions button{
+        padding: 0.45rem;
+        font-size: 1rem;
+    }
+
+    /* Also compress nav in short landscape */
+    #PageNaviggationBox{
+        padding: 0.4rem;
+    }
+    #DateBox{
+        padding: 0.3rem;
+        font-size: 1.1rem;
+    }
+    #UtilityBox{
+        padding: 0.3rem 0;
+    }
+}
+
+/* ==================== ULTRA-WIDE (≥ 1600px) ==================== */
+@media (min-width: 1600px) {
+
+    #MainBody{
+        max-width: 1500px;
+    }
+
+    #PhotoTable{
+        font-size: 1.8rem;
+    }
+
+    /* Footer to 4 columns on very wide screens */
+    #PublicFooterBox,
+    #PrivateFooterBox{
+        grid-template-columns: repeat(4, 1fr);
+    }
 }

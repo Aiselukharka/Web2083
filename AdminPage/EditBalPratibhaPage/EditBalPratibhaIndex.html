@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
     <title>Edit Bal Pratibha Page</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="EditBalPratibhaStyle.css"/>
@@ -59,22 +60,35 @@
                 <option value="AddAdminTool">Add/Delete Admin</option>
             </select>            
         </div>      
+
         <div id="PratibhaEditBox" class="EditBoxes">
             <div id="AdminPratibhaList"></div>
             <div id="AddPratibhaContainer">
-            <div id="AddPratibhaHead">Add New Pratibha</div>
-            <div id="AddCreatorBox">
-                <input id="PratibhaCreatorName" placeholder="Input Creator's Name">
-                <select id="PratibhaCreatorClass"></select>
+                <div id="AddPratibhaHead">Add New Pratibha</div>
+                <div id="AddCreatorBox">
+                    <button type="button" id="btnPickCreator" class="CreatorPickBtn">
+                        <span id="creatorDisplay">Select Creator from Student Data…</span>
+                    </button>
+                    <input type="hidden" id="PratibhaCreatorName" />
+                    <input type="hidden" id="PratibhaCreatorClass" />
+                    <input type="hidden" id="PratibhaCreatorId" />
+                </div>
+                <div id="AddPratibhaBox">
+                    <input type="file" id="PratibhaFile" accept="image/*" />
+                    <button id="btnChoosePratibhaFile" type="button">Choose Pratibha</button>
+
+                    <!-- Preview of cropped image -->
+                    <div id="PratibhaUploadPreviewWrap">
+                        <img id="PratibhaUploadPreview" alt="" />
+                        <span id="PratibhaUploadPreviewHint">No image selected</span>
+                    </div>
+
+                    <input id="PratibhaTitle" placeholder="Pratibha Title" />
+                    <button id="btnUploadPratibha" onclick="uploadPratibha()">Upload</button>
+                </div>
             </div>
-            <div id="AddPratibhaBox">
-                <input type="file" id="PratibhaFile" />
-                <button id="btnChoosePratibhaFile" type="button">Choose Pratibha</button>
-                <input id="PratibhaTitle" placeholder="Pratibha Title" />
-                <button id="btnUploadPratibha" onclick="uploadPratibha()">Upload</button>
-            </div>
-            </div>
-        </div> 
+        </div>
+
         <div id="FooterPlace">
             <div id="FooterPublicHead">Public Pages</div>
             <div id="PublicFooterBox">
@@ -113,11 +127,30 @@
             </div>
         </div>
     </div>
+
+    <!-- ============ Image Cropper Modal (square) ============ -->
+    <div id="PratibhaCropperModal" class="PratibhaModalOverlay" style="display:none;">
+        <div class="PratibhaModal PratibhaCropperModalInner">
+            <div class="PratibhaModalHead">
+                <span>Crop Pratibha Image</span>
+                <button type="button" class="PratibhaModalClose" id="pratibhaCropCancelX">✕</button>
+            </div>
+            <div class="PratibhaCropperStage">
+                <img id="pratibhaCropImage" alt="Crop" />
+            </div>
+            <div class="PratibhaCropperActions">
+                <button type="button" class="CancelBtn" id="pratibhaCropCancel">Cancel</button>
+                <button type="button" class="SaveBtn" id="pratibhaCropApply">Apply Crop</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
     <script src="../../SupabaseConfig.js"></script> 
     <script src="../../CustomDialog.js"></script>
     <script src="../../DocumentReader.js"></script>
     <script src="../../DateConverter.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="../../SmartCalculator.js"></script>
     <script src="../../NepaliCalendar.js"></script>
     <script src="EditBalPratibhaScript.js"></script>

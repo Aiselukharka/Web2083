@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
     <title>Edit Student</title>
     <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="EditStudentStyle.css"/>
@@ -14,7 +15,7 @@
         <div id="PageNaviggationBox">
             <div id="LogoBox"><img src="" alt="Logo" width="100" height="100"></div>
             <button type="button" id="btnCalculator" onclick="openCalculator()">Calculator</button>
-            <select id="PageNavigationSelect">   
+            <select id="PageNavigationSelect">
                 <option value="AdminPage">Admin</option>
                 <option value="LibraryPage">Library</option>
                 <option value="NoticePage">Notice</option>
@@ -29,7 +30,7 @@
                 <option value="HomePage">Home</option>
             </select>
             <button type="button" id="btnCalendar" onclick="showCalendar()">Calendar</button>
-        </div>  
+        </div>
         <div id="DateBox"></div>
         <div id="UtilityBox">
             <select id="EditNavigationSelect">
@@ -57,17 +58,33 @@
                 <option value="LogoutThisDeviceTool">Logout This Device</option>
                 <option value="LogoutAllDevicesTool">Logout All Devices</option>
                 <option value="AddAdminTool">Add/Delete Admin</option>
-            </select>            
-        </div>      
-        <div id="StudentEditContainer"></div>
-        <div id="StudentPhotoEditContainer">
-            <div id="StudentPhotoEditHead">Add Student Photos</div>
-            <div id="StudentPhotoEditBox"></div>
+            </select>
         </div>
-        <div id="DeleteClassDataContainer">
-            <div id="DeleteClassDataHead">Delete Whole Class</div>
-            <div id="DeleteClassDataBox"></div>
+
+        <div id="StudentActionToggleBox">
+            <button type="button" id="btnOpenAddEditStudent" class="StudentActionBtn active"
+                    onclick="toggleStudentSection('addEdit')">Add / Edit Students</button>
+            <button type="button" id="btnPromoteStudent" class="StudentActionBtn"
+                    onclick="toggleStudentSection('promote')">Promote / Retain Students</button>
+            <button type="button" id="btnRollDecision" class="StudentActionBtn"
+                    onclick="toggleStudentSection('roll')">Roll Number Decision</button>
         </div>
+
+        <div id="AddEditStudentContainer" class="StudentSectionContainer">
+            <div id="StudentEditContainer"></div>
+            <div id="StudentPhotoEditContainer">
+                <div id="StudentPhotoEditHead">Add Student Photos</div>
+                <div id="StudentPhotoEditBox"></div>
+            </div>
+            <div id="DeleteClassDataContainer">
+                <div id="DeleteClassDataHead">Delete Entire Class</div>
+                <div id="DeleteClassDataBox"></div>
+            </div>
+        </div>
+
+        <div id="PromoteStudentContainer" class="StudentSectionContainer"></div>
+        <div id="RollDecisionContainer" class="StudentSectionContainer"></div>
+
         <div id="FooterPlace">
             <div id="FooterPublicHead">Public Pages</div>
             <div id="PublicFooterBox">
@@ -103,17 +120,35 @@
                 <a href="../EditRoutinePage/EditRoutineIndex.html">Edit Routine Page</a>
                 <a href="../EditStudentAttendancePage/EditStudentAttendanceIndex.html">Edit Student Attendance Page</a>
                 <a href="../EditStudentPage/EditStudentIndex.html">Edit Student Page</a>
-                <a href="../EditVideoLinkPage/EditVideoLinkIndex.html">Edit Video Link Page</a>                
+                <a href="../EditVideoLinkPage/EditVideoLinkIndex.html">Edit Video Link Page</a>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
-    <script src="../../SupabaseConfig.js"></script> 
+
+    <!-- ==================== Cropper Modal ==================== -->
+    <div id="CropperModal" class="ModalOverlay">
+        <div class="ModalContent">
+            <div class="ModalHeader">Crop Student Photo (3:4)</div>
+            <div class="CropperContainer">
+                <img id="CropperImage" alt="Crop" />
+            </div>
+            <div class="ModalActions">
+                <button type="button" id="btnCancelCrop">Cancel</button>
+                <button type="button" id="btnApplyCrop">Apply Crop</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../SupabaseConfig.js"></script>
     <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
     <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="../../DateConverter.js"></script>
     <script src="../../SmartCalculator.js"></script>
     <script src="../../NepaliCalendar.js"></script>
-    <script src="EditStudentScript.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="EditStudentScript.js"></script>
 </body>
 </html>

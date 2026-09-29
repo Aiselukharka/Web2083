@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'MySanskritFont';
-    src: url('../Sanskrit-2003.ttf') format('truetype');
+    src: url('../../Sanskrit-2003.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -167,7 +167,7 @@ body {
     font-size: 20px;
     font-weight: bold;
     border: none;
-    display: none; /* Controlled dynamically now */
+    display: none;
 }
 #btnDeleteClasses:hover{
     color: #ffff00;
@@ -240,4 +240,435 @@ body {
 #PrivateFooterBox a:hover{
     color: #0f0;
     text-decoration: underline;
+}
+
+/* ============================================================================
+   RESPONSIVE STYLES — Edit Class Page
+   Breakpoints:
+     • 1024px — tablets (portrait) / small laptops
+     • 768px  — large phones (landscape) / small tablets
+     • 600px  — phones
+     • 420px  — small phones  ← nav stacks vertically here and below
+     • max-height 500px + landscape — short landscape phones
+     • ≥1600px — ultrawide
+   ============================================================================ */
+
+/* ==================== TABLETS & BELOW (≤ 1024px) ==================== */
+@media (max-width: 1024px) {
+
+    #MainBody{
+        width: 98%;
+        padding: 0 8px;
+    }
+
+    /* --- Top navigation: keep single row, shrink --- */
+    #PageNaviggationBox{
+        gap: 6px;
+        padding: 8px;
+    }
+    #LogoBox{
+        width: clamp(34px, 4vw, 44px);
+        flex: 0 0 auto;
+    }
+    #PageNavigationSelect{
+        font-size: 18px;
+        padding: 8px 6px;
+        border-width: 2px;
+    }
+    #PageNaviggationBox button{
+        width: auto;
+        min-width: 90px;
+        font-size: 16px;
+        padding: 8px 6px;
+        border-radius: 14px;
+    }
+
+    /* --- Utility box --- */
+    #UtilityBox{
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 96%;
+        font-size: 16px;
+        padding: 8px 6px;
+    }
+
+    /* --- Class section --- */
+    #ClassDataContainer{
+        padding: 8px;
+    }
+    #EditClassHead{
+        font-size: 24px;
+        padding: 8px;
+    }
+    #ClassDataBox{
+        padding: 8px;
+        font-size: 16px;
+    }
+
+    #ClassButtonBox{
+        padding: 8px;
+        gap: 8px;
+    }
+    #btnSaveClasses,
+    #btnDeleteClasses{
+        font-size: 16px;
+        padding: 8px 0;
+    }
+
+    /* --- Date box --- */
+    #DateBox{
+        font-size: 22px;
+        padding: 8px;
+    }
+
+    /* --- Footer: 3 cols → 2 cols --- */
+    #PublicFooterBox,
+    #PrivateFooterBox{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 22px;
+        padding: 14px;
+    }
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 17px;
+    }
+}
+
+/* ==================== LARGE PHONES / SMALL TABLETS (≤ 768px) ==================== */
+@media (max-width: 768px) {
+
+    /* --- Top navigation: still one row --- */
+    #PageNaviggationBox{
+        gap: 5px;
+        padding: 6px;
+    }
+    #LogoBox{
+        width: clamp(28px, 4vw, 36px);
+    }
+    #PageNavigationSelect{
+        font-size: 14px;
+        padding: 6px 4px;
+    }
+    #PageNaviggationBox button{
+        min-width: 72px;
+        font-size: 13px;
+        padding: 6px 4px;
+        border-radius: 12px;
+    }
+
+    #DateBox{
+        font-size: 18px;
+        padding: 6px;
+    }
+
+    /* --- Utility box --- */
+    #UtilityBox{
+        padding: 6px 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 94%;
+        font-size: 14px;
+        padding: 6px 4px;
+    }
+
+    /* --- Class section --- */
+    #ClassDataContainer{
+        padding: 6px;
+    }
+    #EditClassHead{
+        font-size: 18px;
+        padding: 6px;
+    }
+    #ClassDataBox{
+        padding: 4px;
+        font-size: 14px;
+        /* The spreadsheet is 38 columns wide — always allow horizontal
+           scrolling on narrow screens rather than squeezing cells. */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #ClassButtonBox{
+        padding: 6px;
+        gap: 6px;
+    }
+    #btnSaveClasses,
+    #btnDeleteClasses{
+        width: 46%;
+        font-size: 14px;
+        padding: 8px 0;
+        border-radius: 12px;
+    }
+
+    /* --- Footer: 2 cols → 1 col --- */
+    #PublicFooterBox,
+    #PrivateFooterBox{
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    #FooterPlace{
+        padding: 20px 12px;
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 18px;
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 15px;
+    }
+}
+
+/* ==================== PHONES (≤ 600px) ==================== */
+@media (max-width: 600px) {
+
+    #MainBody{
+        width: 100%;
+        padding: 0 4px;
+    }
+
+    #PageNaviggationBox{
+        gap: 4px;
+        padding: 5px 4px;
+    }
+    #LogoBox{
+        width: clamp(24px, 5vw, 30px);
+    }
+    #PageNavigationSelect{
+        font-size: 12px;
+        padding: 5px 3px;
+    }
+    #PageNaviggationBox button{
+        min-width: 60px;
+        font-size: 11px;
+        padding: 5px 3px;
+        border-radius: 10px;
+    }
+
+    #DateBox{
+        font-size: 15px;
+        padding: 5px;
+    }
+
+    #UtilityBox{
+        padding: 5px 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        width: 96%;
+        font-size: 13px;
+        padding: 5px 3px;
+    }
+
+    #ClassDataContainer{
+        padding: 4px;
+    }
+    #EditClassHead{
+        font-size: 16px;
+        padding: 5px;
+    }
+    #ClassDataBox{
+        padding: 3px;
+        font-size: 12px;
+    }
+
+    #ClassButtonBox{
+        padding: 5px 0;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    #btnSaveClasses,
+    #btnDeleteClasses{
+        width: 100%;
+        font-size: 13px;
+        padding: 9px 0;
+        border-radius: 10px;
+    }
+}
+
+/* ============================================================================
+   SMALL PHONES (≤ 420px)  — NAV STACKS VERTICALLY HERE
+   ============================================================================ */
+@media (max-width: 420px) {
+
+    /* --- Top navigation: stack logo, calculator, select, calendar --- */
+    #PageNaviggationBox{
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        justify-content: center;
+        gap: 5px;
+        padding: 6px 4px;
+    }
+    #LogoBox{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 2px 0;
+    }
+    #LogoBox img{
+        width: 56px;
+        height: 56px;
+    }
+    #PageNavigationSelect{
+        width: 100%;
+        font-size: 13px;
+        padding: 6px 4px;
+        border-width: 2px;
+    }
+    #PageNaviggationBox button{
+        width: 100%;
+        min-width: 0;
+        flex: 0 0 auto;
+        font-size: 12px;
+        padding: 7px 4px;
+        border-radius: 10px;
+    }
+
+    #DateBox{
+        font-size: 13px;
+        padding: 5px;
+    }
+
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        font-size: 12px;
+        padding: 5px 3px;
+    }
+
+    #EditClassHead{
+        font-size: 15px;
+    }
+
+    #ClassButtonBox{
+        flex-direction: column;
+        align-items: stretch;
+    }
+    #btnSaveClasses,
+    #btnDeleteClasses{
+        width: 100%;
+    }
+
+    /* Footer */
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 14px;
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 16px;
+    }
+}
+
+/* ==================== SHORT LANDSCAPE PHONES ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+
+    #PageNaviggationBox{
+        padding: 4px;
+    }
+    #LogoBox{
+        width: 26px;
+    }
+    #PageNavigationSelect{
+        font-size: 12px;
+        padding: 4px 3px;
+    }
+    #PageNaviggationBox button{
+        font-size: 11px;
+        padding: 4px 3px;
+    }
+    #DateBox{
+        padding: 3px;
+        font-size: 13px;
+    }
+    #UtilityBox{
+        padding: 3px 0;
+    }
+    #EditNavigationSelect,
+    #AdminToolsSelect{
+        font-size: 12px;
+        padding: 4px 3px;
+    }
+
+    #ClassDataContainer{
+        padding: 4px;
+    }
+    #EditClassHead{
+        font-size: 14px;
+        padding: 4px;
+    }
+    #ClassDataBox{
+        padding: 3px;
+    }
+    /* Give back vertical space to the spreadsheet in landscape */
+    #ClassDataBox .jexcel_content,
+    #ClassDataBox .jspreadsheet {
+        max-height: 60vh !important;
+    }
+
+    #ClassButtonBox{
+        padding: 4px 0;
+    }
+    #btnSaveClasses,
+    #btnDeleteClasses{
+        padding: 5px 0;
+        font-size: 12px;
+    }
+
+    #FooterPlace{
+        padding: 12px 8px;
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 16px;
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 13px;
+    }
+}
+
+/* ==================== ULTRA-WIDE (≥ 1600px) ==================== */
+@media (min-width: 1600px) {
+
+    #MainBody{
+        max-width: 1500px;
+    }
+
+    #EditClassHead{
+        font-size: 38px;
+    }
+    #DateBox{
+        font-size: 36px;
+    }
+
+    #FooterPlace{
+        padding: 40px;
+    }
+    #FooterPublicHead,
+    #FooterPrivateHead{
+        font-size: 32px;
+    }
+    #PublicFooterBox a,
+    #PrivateFooterBox a{
+        font-size: 22px;
+    }
+
+    /* Footer back to 4 columns on very wide screens */
+    #PublicFooterBox,
+    #PrivateFooterBox{
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
