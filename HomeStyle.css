@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'MySanskritFont';
-    src: url('../Sanskrit-2003.ttf') format('truetype');
+    src: url('Sanskrit-2003.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

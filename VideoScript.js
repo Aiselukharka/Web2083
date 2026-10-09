@@ -203,7 +203,6 @@ function createVideoCards(videos) {
         return;
     }
     
-    // Clear existing content
     videoGrid.innerHTML = '';
     
     if (!videos || videos.length === 0) {
@@ -248,8 +247,8 @@ function createVideoCards(videos) {
                 videoInfo: videoInfo,
                 thumbnailUrl: thumbnailUrl || '',
                 embedUrl: embedUrl,
-                safeName: safeEncode(videoName),
-                safeDescription: safeEncode(videoDescription)
+                name: videoName,            // raw, not HTML-encoded
+                description: videoDescription  // raw, not HTML-encoded
             });
             
             console.log('Successfully processed: ' + videoName + ' (' + videoInfo.platform + ')');
@@ -263,36 +262,77 @@ function createVideoCards(videos) {
         return;
     }
     
-    // Create video cards
     var fragment = document.createDocumentFragment();
     
     for (var j = 0; j < processedVideos.length; j++) {
         try {
             var data = processedVideos[j];
             
+            // Build fallback SVG as a data URI (safe, no quotes issues)
+            var platformIcon = data.videoInfo.platform === 'youtube' ? 'YouTube' : 'Facebook';
+            var fallbackSvg = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">' +
+                '<rect width="800" height="450" fill="#1e293b"/>' +
+                '<text x="400" y="225" text-anchor="middle" dominant-baseline="middle" fill="#38bdf8" font-family="Arial" font-size="24">' + platformIcon + '</text>' +
+                '</svg>'
+            );
+            
+            // --- Card container ---
             var videoCard = document.createElement('div');
             videoCard.className = 'video-card';
             
-            var platformBadge = '';
+            // --- Thumbnail wrapper ---
+            var thumbWrapper = document.createElement('div');
+            thumbWrapper.className = 'video-thumbnail-wrapper';
+            
+            var img = document.createElement('img');
+            img.src = data.thumbnailUrl || fallbackSvg;
+            img.alt = data.name;
+            img.loading = 'lazy';
+            img.addEventListener('error', function () {
+                this.src = fallbackSvg;
+            });
+            thumbWrapper.appendChild(img);
+            
+            var playIcon = document.createElement('div');
+            playIcon.className = 'video-play-icon';
+            playIcon.innerHTML = '<i class="fas fa-play"></i>';
+            thumbWrapper.appendChild(playIcon);
+            
+            // --- Card info ---
+            var cardInfo = document.createElement('div');
+            cardInfo.className = 'video-card-info';
+            
+            var titleEl = document.createElement('h3');
+            titleEl.textContent = data.name;          // safe, no HTML parsing
+            cardInfo.appendChild(titleEl);
+            
+            var descEl = document.createElement('p');
+            descEl.textContent = data.description;     // safe
+            cardInfo.appendChild(descEl);
+            
+            var badge = document.createElement('span');
             if (data.videoInfo.platform === 'youtube') {
-                platformBadge = '<span class="video-platform-badge badge-youtube"><i class="fab fa-youtube"></i> YouTube</span>';
+                badge.className = 'video-platform-badge badge-youtube';
+                badge.innerHTML = '<i class="fab fa-youtube"></i> YouTube';
             } else {
-                platformBadge = '<span class="video-platform-badge badge-facebook"><i class="fab fa-facebook"></i> Facebook</span>';
+                badge.className = 'video-platform-badge badge-facebook';
+                badge.innerHTML = '<i class="fab fa-facebook"></i> Facebook';
             }
+            cardInfo.appendChild(badge);
             
-            var fallbackSvg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450"%3E%3Crect width="800" height="450" fill="%231e293b"/%3E%3Ctext x="400" y="225" text-anchor="middle" dominant-baseline="middle" fill="%2338bdf8" font-family="Arial" font-size="24"%3E' + (data.videoInfo.platform === 'youtube' ? '▶️ YouTube' : '📱 Facebook') + '%3C/text%3E%3C/svg%3E';
-            var thumbnailSrc = data.thumbnailUrl || fallbackSvg;
+            // --- Assemble card ---
+            videoCard.appendChild(thumbWrapper);
+            videoCard.appendChild(cardInfo);
             
-            videoCard.innerHTML = '<div class="video-thumbnail-wrapper"><img src="' + thumbnailSrc + '" alt="' + data.safeName + '" loading="lazy" onerror="this.onerror=null; this.src=\'' + fallbackSvg + '\'"><div class="video-play-icon"><i class="fas fa-play"></i></div></div><div class="video-card-info"><h3>' + data.safeName + '</h3><p>' + data.safeDescription + '</p>' + platformBadge + '</div>';
-            
-            // Store data for modal
-            videoCard.dataset.videoName = data.safeName;
-            videoCard.dataset.videoDescription = data.safeDescription;
+            // --- Data for modal (use raw values, not encoded) ---
+            videoCard.dataset.videoName = data.name;
+            videoCard.dataset.videoDescription = data.description;
             videoCard.dataset.embedUrl = data.embedUrl;
             videoCard.dataset.platform = data.videoInfo.platform;
             videoCard.dataset.videoId = data.videoInfo.videoId;
             
-            videoCard.addEventListener('click', function() {
+            videoCard.addEventListener('click', function () {
                 openVideoModal(
                     this.dataset.embedUrl,
                     this.dataset.videoName,
