@@ -1,0 +1,24 @@
+{
+  "name": "Aiselukharka Secondary School",
+  "short_name": "Aiselukharka",
+  "description": "School Management System for Aiselukharka Secondary School",
+  "start_url": "/Web2083/index.html",
+  "scope": "/Web2083/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/Web2083/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Web2083/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

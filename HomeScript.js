@@ -496,3 +496,28 @@ function refreshVideoGallery() {
         }
     }
 }
+
+// ---- PWA AUTO-UPDATE ----
+if ('serviceWorker' in navigator) {
+  let refreshing = false;
+
+  // When a new SW takes control, reload the page once
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    refreshing = true;
+    console.log('New version detected — reloading...');
+    window.location.reload();
+  });
+
+  // Poll for updates every 30 minutes
+  setInterval(() => {
+    navigator.serviceWorker.ready.then((reg) => reg.update());
+  }, 30 * 60 * 1000);
+
+  // Also check on tab focus (user returns to the page)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      navigator.serviceWorker.ready.then((reg) => reg.update());
+    }
+  });
+}
