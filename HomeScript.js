@@ -66,50 +66,79 @@ async function loadDynamicLogoAndFavicon() {
 }
 
 // ============================================================
-// FETCH IMAGES FROM SUPABASE (Updated to utilize supabaseClient)
+// FETCH SLIDER IMAGES & CREDENTIALS FROM AboutSchoolTable
+// (Uses 'Name' and 'Value' columns)
 // ============================================================
-const TABLE_NAME = 'AdminImageTable';
+const TABLE_NAME = 'AboutSchoolTable';
+
 async function fetchSliderImagesFromSupabase() {
-    console.log("Fetching from Supabase table via client:", TABLE_NAME);    
+    console.log("Fetching slider data from Supabase table:", TABLE_NAME);
+
     try {
         const { data: allRecords, error } = await supabaseClient
             .from(TABLE_NAME)
-            .select('*')
-            .limit(50);        
+            .select('Name, Value');
+
         if (error) {
             throw new Error(error.message);
-        }        
-        console.log(`Found ${allRecords.length} total records`);        
-        if (allRecords.length === 0) {
-            throw new Error("No records found in the table");
-        }        
-        const sliderRecords = allRecords.filter(record => {            
-            const dbName = record.ImageName || '';
-            return dbName.toLowerCase().includes('sliderpicture');            
-        });        
-        console.log(`Found ${sliderRecords.length} slider pictures`);        
-        if (sliderRecords.length === 0) {
-            const allNames = allRecords.map(r => r.ImageName).filter(n => n);
+        }
+
+        if (!allRecords || allRecords.length === 0) {
+            throw new Error("No records found in AboutSchoolTable");
+        }
+
+        // Separate slider picture records and credential records
+        const pictureRecords = allRecords.filter(record => {
+            const name = String(record.Name || '');
+            return /^SliderPicture\d+$/i.test(name);
+        });
+
+        const credentialRecords = allRecords.filter(record => {
+            const name = String(record.Name || '');
+            return /^SliderCredential\d+$/i.test(name);
+        });
+
+        console.log(`Found ${pictureRecords.length} slider pictures and ${credentialRecords.length} credentials`);
+
+        if (pictureRecords.length === 0) {
+            const allNames = allRecords.map(r => r.Name).filter(n => n);
             throw new Error(`No SliderPicture records. Found: ${allNames.join(', ')}`);
-        }        
-        const sortedRecords = sliderRecords.sort((a, b) => {
-            const getNumber = (name) => {
-                const match = String(name || '').match(/SliderPicture(\d+)/i);
-                return match ? parseInt(match[1], 10) : 999;
+        }
+
+        // Build a lookup map for credentials by their numeric suffix
+        const credentialMap = {};
+        credentialRecords.forEach(rec => {
+            const match = String(rec.Name).match(/^SliderCredential(\d+)$/i);
+            if (match) {
+                credentialMap[match[1]] = rec.Value || '';
+            }
+        });
+
+        // Sort picture records numerically by their suffix (1, 2, 3, ...)
+        const sortedPictures = pictureRecords.sort((a, b) => {
+            const getNum = (name) => {
+                const m = String(name).match(/^SliderPicture(\d+)$/i);
+                return m ? parseInt(m[1], 10) : 999;
             };
-            return getNumber(a.ImageName) - getNumber(b.ImageName);
-        });        
-        const validRecords = sortedRecords.filter(r => r.ImageUrl && r.ImageUrl.trim() !== '');        
-        return validRecords.map(record => {
-            const sliderNumber = record.ImageName.replace('SliderPicture', '');
-            const matchingCredentialRow = allRecords.find(r => r.ImageName === `SliderCredential${sliderNumber}`);
-            return {
-                name: record.FileName || record.ImageName, 
-                url: record.ImageUrl || record.Value || record.value,                   
-                id: record.id,
-                credentials: matchingCredentialRow ? matchingCredentialRow.Value || matchingCredentialRow.value : "No credentials provided"
-            };
-        });        
+            return getNum(a.Name) - getNum(b.Name);
+        });
+
+        // Map to the shape your slider expects
+        const validRecords = sortedPictures
+            .filter(r => r.Value && String(r.Value).trim() !== '')
+            .map(record => {
+                const suffix = String(record.Name).match(/^SliderPicture(\d+)$/i)[1];
+                return {
+                    name: record.Name,
+                    url: String(record.Value).trim(),
+                    id: record.Name,
+                    credentials: credentialMap[suffix] || "No credentials provided"
+                };
+            });
+
+        console.log(`Returning ${validRecords.length} valid slider records`);
+        return validRecords;
+
     } catch (err) {
         console.error("Supabase slider loading error:", err);
         return null;
