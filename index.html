@@ -99,7 +99,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
             navigator.serviceWorker
-                .register('/Web2083/sw.js', { scope: '/Web2083/' })
+                .register('/Web2083/service-worker.js', { scope: '/Web2083/' })
                 .then((reg) => console.log('SW registered:', reg.scope))
                 .catch((err) => console.error('SW failed:', err));
             });
